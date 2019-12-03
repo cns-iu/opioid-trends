@@ -91,3 +91,14 @@ def declare_variables(variables, macro):
       f'  vegaEmbed("#{ vid }", JSON.parse(\'{ json_spec }\'), opt);',
       f'</script>'
     )
+
+  @macro
+  def include_vega_ext(url):
+    vid = unique('vega-embed-id')
+    return _multiline(
+      f'<div id="{ vid }"></div>',
+      f'<script type="text/javascript">',
+      f'  var opt = {{ "renderer": "canvas", "actions": false }};',
+      f'  vegaEmbed("#{ vid }", "{ url }", opt);',
+      f'</script>'
+    )
