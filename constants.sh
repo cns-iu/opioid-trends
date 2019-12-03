@@ -15,12 +15,11 @@ DB=$ORIG/box-health/R2767_Data.db
 EDB=$OUT/box-health/R2767_Data.db.e
 DATA_SOURCES="$ORIG/box-health/Final Datasets"
 
+SRC=./src
+
 SCHEMA_DIR=./docs/schema
 SCHEMA_NAME=IADC
 SCHEMA="$SCHEMA_DIR/$SCHEMA_NAME.public.xml"
-
-COLUMN_DISTRIBUTION_OVERRIDES=./column-distribution-overrides.yml
-AGGREGATE_DATA="$OUT/aggregate-table-data.yml"
 
 BASE_URL="https://demo.cns.iu.edu/a2agc-dataset/"
 
