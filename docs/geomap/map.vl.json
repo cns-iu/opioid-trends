@@ -1,0 +1,32 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "width": 600,
+  "height": 400,
+  "data": {
+    "url": "indiana.topojson",
+    "format": {
+      "type": "topojson",
+      "feature": "counties"
+    }
+  },
+  "transform": [{
+    "lookup": "id",
+    "from": {
+      "data": {
+        "url": "https://vega.github.io/vega-datas/ets/data/unemployment.tsv"
+      },
+      "key": "id",
+      "fields": ["rate"]
+    }
+  }],
+  "projection": {
+    "type": "mercator"
+  },
+  "mark": "geoshape",
+  "encoding": {
+    "color": {
+      "field": "rate",
+      "type": "quantitative"
+    }
+  }
+}

@@ -13,6 +13,8 @@ use_directory_urls: false
 nav:
   - About: index.md
   - '&#x1F517; Schema Browser': schema/index.html
+  - Chart: chart/index.md
+  - Map: geomap/index.md
 
 plugins:
   - search
