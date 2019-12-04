@@ -9,23 +9,25 @@
       "feature": "counties"
     }
   },
-  "transform": [{
-    "lookup": "id",
-    "from": {
-      "data": {
-        "url": "https://vega.github.io/vega-datasets/data/unemployment.tsv"
-      },
-      "key": "id",
-      "fields": ["rate"]
+  "transform": [
+    {
+      "lookup": "id",
+      "from": {
+        "data": {
+          "url": "../data/geomap-data.csv"
+        },
+        "key": "TRACT_5",
+        "fields": ["N_OPIOID_PRESCRIPTIONS", "PERIOD"]
+      }
     }
-  }],
+  ],
   "projection": {
     "type": "mercator"
   },
   "mark": "geoshape",
   "encoding": {
     "color": {
-      "field": "rate",
+      "field": "N_OPIOID_PRESCRIPTIONS",
       "type": "quantitative"
     }
   }
