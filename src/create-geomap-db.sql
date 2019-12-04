@@ -44,7 +44,7 @@ CREATE TABLE "DIAGNOSES_AGG_OPIOID" AS
     count(DISTINCT STUDY_ID) AS "N_OPIOID_DIAGNOSED" -- O4 # individuals diagnosed with opioid misuse
   FROM src.DIAGNOSES
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
-  WHERE DX_CODE_TYPE == 'OPIOID_USE_DX' --! OR DX_CODE_TYPE == 'SUBSTANCE_USE_DISORDER'
+  WHERE DX_CODE_TYPE == 'OPIOID_USE_DX'
   GROUP BY tract_5, period
   ORDER BY period, tract_5;
 
@@ -55,7 +55,6 @@ CREATE TABLE "PILL_IN_AGG" AS
     date(TRANSACTION_DATE, 'start of month') AS "PERIOD",
     BUYER_TRACT_5 AS "TRACT_5", --! OR Reporter County?
     sum(QUANTITY) AS "N_PILLS_ISSUED" -- O5 # of pills issued
-    --! count(DISTINCT (BUYER_NAME || BUYER_COUNTY)) AS "N_PILL_BUYERS" -- O5 # of pill buyers
   FROM src.PILL_IN
   GROUP BY tract_5, period
   ORDER BY period, tract_5;
