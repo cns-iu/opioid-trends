@@ -13,7 +13,7 @@
     "lookup": "id",
     "from": {
       "data": {
-        "url": "https://vega.github.io/vega-datas/ets/data/unemployment.tsv"
+        "url": "https://vega.github.io/vega-datasets/data/unemployment.tsv"
       },
       "key": "id",
       "fields": ["rate"]
