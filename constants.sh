@@ -16,7 +16,7 @@ EDB=$OUT/box-health/R2767_Data.db.e
 DATA_SOURCES="$ORIG/box-health/Final Datasets"
 
 CHART_DB=$OUT/chart-data.db
-MAP_DB=$OUT/map-data.db
+GEOMAP_DB=$OUT/map-data.db
 
 SRC=./src
 
