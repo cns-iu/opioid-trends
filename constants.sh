@@ -15,6 +15,9 @@ DB=$ORIG/box-health/R2767_Data.db
 EDB=$OUT/box-health/R2767_Data.db.e
 DATA_SOURCES="$ORIG/box-health/Final Datasets"
 
+CHART_DB=$OUT/chart-data.db
+MAP_DB=$OUT/map-data.db
+
 SRC=./src
 
 SCHEMA_DIR=./docs/schema
