@@ -3,21 +3,27 @@
   "width": 600,
   "height": 400,
   "data": {
-    "url": "indiana.topojson",
-    "format": {
-      "type": "topojson",
-      "feature": "counties"
-    }
+    "url": "../data/geomap-data.csv"
   },
   "transform": [
     {
-      "lookup": "id",
+      "filter": {
+        "field": "PERIOD",
+        "equal": "2017-01-01"
+      }
+    },
+    {
+      "lookup": "TRACT_5",
       "from": {
         "data": {
-          "url": "../data/geomap-data.csv"
+          "url": "indiana.topojson",
+          "format": {
+            "type": "topojson",
+            "feature": "counties"
+          }
         },
-        "key": "TRACT_5",
-        "fields": ["N_OPIOID_PRESCRIPTIONS", "PERIOD"]
+        "key": "id",
+        "fields": ["type", "id", "properties", "geometry"]
       }
     }
   ],
@@ -27,7 +33,7 @@
   "mark": "geoshape",
   "encoding": {
     "color": {
-      "field": "N_OPIOID_PRESCRIPTIONS",
+      "field": "N_OPIOID_PRESCRIBERS",
       "type": "quantitative"
     }
   }
