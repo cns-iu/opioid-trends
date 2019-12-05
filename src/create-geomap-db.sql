@@ -81,8 +81,8 @@ CREATE TABLE "DIAGNOSES_AGG_STD" AS
   SELECT
     date(DX_DATE, 'start of month') AS "PERIOD",
     substr(TRACT_11, 0, 6) AS "TRACT_5",
-    count(*) AS "N_STD_DX", -- C1 # of sexually transmitted diseases 
-    count(DISTINCT STUDY_ID) AS "N_STD_DIAGNOSED" -- C1 # individuals diagnosed with sexually transmitted diseases 
+    count(*) AS "N_STD_DX", -- C1 # of sexually transmitted diseases
+    count(DISTINCT STUDY_ID) AS "N_STD_DIAGNOSED" -- C1 # individuals diagnosed with sexually transmitted diseases
   FROM src.DIAGNOSES
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
   WHERE DX_CODE_TYPE == 'STD_DX'
@@ -124,7 +124,7 @@ CREATE TABLE "DIAGNOSES_AGG_MENTAL_DX" AS
     date(DX_DATE, 'start of month') AS "PERIOD",
     substr(TRACT_11, 0, 6) AS "TRACT_5",
     count(*) AS "N_MENTAL_DX", -- C4 # of mental health diagnoses
-    count(DISTINCT STUDY_ID) AS "N_MENTAL_DIAGNOSED" -- C4 # individuals diagnosed with mental health disorders 
+    count(DISTINCT STUDY_ID) AS "N_MENTAL_DIAGNOSED" -- C4 # individuals diagnosed with mental health disorders
   FROM src.DIAGNOSES
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
   WHERE DX_CODE_TYPE == 'ENCOUNTER_MENTAL_DX'
@@ -156,7 +156,7 @@ CREATE TABLE "ACS_AGG" AS
     sum(total_population) AS "TOTAL_POPULATION", -- D1
     sum(total_male) AS "TOTAL_MALE", -- D2
     sum(total_female) AS "TOTAL_FEMALE", -- D3
-    sum(median_age) AS "MEDIAN_AGE", -- D4 
+    sum(median_age) AS "MEDIAN_AGE", -- D4
     sum(income_below_poverty_12month) AS "INCOME_BELOW_POVERTY_12MONTH", -- D5
     sum(cash_assistance_or_snap) AS "CASH_ASSISTANCE_OR_SNAP", -- D6
     sum(not_in_labor_force) AS "NOT_IN_LABOR_FORCE" -- D7
@@ -171,7 +171,7 @@ CREATE TABLE "ALL_AGGREGATES" AS
   SELECT *
   FROM
     -- (O)pioid related events --
-    FILLS_AGG F
+    FILLS_AGG AS F
     LEFT JOIN ENCOUNTERS_AGG USING(tract_5, period)
     LEFT JOIN DIAGNOSES_AGG_OPIOID USING(tract_5, period)
     LEFT JOIN PILL_IN_AGG USING(tract_5, period)

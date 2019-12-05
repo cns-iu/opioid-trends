@@ -72,8 +72,8 @@ DROP TABLE IF EXISTS "DIAGNOSES_AGG_STD";
 CREATE TABLE "DIAGNOSES_AGG_STD" AS
   SELECT
     date(DX_DATE, 'start of month') AS "PERIOD",
-    count(*) AS "N_STD_DX", -- C1 # of sexually transmitted diseases 
-    count(DISTINCT STUDY_ID) AS "N_STD_DIAGNOSED" -- C1 # individuals diagnosed with sexually transmitted diseases 
+    count(*) AS "N_STD_DX", -- C1 # of sexually transmitted diseases
+    count(DISTINCT STUDY_ID) AS "N_STD_DIAGNOSED" -- C1 # individuals diagnosed with sexually transmitted diseases
   FROM src.DIAGNOSES
   WHERE DX_CODE_TYPE == 'STD_DX'
   GROUP BY period
@@ -109,7 +109,7 @@ CREATE TABLE "DIAGNOSES_AGG_MENTAL_DX" AS
   SELECT
     date(DX_DATE, 'start of month') AS "PERIOD",
     count(*) AS "N_MENTAL_DX", -- C4 # of mental health diagnoses
-    count(DISTINCT STUDY_ID) AS "N_MENTAL_DIAGNOSED" -- C4 # individuals diagnosed with mental health disorders 
+    count(DISTINCT STUDY_ID) AS "N_MENTAL_DIAGNOSED" -- C4 # individuals diagnosed with mental health disorders
   FROM src.DIAGNOSES
   WHERE DX_CODE_TYPE == 'ENCOUNTER_MENTAL_DX'
   GROUP BY period
@@ -137,7 +137,7 @@ CREATE TABLE "ACS_AGG" AS
     sum(total_population) AS "TOTAL_POPULATION", -- D1
     sum(total_male) AS "TOTAL_MALE", -- D2
     sum(total_female) AS "TOTAL_FEMALE", -- D3
-    sum(median_age) AS "MEDIAN_AGE", -- D4 
+    sum(median_age) AS "MEDIAN_AGE", -- D4
     sum(income_below_poverty_12month) AS "INCOME_BELOW_POVERTY_12MONTH", -- D5
     sum(cash_assistance_or_snap) AS "CASH_ASSISTANCE_OR_SNAP", -- D6
     sum(not_in_labor_force) AS "NOT_IN_LABOR_FORCE" -- D7
@@ -152,7 +152,7 @@ CREATE TABLE "ALL_AGGREGATES" AS
   SELECT *
   FROM
     -- (O)pioid related events --
-    FILLS_AGG F
+    FILLS_AGG AS F
     LEFT JOIN ENCOUNTERS_AGG USING(period)
     LEFT JOIN DIAGNOSES_AGG_OPIOID USING(period)
     LEFT JOIN PILL_IN_AGG USING(period)
@@ -166,3 +166,120 @@ CREATE TABLE "ALL_AGGREGATES" AS
     -- (D)emographic Data --
     LEFT JOIN ACS_AGG USING(period)
   ORDER BY F.period;
+
+DROP TABLE IF EXISTS "ALL_AGGREGATES_ROW_BASED";
+CREATE TABLE "ALL_AGGREGATES_ROW_BASED" AS
+    SELECT
+      PERIOD,
+      'N_OPIOID_PRESCRIPTIONS' AS "VARIABLE",
+      N_OPIOID_PRESCRIPTIONS AS "VALUE"
+    FROM FILLS_AGG
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_OPIOID_PRESCRIBERS' AS "VARIABLE",
+      N_OPIOID_PRESCRIBERS AS "VALUE"
+    FROM FILLS_AGG
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_OPIOID_OVERDOSES' AS "VARIABLE",
+      N_OPIOID_OVERDOSES AS "VALUE"
+    FROM ENCOUNTERS_AGG
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_OPIOID_OVERDOSERS' AS "VARIABLE",
+      N_OPIOID_OVERDOSERS AS "VALUE"
+    FROM ENCOUNTERS_AGG
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_OPIOID_DX' AS "VARIABLE",
+      N_OPIOID_DX AS "VALUE"
+    FROM DIAGNOSES_AGG_OPIOID
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_OPIOID_DIAGNOSED' AS "VARIABLE",
+      N_OPIOID_DIAGNOSED AS "VALUE"
+    FROM DIAGNOSES_AGG_OPIOID
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_PILLS_ISSUED' AS "VARIABLE",
+      N_PILLS_ISSUED AS "VALUE"
+    FROM PILL_IN_AGG
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_NARCAN_RUNS' AS "VARIABLE",
+      N_NARCAN_RUNS AS "VALUE"
+    FROM EMS_AGG
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_NARCAN_INCIDENTS' AS "VARIABLE",
+      N_NARCAN_INCIDENTS AS "VALUE"
+    FROM EMS_AGG
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_STD_DX' AS "VARIABLE",
+      N_STD_DX AS "VALUE"
+    FROM DIAGNOSES_AGG_STD
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_STD_DIAGNOSED' AS "VARIABLE",
+      N_STD_DIAGNOSED AS "VALUE"
+    FROM DIAGNOSES_AGG_STD
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_HEPC_DX' AS "VARIABLE",
+      N_HEPC_DX AS "VALUE"
+    FROM DIAGNOSES_AGG_HEPC
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_HEPC_DIAGNOSED' AS "VARIABLE",
+      N_HEPC_DIAGNOSED AS "VALUE"
+    FROM DIAGNOSES_AGG_HEPC
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_HIV_DX' AS "VARIABLE",
+      N_HIV_DX AS "VALUE"
+    FROM DIAGNOSES_AGG_HIV
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_HIV_DIAGNOSED' AS "VARIABLE",
+      N_HIV_DIAGNOSED AS "VALUE"
+    FROM DIAGNOSES_AGG_HIV
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_MENTAL_DX' AS "VARIABLE",
+      N_MENTAL_DX AS "VALUE"
+    FROM DIAGNOSES_AGG_MENTAL_DX
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_MENTAL_DIAGNOSED' AS "VARIABLE",
+      N_MENTAL_DIAGNOSED AS "VALUE"
+    FROM DIAGNOSES_AGG_MENTAL_DX
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_SUD_DX' AS "VARIABLE",
+      N_SUD_DX AS "VALUE"
+    FROM DIAGNOSES_AGG_SUD
+  UNION ALL
+    SELECT
+      PERIOD,
+      'N_SUD_DIAGNOSED' AS "VARIABLE",
+      N_SUD_DIAGNOSED AS "VALUE"
+    FROM DIAGNOSES_AGG_SUD
+  ORDER BY variable, period;
