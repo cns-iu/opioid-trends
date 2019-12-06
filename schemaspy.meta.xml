@@ -1,0 +1,151 @@
+<schemaMeta xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://schemaspy.org/xsd/6/schemameta.xsd" >
+  <comments>The Internet Addictions Data Commons (IADC) database for IU’s Addictions Grand Challenge</comments>
+  <tables>
+    <table name="PILL_IN" comments="DEA Pill Purchase Data in Indiana">
+      <column name="REPORTER_BUS_ACT" comments="Business activity of reporter"/>
+      <column name="REPORTER_NAME" comments="Name of reporter"/>
+      <column name="REPORTER_STATE" comments="State of reporter"/>
+      <column name="REPORTER_COUNTY" comments="County of reporter"/>
+      <column name="BUYER_BUS_ACT" comments="Business activity of buyer"/>
+      <column name="BUYER_NAME" comments="Name of buyer"/>
+      <column name="BUYER_STATE" comments="State of buyer"/>
+      <column name="BUYER_COUNTY" comments="County of buyer"/>
+      <column name="NDC_NO" comments="The National Drug Code (NDC) used by ARCOS is an 11-character code that identifies controlled substance products. This code is divided into three segments: the labeler code, the product code, and the package size code. General specifications are presented in Section 5.10.2, Specifications: NDC, followed by detailed specifications for each segment."/>
+      <column name="DRUG_NAME" comments="Drug name assigned by labeler"/>
+      <column name="QUANTITY" comments="The quantity field is a numeric field containing the number of packages, weight, or volume being reported."/>
+      <column name="STRENGTH" comments=""/>
+      <column name="TRANSACTION_DATE" comments="The transaction date is the actual date on which a reportable activity occurred."/>
+      <column name="CALC_BASE_WT_IN_GM" comments="DEA calculated gram equivalent of active ingredient in shipment"/>
+      <column name="DOSAGE_UNIT" comments=""/>
+      <column name="TRANSACTION_ID" comments=""/>
+      <column name="INGREDIENT_NAME" comments="Ingrediant Name"/>
+      <column name="MME_CONVERSION_FACTOR" comments="Morphine Milligram Equivalents conversion factor"/>
+      <column name="COMBINED_LABELER_NAME" comments="Labeler name"/>
+      <column name="REVISED_COMPANY_NAME" comments="Revised Company Name"/>
+      <column name="REPORTER_FAMILY" comments="Reporter Organization Name"/>
+      <column name="DOS_STR" comments="Total milligrams of opioid ingrediant per pill"/>
+      <column name="BUYER_TRACT_5" comments="First 5 digits of census tract of buyer"/>
+    </table>
+    <table name="ACS" comments="Census Tract Level Social Determinants from ACS 5-Year Estimates">
+      <column name="GEOGRAPHY_NAME" comments="Plaintext geography name"/>
+      <column name="TRACT_11" comments="11 digit census tract"/>
+      <column name="YEAR" comments="Year of estimate, e.g 2017 means 2013-2017 5 year estimate"/>
+      <column name="TOTAL_FEMALE" comments="Total female population, from census table B01001"/>
+      <column name="TOTAL_MALE" comments="Total male population, from census table B01001"/>
+      <column name="MEDIAN_AGE" comments="Median age, from census table B01002"/>
+      <column name="TOTAL_POPULATION" comments="Total population, from census table B01001"/>
+      <column name="TOTAL_HOUSEHOLDS" comments="Total household, from census trable B00002"/>
+      <column name="CASH_ASSISTANCE_OR_SNAP" comments="Total with SNAP, from census table B09010"/>
+      <column name="NOT_IN_LABOR_FORCE" comments="Total not in labor force, from census table B10058"/>
+      <column name="INCOME_BELOW_POVERTY_12MONTH" comments="Below poverty level in past 12 month, from census table B14006"/>
+      <column name="INCOME_ABOVE_POVERTY_12MONTH" comments="Above poverty level in past 12 month, from census table B14006"/>
+      <column name="INCOME_U10K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_10K_15K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_15K_20K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_20K_25K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_25K_30K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_30K_35K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_35K_40K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_40K_50K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_45K_50K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_50K_60K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_60K_75K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_75K_100K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_100K_125K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_125K_150K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_150K_200K" comments="Income bracket from census table B19001"/>
+      <column name="INCOME_200KO" comments="Income bracket from census table B19001"/>
+      <column name="TRACT_5" comments="First 5 digits of TRACT_11, represents just state and county"/>
+    </table>
+    <table name="EMS" comments="De-identified county level EMS run data from MPH">
+      <column name="INC_INCIDENTID" comments="Incident ID direct from EMS data. There might be multiple rows with the same incident ID due to different MEDICATION_GIVEN values"/>
+      <column name="INC_INCIDENTDATE" comments="Date of EMS incident"/>
+      <column name="NARCANRUN" comments="Was Narcan given during this EMS run? "/>
+      <column name="SIT_PROVIDER_PRIM_IMPRESSION" comments="Primary impression/diagnosis by EMS provider."/>
+      <column name="SIT_PRIMARYSYMPTOM" comments="Patient's primary sympton requiring EMS services."/>
+      <column name="MEDICATION_GIVEN" comments="The medication given to the patient"/>
+      <column name="DRUGUSEINDICATORS" comments="Any drug use by patient"/>
+      <column name="INC_TRACT_5" comments="5 digit state and fips code where incident occurred. "/>
+      <column name="INC_CITY" comments="City where incident occurred"/>
+      <column name="INC_ZIP" comments="Zip code where incident occurred"/>
+      <column name="EMS_PROVIDER_TRACT_5" comments="5 digit state and fips code of EMS provider location"/>
+      <column name="EMS_PROVIDER_CITY" comments="City of EMS provider"/>
+      <column name="EMS_PROVIDER_ZIP" comments="Zip code of ems provider"/>
+      <column name="PAT_TRACT_5" comments="5 digit state and fips code of patient's home address"/>
+      <column name="PAT_CITY" comments="City of patient's home address"/>
+      <column name="PAT_ZIP" comments="Zip code of patient's home address"/>
+    </table>
+    <table name="TRACT_MAP" comments="Maps Indiana census tracts to county names">
+      <column name="TRACT_11" comments="11 digit census tract code. Digits 1-2 are a state code, digits 3-5 are a county FIPS code, and digits 6-11 represent a census tract"/>
+      <column name="TRACT_5" comments="Digits 1-5 of TRACT_11, representing a county"/>
+      <column name="COUNTY" comments="County associated with TRACT_5"/>
+    </table>
+    <table name="COUNTY_COVERAGE" comments="INPC population coverage by county">
+      <column name="TRACT_5" comments="5 digit state and fips code of the county"/>
+      <column name="INPC_POPULATION" comments="Number of unique INPC patients with a home address in the county"/>
+      <column name="TOTAL_POPULATION" comments="Total population of county per ACS 2017 5-year estimates"/>
+      <column name="INPC_COVERAGE_PCT" comments="INPC_POPULATION divided by TOTAL_POPULATION"/>
+    </table>
+    <table name="DEMOGRAPHICS" comments="Patient level demographic data">
+      <column name="STUDY_ID" comments="Unique patient identifier for linking to other clinical data"/>
+      <column name="OPIOID_FILL_INDEX_DATE" comments="Date of first opioid fill in study period"/>
+      <column name="AGE_AT_INDEX_FILL" comments="Age in years at OPIOID_FILL_INDEX_DATE"/>
+      <column name="DATE_OF_BIRTH" comments="Date of birth of patient"/>
+      <column name="GENDER" comments="Patient's gender (F=Female, M=Male, U=Unknown)"/>
+      <column name="ETHNICITY" comments="Patient's ethnicity"/>
+      <column name="RACE" comments="Patient's race"/>
+      <column name="TRACT_11" comments="11 digit census tract of patient's most recent home address"/>
+      <column name="TRACT_UPDATE_DATE" comments="Most recent update date of TRACT_11 for this patient"/>
+      <column name="ONE_PER_YEAR_FLAG" comments="If set to 1, indicates patient had a complete calender year with a single opioid fill"/>
+      <column name="ONE_PER_YEAR_DATE" comments="Date of earliest qualifying opioid fill for ONE_PER_YEAR_FLAG"/>
+      <column name="THREE_FILL_FLAG" comments="If set 1 to 1, inidcates patient had 3+ opioid fills within any 120 day period"/>
+      <column name="THREE_FILL_DATE" comments="Date of earliest qualifying opiod fill for THREE_FILL_FLAG"/>
+    </table>
+    <table name="DIAGNOSES" comments="Patient level diagnosis data">
+      <column name="STUDY_ID" comments="Unique patient identifier for linking to other clinical data"/>
+      <column name="ENCOUNTER_ID" comments="Encounter ID for linkage with Encounter table"/>
+      <column name="DX_DATE" comments="Date of diagnosis"/>
+      <column name="DX_CODE" comments="Diagnosis Code"/>
+      <column name="DX_CODE_SYSTEM" comments="Diagnosis Code System"/>
+      <column name="DX_TEXT" comments="Diagnosis text/name"/>
+      <column name="DX_CODE_TYPE" comments="Diagnosis type. See R2767 Codebooks folder for all codes that were searched for"/>
+    </table>
+    <table name="FILLS" comments="Patient level fill data">
+      <column name="STUDY_ID" comments="Unique patient identifier for linking to other clinical data"/>
+      <column name="NDC_CODE" comments="11 digit NDC Code that was filled"/>
+      <column name="DRUG_NAME" comments="Named of drug that was filled"/>
+      <column name="FILL_DATE" comments="Fill date"/>
+      <column name="DISPENSE_AMOUNT" comments="Number of units dispensed at fill"/>
+      <column name="NUMBER_OF_DAYS_SUPPLY" comments="Number of days supply"/>
+      <column name="DRUG_TYPE" comments="Type of drug that was fill (AA = Anti Anxiety, AD = Antidepressant, NEURO = Neurlogical Agent, OPIOID = Opioid"/>
+    </table>
+    <table name="ENCOUNTERS" comments="Patient level encounter data">
+      <column name="STUDY_ID" comments="Unique patient identifier for linking to other clinical data"/>
+      <column name="ENCOUNTER_ID" comments="Encounter ID for linking with diagnoses"/>
+      <column name="ADMIT_TIME" comments="Date patient was admitted"/>
+      <column name="DISCHARGE_TIME" comments="Date patient was discharged"/>
+      <column name="COMMERCIAL_FLAG" comments="Set to 1 if commerical insurance was used at the encounter"/>
+      <column name="OTHERGOV_FLAG" comments="Set to 1 if other government insurance was used at the encounter"/>
+      <column name="SELFPAY_FLAG" comments="Set to 1 if self pay was used at the encounter"/>
+      <column name="WORKERSCOMP_FLAG" comments="Set to 1 if wokers compensation was used at the encounter"/>
+      <column name="INSTITUTIONALIZED_FLAG" comments="Set to 1 if a institutionalized payment method was used at the encounter"/>
+      <column name="CHARITY_FLAG" comments="Set to 1 if commerical insurance was used at the encounter"/>
+      <column name="MEDICARE_FLAG" comments="Set to 1 if commerical insurance was used at the encounter"/>
+      <column name="MEDICAID_FLAG" comments="Set to 1 if commerical insurance was used at the encounter"/>
+      <column name="LIFE_FLAG" comments="Set to 1 if commerical insurance was used at the encounter"/>
+      <column name="MDWISE_FLAG" comments="Set to 1 if commerical insurance was used at the encounter"/>
+      <column name="NODATA_FLAG" comments="Set to 1 if commerical insurance was used at the encounter"/>
+      <column name="CARE_SETTING_CATEGORY" comments="Encounter type (E = Emergency, I = Inpatient, O = Outpatient)"/>
+      <column name="OPIOID_OD" comments="Flag set to 1 if overdose phenotype detected an opioid overdose at this encounter"/>
+      <column name="ANY_OD" comments="Flag set to 1 if any overdose phenotype detected at this encounter"/>
+    </table>
+    <table name="LABS" comments="Patient level lab data">
+      <column name="STUDY_ID" comments="Unique patient identifier for linking to other clinical data"/>
+      <column name="TEST_DATE" comments="Physiologic date of lab test"/>
+      <column name="LAB_NAME" comments="Name of lab test"/>
+      <column name="LAB_CODE_TYPE" comments="Lab Type"/>
+      <column name="VALUE_TYPE" comments="Result value type (T = Text, N = Numeric)"/>
+      <column name="LAB_VALUE" comments="Lab value. Numeric results may represent contain ranges, including symbols such as '&gt;' and '&lt;'"/>
+    </table>
+  </tables>
+</schemaMeta>
