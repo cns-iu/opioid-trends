@@ -3,7 +3,7 @@ source constants.sh
 set -ev
 
 # Only run if there isn't an existing indiana.topojson
-if [ ! -e docs/geomap/indiana.topojson ]
+if [ ! -e docs/data/indiana.topojson ]
 then
 
   if [ "$(which topo2geo)" = "" ]; then
@@ -18,5 +18,5 @@ then
   topo2geo -n counties=- < $OUT/counties-10m.json \
     | ndjson-filter '/^18/.test(d.id)' \
     | geo2topo -n counties=- \
-    > docs/geomap/indiana.topojson
+    > docs/data/indiana.topojson
 fi

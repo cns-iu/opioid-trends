@@ -120,9 +120,6 @@ env.sh
 /docs/schema
 /docs/dataset/tables/*.md
 
-# Data folder for site
-/docs/data/
-
 # Raw Data
 /raw-data
 

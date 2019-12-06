@@ -2,7 +2,9 @@
 source constants.sh
 set -ev
 
+rm -rf site/data
+
 mkdocs build
 
-rm -rf site/data
-cp -r $OUT/site-data site/data
+mkdir -p site/data
+cp -r $OUT/site-data/* site/data

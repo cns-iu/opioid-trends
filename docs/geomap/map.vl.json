@@ -16,7 +16,7 @@
       "lookup": "TRACT_5",
       "from": {
         "data": {
-          "url": "indiana.topojson",
+          "url": "../data/indiana.topojson",
           "format": {
             "type": "topojson",
             "feature": "counties"
