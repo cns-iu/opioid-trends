@@ -155,7 +155,7 @@ CREATE TABLE "ACS_AGG" AS
     sum(total_population) AS "TOTAL_POPULATION", -- D1
     sum(total_male) AS "TOTAL_MALE", -- D2
     sum(total_female) AS "TOTAL_FEMALE", -- D3
-    sum(median_age) AS "MEDIAN_AGE", -- D4
+    avg(median_age) AS "MEDIAN_AGE", -- D4
     sum(income_below_poverty_12month) AS "INCOME_BELOW_POVERTY_12MONTH", -- D5
     sum(cash_assistance_or_snap) AS "CASH_ASSISTANCE_OR_SNAP", -- D6
     sum(not_in_labor_force) AS "NOT_IN_LABOR_FORCE" -- D7
