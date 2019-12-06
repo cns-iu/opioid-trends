@@ -1,6 +1,6 @@
-site_name: IADC Visualizations
+site_name: Opioid Trends
 site_url: https://node.cns.iu.edu/client/opioid-trends
-site_description: Indiana Addictions Data Commons (IADC) Visualizations
+site_description: Opioid Trends using the IADC Dataset
 site_author: CNS & Regenstrief Institute
 
 repo_url: https://github.com/cns-iu/opioid-trends/
@@ -11,10 +11,11 @@ repo_url: https://github.com/cns-iu/opioid-trends/
 use_directory_urls: false
 
 nav:
-  - About: index.md
-  - '&#x1F517; Schema Browser': schema/index.html
+  - Home: index.md
   - Chart: chart/index.md
   - Map: geomap/index.md
+  - Data: data/index.md
+  - Sources: sources/index.md  
 
 plugins:
   - search

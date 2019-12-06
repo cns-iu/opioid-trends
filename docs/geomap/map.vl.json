@@ -1,40 +1,76 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "width": 600,
-  "height": 400,
-  "data": {
-    "url": "../data/geomap-data.csv"
-  },
-  "transform": [
-    {
-      "filter": {
-        "field": "PERIOD",
-        "equal": "2017-01-01"
-      }
-    },
-    {
-      "lookup": "TRACT_5",
-      "from": {
-        "data": {
-          "url": "../data/indiana.topojson",
-          "format": {
-            "type": "topojson",
-            "feature": "counties"
-          }
-        },
-        "key": "id",
-        "fields": ["type", "id", "properties", "geometry"]
-      }
-    }
+  "repeat": [
+    "N_OPIOID_PRESCRIPTIONS",
+    "N_OPIOID_PRESCRIBERS",
+    "N_OPIOID_OVERDOSES",
+    "N_OPIOID_OVERDOSERS",
+    "N_OPIOID_DX",
+    "N_OPIOID_DIAGNOSED",
+    "N_PILLS_ISSUED",
+    "N_NARCAN_RUNS",
+    "N_NARCAN_INCIDENTS",
+    "N_STD_DX",
+    "N_STD_DIAGNOSED",
+    "N_HEPC_DX",
+    "N_HEPC_DIAGNOSED",
+    "N_HIV_DX",
+    "N_HIV_DIAGNOSED",
+    "N_MENTAL_DX",
+    "N_MENTAL_DIAGNOSED",
+    "N_SUD_DX",
+    "N_SUD_DIAGNOSED",
+    "TOTAL_POPULATION",
+    "TOTAL_MALE",
+    "TOTAL_FEMALE",
+    "MEDIAN_AGE",
+    "INCOME_BELOW_POVERTY_12MONTH",
+    "CASH_ASSISTANCE_OR_SNAP",
+    "NOT_IN_LABOR_FORCE"
   ],
-  "projection": {
-    "type": "mercator"
+  "columns": 2,
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
   },
-  "mark": "geoshape",
-  "encoding": {
-    "color": {
-      "field": "N_OPIOID_PRESCRIBERS",
-      "type": "quantitative"
+  "spec": {
+    "width": 300,
+    "height": 200,
+    "data": {
+      "url": "../data/geomap-data.csv"
+    },
+    "transform": [
+      {
+        "filter": {
+          "field": "PERIOD",
+          "equal": "2017-01-01"
+        }
+      },
+      {
+        "lookup": "TRACT_5",
+        "from": {
+          "data": {
+            "url": "../data/indiana.topojson",
+            "format": {
+              "type": "topojson",
+              "feature": "counties"
+            }
+          },
+          "key": "id",
+          "fields": ["type", "id", "properties", "geometry"]
+        }
+      }
+    ],
+    "projection": {
+      "type": "mercator"
+    },
+    "mark": "geoshape",
+    "encoding": {
+      "color": {
+        "field": {"repeat": "repeat"},
+        "type": "quantitative"
+      }
     }
   }
 }
