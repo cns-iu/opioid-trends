@@ -16,7 +16,7 @@ CREATE TABLE "FILLS_AGG" AS
     count(DISTINCT STUDY_ID) AS "N_OPIOID_PRESCRIBERS" -- O2 # individuals with opioid prescriptions
   FROM src.FILLS
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
-  WHERE drug_type = 'OPIOID'
+  WHERE drug_type = 'OPIOID' AND tract_5 IS NOT NULL
   GROUP BY tract_5, period
   ORDER BY period, tract_5;
 
