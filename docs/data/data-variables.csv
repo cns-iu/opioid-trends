@@ -1,4 +1,4 @@
-DATA_VARIABLE,label,type,scale,color,scalingFactor
+DATA_VARIABLE,LABEL,TYPE,SCALE,COLOR,SCALING_FACTOR
 N_OPIOID_PRESCRIPTIONS,# of opioid prescriptions,Opioid related events,Events,1,1
 N_OPIOID_PRESCRIBERS,# who had opioid prescriptions,Opioid related events,Persons,1,1
 N_OPIOID_OVERDOSES,# of opioid overdoses,Opioid related events,Events,2,1

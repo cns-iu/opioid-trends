@@ -1,0 +1,140 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+
+  "name": "Opioid Trends Over Time",
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding"
+  },
+
+  "data": {
+    "url": "../data/chart-data-row-based.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "PERIOD": "date",
+        "VALUE": "number"
+      }
+    }
+  },
+
+  "transform": [
+    {
+      "lookup": "DATA_VARIABLE",
+      "from": {
+        "key": "DATA_VARIABLE",
+        "fields": ["LABEL", "TYPE", "SCALE", "COLOR", "SCALING_FACTOR"],
+        "data": {
+          "url": "../data/data-variables.csv",
+          "format": {
+            "type": "csv",
+            "parse": {
+              "COLOR": "number",
+              "SCALING_FACTOR": "number"
+            }
+          }
+        }
+      }
+    },
+
+    {
+      "calculate": "toNumber(datum.COLOR)",
+      "as": "COLOR"
+    },
+    {
+      "calculate": "toNumber(datum.SCALING_FACTOR)",
+      "as": "SCALING_FACTOR"
+    }
+  ],
+
+  "vconcat": [
+    {
+      "width": 800,
+      "height": 440,
+
+      "layer": [
+        {
+          "mark": "line"
+        }
+      ],
+
+      "encoding": {
+        "x": {
+          "type": "temporal",
+          "field": "PERIOD",
+          "scale": {
+            "domain": {
+              "selection": "brush"
+            }
+          },
+          "axis": {
+            "title": null
+          }
+        },
+        "y": {
+          "type": "quantitative",
+          "field": "VALUE"
+        },
+        "color": {
+          "type": "nominal",
+          "field": "DATA_VARIABLE",
+          "scale": {
+            "scheme": "category20"
+          }
+        }
+      },
+
+      "resolve": {
+        "axis": {
+          "x": "shared",
+          "y": "independent"
+        }
+      }
+    },
+    {
+      "width": 800,
+      "height": 60,
+
+      "layer": [
+        {
+          "mark": "line",
+
+          "selection": {
+            "brush": {
+              "type": "interval",
+              "encodings": ["x"]
+            }
+          }
+        }
+      ],
+
+      "encoding": {
+        "x": {
+          "type": "temporal",
+          "field": "PERIOD"
+        },
+        "y": {
+          "type": "quantitative",
+          "field": "VALUE",
+          "axis": {
+            "grid": false
+          }
+        },
+        "color": {
+          "type": "nominal",
+          "field": "DATA_VARIABLE",
+          "scale": {
+            "scheme": "category20"
+          }
+        }
+      },
+
+      "resolve": {
+        "axis": {
+          "x": "shared",
+          "y": "independent"
+        }
+      }
+    }
+  ]
+}
