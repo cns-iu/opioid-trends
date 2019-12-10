@@ -243,11 +243,13 @@ CREATE TABLE "ALL_AGGREGATES" AS
     LEFT JOIN DIAGNOSES_AGG_SUD USING(tract_5, period)
     -- (D)emographic Data --
     LEFT JOIN ACS_AGG USING(tract_5, period)
+  WHERE cast(strftime('%Y', F.period) as integer) >= 2009
   ORDER BY F.period, F.tract_5;
 
 
 DROP TABLE IF EXISTS "ALL_AGGREGATES_ROW_BASED";
 CREATE TABLE "ALL_AGGREGATES_ROW_BASED" AS
+  SELECT * FROM (
   -- FILLS_AGG
     SELECT
       PERIOD, TRACT_5,
@@ -414,4 +416,6 @@ CREATE TABLE "ALL_AGGREGATES_ROW_BASED" AS
       'NOT_IN_LABOR_FORCE' AS "DATA_VARIABLE",
       NOT_IN_LABOR_FORCE AS "VALUE"
     FROM ACS_AGG
+  ) AS A
+  WHERE cast(strftime('%Y', period) as integer) >= 2009
   ORDER BY data_variable, period, tract_5;
