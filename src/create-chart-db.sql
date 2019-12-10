@@ -10,7 +10,13 @@ ATTACH DATABASE 'raw-data/original/box-health/R2767_Data.db' AS src;
 DROP TABLE IF EXISTS "FILLS_AGG";
 CREATE TABLE "FILLS_AGG" AS
   SELECT
-    date(FILL_DATE, 'start of month') AS "PERIOD",
+    -- date(FILL_DATE, 'start of month') AS "PERIOD", -- Monthly Period
+    strftime('%Y', FILL_DATE) || CASE 
+      WHEN cast(strftime('%m', FILL_DATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+      WHEN cast(strftime('%m', FILL_DATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
+      WHEN cast(strftime('%m', FILL_DATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
+      ELSE '-10-01'
+    END AS "PERIOD", -- Quarterly Period
     count(*) AS "N_OPIOID_PRESCRIPTIONS", -- O1 # opioid prescriptions
     count(DISTINCT STUDY_ID) AS "N_OPIOID_PRESCRIBERS" -- O2 # individuals with opioid prescriptions
   FROM src.FILLS
@@ -22,7 +28,13 @@ CREATE TABLE "FILLS_AGG" AS
 DROP TABLE IF EXISTS "ENCOUNTERS_AGG";
 CREATE TABLE "ENCOUNTERS_AGG" AS
   SELECT
-    date(ADMIT_TIME, 'start of month') AS "PERIOD",
+    -- date(ADMIT_TIME, 'start of month') AS "PERIOD", -- Monthly Period
+    strftime('%Y', ADMIT_TIME) || CASE 
+      WHEN cast(strftime('%m', ADMIT_TIME) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+      WHEN cast(strftime('%m', ADMIT_TIME) as integer) BETWEEN 4 and 6 THEN '-04-01'
+      WHEN cast(strftime('%m', ADMIT_TIME) as integer) BETWEEN 7 and 9 THEN '-07-01'
+      ELSE '-10-01'
+    END AS "PERIOD", -- Quarterly Period
     count(*) AS "N_OPIOID_OVERDOSES", -- O3 # opioid overdoses
     count(DISTINCT STUDY_ID) AS "N_OPIOID_OVERDOSERS" -- 03 # individuals that had opioid overdoses
   FROM src.ENCOUNTERS
@@ -34,7 +46,13 @@ CREATE TABLE "ENCOUNTERS_AGG" AS
 DROP TABLE IF EXISTS "DIAGNOSES_AGG_OPIOID";
 CREATE TABLE "DIAGNOSES_AGG_OPIOID" AS
   SELECT
-    date(DX_DATE, 'start of month') AS "PERIOD",
+    -- date(DX_DATE, 'start of month') AS "PERIOD", -- Monthly Period
+    strftime('%Y', DX_DATE) || CASE 
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
+      ELSE '-10-01'
+    END AS "PERIOD", -- Quarterly Period
     count(*) AS "N_OPIOID_DX", -- O4 # opioid misuse diagnoses
     count(DISTINCT STUDY_ID) AS "N_OPIOID_DIAGNOSED" -- O4 # individuals diagnosed with opioid misuse
   FROM src.DIAGNOSES
@@ -46,7 +64,13 @@ CREATE TABLE "DIAGNOSES_AGG_OPIOID" AS
 DROP TABLE IF EXISTS "PILL_IN_AGG";
 CREATE TABLE "PILL_IN_AGG" AS
   SELECT
-    date(TRANSACTION_DATE, 'start of month') AS "PERIOD",
+    -- date(TRANSACTION_DATE, 'start of month') AS "PERIOD", -- Monthly Period
+    strftime('%Y', TRANSACTION_DATE) || CASE 
+      WHEN cast(strftime('%m', TRANSACTION_DATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+      WHEN cast(strftime('%m', TRANSACTION_DATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
+      WHEN cast(strftime('%m', TRANSACTION_DATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
+      ELSE '-10-01'
+    END AS "PERIOD", -- Quarterly Period
     sum(QUANTITY) AS "N_PILLS_ISSUED" -- O5 # of pills issued
   FROM src.PILL_IN
   GROUP BY period
@@ -56,7 +80,13 @@ CREATE TABLE "PILL_IN_AGG" AS
 DROP TABLE IF EXISTS "EMS_AGG";
 CREATE TABLE "EMS_AGG" AS
   SELECT
-    date(INC_INCIDENTDATE, 'start of month') AS "PERIOD",
+    -- date(INC_INCIDENTDATE, 'start of month') AS "PERIOD", -- Monthly Period
+    strftime('%Y', INC_INCIDENTDATE) || CASE 
+      WHEN cast(strftime('%m', INC_INCIDENTDATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+      WHEN cast(strftime('%m', INC_INCIDENTDATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
+      WHEN cast(strftime('%m', INC_INCIDENTDATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
+      ELSE '-10-01'
+    END AS "PERIOD", -- Quarterly Period
     count(*) AS "N_NARCAN_RUNS", -- O6 # of Narcan runs
     count(DISTINCT INC_INCIDENTID) AS "N_NARCAN_INCIDENTS" -- O6 # of ems runs which administered Narcan
   FROM src.EMS
@@ -70,7 +100,13 @@ CREATE TABLE "EMS_AGG" AS
 DROP TABLE IF EXISTS "DIAGNOSES_AGG_STD";
 CREATE TABLE "DIAGNOSES_AGG_STD" AS
   SELECT
-    date(DX_DATE, 'start of month') AS "PERIOD",
+    -- date(DX_DATE, 'start of month') AS "PERIOD", -- Monthly Period
+    strftime('%Y', DX_DATE) || CASE 
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
+      ELSE '-10-01'
+    END AS "PERIOD", -- Quarterly Period
     count(*) AS "N_STD_DX", -- C1 # of sexually transmitted diseases
     count(DISTINCT STUDY_ID) AS "N_STD_DIAGNOSED" -- C1 # individuals diagnosed with sexually transmitted diseases
   FROM src.DIAGNOSES
@@ -82,7 +118,13 @@ CREATE TABLE "DIAGNOSES_AGG_STD" AS
 DROP TABLE IF EXISTS "DIAGNOSES_AGG_HEPC";
 CREATE TABLE "DIAGNOSES_AGG_HEPC" AS
   SELECT
-    date(DX_DATE, 'start of month') AS "PERIOD",
+    -- date(DX_DATE, 'start of month') AS "PERIOD", -- Monthly Period
+    strftime('%Y', DX_DATE) || CASE 
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
+      ELSE '-10-01'
+    END AS "PERIOD", -- Quarterly Period
     count(*) AS "N_HEPC_DX", -- C2 # of Hep C diagnoses
     count(DISTINCT STUDY_ID) AS "N_HEPC_DIAGNOSED" -- C2 # individuals diagnosed with Hep C
   FROM src.DIAGNOSES INNER JOIN src.LABS USING (STUDY_ID)
@@ -94,7 +136,13 @@ CREATE TABLE "DIAGNOSES_AGG_HEPC" AS
 DROP TABLE IF EXISTS "DIAGNOSES_AGG_HIV";
 CREATE TABLE "DIAGNOSES_AGG_HIV" AS
   SELECT
-    date(DX_DATE, 'start of month') AS "PERIOD",
+    -- date(DX_DATE, 'start of month') AS "PERIOD", -- Monthly Period
+    strftime('%Y', DX_DATE) || CASE 
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
+      ELSE '-10-01'
+    END AS "PERIOD", -- Quarterly Period
     count(*) AS "N_HIV_DX", -- C3 # of HIV/AIDS diagnoses
     count(DISTINCT STUDY_ID) AS "N_HIV_DIAGNOSED" -- C3 # individuals diagnosed with HIV/AIDS
   FROM src.DIAGNOSES INNER JOIN src.LABS USING (STUDY_ID)
@@ -106,7 +154,13 @@ CREATE TABLE "DIAGNOSES_AGG_HIV" AS
 DROP TABLE IF EXISTS "DIAGNOSES_AGG_MENTAL_DX";
 CREATE TABLE "DIAGNOSES_AGG_MENTAL_DX" AS
   SELECT
-    date(DX_DATE, 'start of month') AS "PERIOD",
+    -- date(DX_DATE, 'start of month') AS "PERIOD", -- Monthly Period
+    strftime('%Y', DX_DATE) || CASE 
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
+      ELSE '-10-01'
+    END AS "PERIOD", -- Quarterly Period
     count(*) AS "N_MENTAL_DX", -- C4 # of mental health diagnoses
     count(DISTINCT STUDY_ID) AS "N_MENTAL_DIAGNOSED" -- C4 # individuals diagnosed with mental health disorders
   FROM src.DIAGNOSES
@@ -118,7 +172,13 @@ CREATE TABLE "DIAGNOSES_AGG_MENTAL_DX" AS
 DROP TABLE IF EXISTS "DIAGNOSES_AGG_SUD";
 CREATE TABLE "DIAGNOSES_AGG_SUD" AS
   SELECT
-    date(DX_DATE, 'start of month') AS "PERIOD",
+    -- date(DX_DATE, 'start of month') AS "PERIOD", -- Monthly Period
+    strftime('%Y', DX_DATE) || CASE 
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
+      ELSE '-10-01'
+    END AS "PERIOD", -- Quarterly Period
     count(*) AS "N_SUD_DX", -- C5 # substance abuse diagnoses
     count(DISTINCT STUDY_ID) AS "N_SUD_DIAGNOSED" -- C5 # individuals diagnosed with substance abuse diagnoses
   FROM src.DIAGNOSES

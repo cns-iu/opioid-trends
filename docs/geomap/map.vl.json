@@ -1,76 +1,119 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "repeat": [
-    "N_OPIOID_PRESCRIPTIONS",
-    "N_OPIOID_PRESCRIBERS",
-    "N_OPIOID_OVERDOSES",
-    "N_OPIOID_OVERDOSERS",
-    "N_OPIOID_DX",
-    "N_OPIOID_DIAGNOSED",
-    "N_PILLS_ISSUED",
-    "N_NARCAN_RUNS",
-    "N_NARCAN_INCIDENTS",
-    "N_STD_DX",
-    "N_STD_DIAGNOSED",
-    "N_HEPC_DX",
-    "N_HEPC_DIAGNOSED",
-    "N_HIV_DX",
-    "N_HIV_DIAGNOSED",
-    "N_MENTAL_DX",
-    "N_MENTAL_DIAGNOSED",
-    "N_SUD_DX",
-    "N_SUD_DIAGNOSED",
-    "TOTAL_POPULATION",
-    "TOTAL_MALE",
-    "TOTAL_FEMALE",
-    "MEDIAN_AGE",
-    "INCOME_BELOW_POVERTY_12MONTH",
-    "CASH_ASSISTANCE_OR_SNAP",
-    "NOT_IN_LABOR_FORCE"
-  ],
-  "columns": 2,
-  "resolve": {
-    "scale": {
-      "color": "independent"
+  "data": {
+    "url": "../data/geomap-data.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "PERIOD": "date",
+        "N_OPIOID_PRESCRIPTIONS": "number",
+        "N_OPIOID_PRESCRIBERS": "number",
+        "N_OPIOID_OVERDOSES": "number",
+        "N_OPIOID_OVERDOSERS": "number",
+        "N_OPIOID_DX": "number",
+        "N_OPIOID_DIAGNOSED": "number",
+        "N_PILLS_ISSUED": "number",
+        "N_NARCAN_RUNS": "number",
+        "N_NARCAN_INCIDENTS": "number",
+        "N_STD_DX": "number",
+        "N_STD_DIAGNOSED": "number",
+        "N_HEPC_DX": "number",
+        "N_HEPC_DIAGNOSED": "number",
+        "N_HIV_DX": "number",
+        "N_HIV_DIAGNOSED": "number",
+        "N_MENTAL_DX": "number",
+        "N_MENTAL_DIAGNOSED": "number",
+        "N_SUD_DX": "number",
+        "N_SUD_DIAGNOSED": "number",
+        "TOTAL_POPULATION": "number",
+        "TOTAL_MALE": "number",
+        "TOTAL_FEMALE": "number",
+        "MEDIAN_AGE": "number",
+        "INCOME_BELOW_POVERTY_12MONTH": "number",
+        "CASH_ASSISTANCE_OR_SNAP": "number",
+        "NOT_IN_LABOR_FORCE": "number"
+      }
     }
   },
-  "spec": {
-    "width": 300,
-    "height": 200,
-    "data": {
-      "url": "../data/geomap-data.csv"
-    },
-    "transform": [
-      {
-        "filter": {
-          "field": "PERIOD",
-          "equal": "2017-01-01"
-        }
-      },
-      {
-        "lookup": "TRACT_5",
-        "from": {
-          "data": {
-            "url": "../data/indiana.topojson",
-            "format": {
-              "type": "topojson",
-              "feature": "counties"
-            }
-          },
-          "key": "id",
-          "fields": ["type", "id", "properties", "geometry"]
-        }
-      }
-    ],
-    "projection": {
-      "type": "mercator"
-    },
-    "mark": "geoshape",
-    "encoding": {
-      "color": {
-        "field": {"repeat": "repeat"},
-        "type": "quantitative"
+  "transform": [
+    {
+      "lookup": "TRACT_5",
+      "from": {
+        "data": {
+          "url": "../data/indiana.topojson",
+          "format": {
+            "type": "topojson",
+            "feature": "counties"
+          }
+        },
+        "key": "id",
+        "fields": ["type", "id", "properties", "geometry"]
       }
     }
-  }
+  ],
+  "vconcat": [
+    {
+      "repeat": [
+        "N_OPIOID_PRESCRIBERS",
+        "N_OPIOID_OVERDOSERS",
+        "N_OPIOID_DIAGNOSED",
+        "N_PILLS_ISSUED"
+      ],
+      "columns": 2,
+      "resolve": {
+        "scale": {
+          "color": "independent"
+        }
+      },
+      "spec": {
+        "width": 300,
+        "height": 220,
+        "transform": [
+          {"filter": {"selection": "brush"}}
+        ],
+        "projection": {
+          "type": "mercator"
+        },
+        "mark": {
+          "type": "geoshape",
+          "stroke": "#fcfcfc"
+        },
+        "encoding": {
+          "color": {
+            "field": {"repeat": "repeat"},
+            "type": "quantitative"
+          }
+        }
+      }
+    },
+    {
+      "mark": "area",
+      "width": 790,
+      "height": 160,
+      "selection": {
+        "brush": {
+          "type": "interval",
+          "encodings": ["x"],
+          "empty": "all"
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "PERIOD",
+          "timeUnit": "yearmonth",
+          "type": "temporal"
+        },
+        "y": {
+          "aggregate": "sum",
+          "field": "N_OPIOID_PRESCRIPTIONS",
+          "type": "quantitative",
+          "axis": {
+            "title": "N_OPIOID_PRESCRIPTIONS",
+            "orient": "right",
+            "titlePadding": 20
+          }
+        }
+      }
+    }
+  ]
 }
