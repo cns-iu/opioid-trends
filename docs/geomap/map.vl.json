@@ -1,5 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "name": "Opioid Trends on the Indiana Map",
   "data": {
     "url": "../data/geomap-data.csv",
     "format": {
@@ -100,7 +101,6 @@
       "encoding": {
         "x": {
           "field": "PERIOD",
-          "timeUnit": "yearmonth",
           "type": "temporal"
         },
         "y": {
