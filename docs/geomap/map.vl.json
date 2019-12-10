@@ -53,9 +53,43 @@
   ],
   "vconcat": [
     {
+      "repeat": [
+        "N_OPIOID_PRESCRIBERS",
+        "N_OPIOID_OVERDOSERS",
+        "N_OPIOID_DIAGNOSED",
+        "N_PILLS_ISSUED"
+      ],
+      "columns": 2,
+      "resolve": {
+        "scale": {
+          "color": "independent"
+        }
+      },
+      "spec": {
+        "width": 300,
+        "height": 220,
+        "transform": [
+          {"filter": {"selection": "brush"}}
+        ],
+        "projection": {
+          "type": "mercator"
+        },
+        "mark": {
+          "type": "geoshape",
+          "stroke": "#fcfcfc"
+        },
+        "encoding": {
+          "color": {
+            "field": {"repeat": "repeat"},
+            "type": "quantitative"
+          }
+        }
+      }
+    },
+    {
       "mark": "area",
-      "width": 800,
-      "height": 150,
+      "width": 790,
+      "height": 160,
       "selection": {
         "brush": {
           "type": "interval",
@@ -77,40 +111,6 @@
             "title": "N_OPIOID_PRESCRIPTIONS",
             "orient": "right",
             "titlePadding": 20
-          }
-        }
-      }
-    },
-    {
-      "repeat": [
-        "N_OPIOID_PRESCRIBERS",
-        "N_OPIOID_OVERDOSERS",
-        "N_OPIOID_DIAGNOSED",
-        "N_PILLS_ISSUED"
-      ],
-      "columns": 2,
-      "resolve": {
-        "scale": {
-          "color": "independent"
-        }
-      },
-      "spec": {
-        "width": 300,
-        "height": 200,
-        "transform": [
-          {"filter": {"selection": "brush"}}
-        ],
-        "projection": {
-          "type": "mercator"
-        },
-        "mark": {
-          "type": "geoshape",
-          "stroke": "#fcfcfc"
-        },
-        "encoding": {
-          "color": {
-            "field": {"repeat": "repeat"},
-            "type": "quantitative"
           }
         }
       }
