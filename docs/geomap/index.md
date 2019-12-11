@@ -9,8 +9,9 @@
     // Replace relative paths with absolute URLs
     var host = new URL(document.URL).origin;
     var spec = text.replace('../data/', host + '/data/');
-
-    vegaEmbed("#visualization", JSON.parse(spec), opt).then(console.log);
+    return vegaEmbed("#visualization", JSON.parse(spec), opt);
+  }).then((results) => {
+    console.log("Visualization successfully loaded");
   });
 </script>
 
