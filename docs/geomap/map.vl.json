@@ -6,9 +6,13 @@
     "anchor": "middle",
     "fontSize": 28
   },
+  "padding": 10,
   "autosize": {
     "type": "pad",
     "resize": true
+  },
+  "config": {
+    "view": {"strokeOpacity": 0}
   },
   "data": {
     "url": "http://localhost:41121/data/geomap-data-row-based.csv",
@@ -50,11 +54,10 @@
       "filter": "datum.TRACT_5 != '' && !!datum.VALUE && toString(datum.VALUE) != 'Infinity' && !!datum.LEGEND_ORDER"
     }
   ],
-  
   "vconcat": [ 
     {
-      "width": 300,
-      "height": 220,
+      "width": 250,
+      "height": 250,
       "transform": [
         {
           "filter": {
@@ -65,7 +68,7 @@
           }
         },
         {
-          "joinaggregate": [{
+          "aggregate": [{
             "op": "sum",
             "field": "VALUE",
             "as": "value"
@@ -101,7 +104,11 @@
           "field": "LABEL",
           "type": "nominal",
           "columns": 2,
-          "title": " "
+          "title": " ",
+          "header": {
+            "labelAlign": "right",
+            "labelAnchor": "end"
+          }
         },
         "shape": {
           "field": "geo",
@@ -125,8 +132,11 @@
       }
     },
     {
-      "width": 790,
-      "height": 160,
+      "width": 703,
+      "height": 150,
+      "view": {
+        "strokeOpacity": 1
+      },
       "layer": [
         {
           "mark": "line",
@@ -134,7 +144,7 @@
             "period": {
               "type": "interval",
               "encodings": ["x"],
-              "empty": "all"
+              "on": "[mousedown, window:mouseup] > window:mousemove{150, 300}"
             },
             "data_variable": {
               "type": "multi", 
