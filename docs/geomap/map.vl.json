@@ -15,7 +15,7 @@
     "view": {"strokeOpacity": 0}
   },
   "data": {
-    "url": "http://localhost:41121/data/geomap-data-row-based.csv",
+    "url": "../data/geomap-data-row-based.csv",
     "format": {
       "type": "csv",
       "parse": {
@@ -31,7 +31,7 @@
         "key": "DATA_VARIABLE",
         "fields": ["LEGEND_ORDER", "LABEL", "TYPE", "SCALE", "COLOR", "SCALING_FACTOR"],
         "data": {
-          "url": "http://localhost:41121/data/data-variables.csv",
+          "url": "../data/data-variables.csv",
           "format": {
             "type": "csv",
             "parse": {
@@ -81,7 +81,7 @@
           "lookup": "TRACT_5",
           "from": {
             "data": {
-              "url": "http://localhost:41121/data/indiana.topojson",
+              "url": "../data/indiana.topojson",
               "format": {
                 "type": "topojson",
                 "feature": "counties"
