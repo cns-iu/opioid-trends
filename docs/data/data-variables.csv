@@ -1,27 +1,27 @@
-DATA_VARIABLE,LABEL,TYPE,SCALE,COLOR,SCALING_FACTOR
-N_OPIOID_PRESCRIPTIONS,# of opioid prescriptions,Opioid related events,Events,1,1
-N_OPIOID_PRESCRIBERS,# who had opioid prescriptions,Opioid related events,Persons,1,1
-N_OPIOID_OVERDOSES,# of opioid overdoses,Opioid related events,Events,2,1
-N_OPIOID_OVERDOSERS,# who had opioid overdoses,Opioid related events,Persons,2,1
-N_OPIOID_DX,# of opioid misuse diagnoses,Opioid related events,Events,3,1
-N_OPIOID_DIAGNOSED,# who had opioid misuse diagnosed,Opioid related events,Persons,3,1
-N_PILLS_ISSUED,# of pills issued,Opioid related events,Pills,4,1
-N_NARCAN_RUNS,# of times narcan was used during an EMS run,Opioid related events,Events,5,1
-N_NARCAN_INCIDENTS,# incidents where narcan was used during an EMS run,Opioid related events,Events,5,1
-N_STD_DX,# of STDs diagnosed,Comorbid events,Events,6,1
-N_STD_DIAGNOSED,# who had an STD diagnoses,Comorbid events,Persons,6,1
-N_HEPC_DX,# of Hepatitus C diagnoses,Comorbid events,Events,7,1
-N_HEPC_DIAGNOSED,# who had a Hepatitus C diagnosis,Comorbid events,Persons,7,1
-N_HIV_DX,# of HIV/AIDS diagnoses,Comorbid events,Events,8,1
-N_HIV_DIAGNOSED,# who had an HIV/AIDS diagnosis,Comorbid events,Persons,8,1
-N_MENTAL_DX,# of mental health diagnoses,Comorbid events,Events,9,1
-N_MENTAL_DIAGNOSED,# who had a mental health diagnosis,Comorbid events,Persons,9,1
-N_SUD_DX,# of substance use disorder diagnoses,Comorbid events,Events,10,1
-N_SUD_DIAGNOSED,# who had a substance use disorder diagnosis,Comorbid events,Persons,10,1
-TOTAL_POPULATION,# who were residents,Demographic data,Persons,11,1
-TOTAL_MALE,# who were male residents,Demographic data,Persons,12,1
-TOTAL_FEMALE,# who were female residents,Demographic data,Persons,13,1
-MEDIAN_AGE,Median age of residents,Demographic data,Age,14,1
-INCOME_BELOW_POVERTY_12MONTH,# who had income below poverty level within 12 months,Demographic data,Persons,15,1
-CASH_ASSISTANCE_OR_SNAP,# who had cash asistance or SNAP,Demographic data,Persons,16,1
-NOT_IN_LABOR_FORCE,# who were not in the labor force,Demographic data,Persons,17,1
+LEGEND_ORDER,DATA_VARIABLE,LABEL,TYPE,SCALE,COLOR,SCALING_FACTOR
+01,N_OPIOID_PRESCRIPTIONS,# of opioid prescriptions,Opioid related events,Events,1,1
+02,N_OPIOID_PRESCRIBERS,# who had opioid prescriptions,Opioid related events,Persons,1,1
+03,N_OPIOID_OVERDOSES,# of opioid overdoses,Opioid related events,Events,2,1
+04,N_OPIOID_OVERDOSERS,# who had opioid overdoses,Opioid related events,Persons,2,1
+05,N_OPIOID_DX,# of opioid misuse diagnoses,Opioid related events,Events,3,1
+06,N_OPIOID_DIAGNOSED,# who had opioid misuse diagnosed,Opioid related events,Persons,3,1
+07,N,_PILLS_ISSUED,# of pills issued,Opioid related events,Pills,4,1
+08,N_NARCAN_RUNS,# of times narcan was used during an EMS run,Opioid related events,Events,5,1
+09,N_NARCAN_INCIDENTS,# incidents where narcan was used during an EMS run,Opioid related events,Events,5,1
+10,N_STD_DX,# of STDs diagnosed,Comorbid events,Events,6,1
+11,N_STD_DIAGNOSED,# who had an STD diagnoses,Comorbid events,Persons,6,1
+12,N_HEPC_DX,# of Hepatitus C diagnoses,Comorbid events,Events,7,1
+13,N_HEPC_DIAGNOSED,# who had a Hepatitus C diagnosis,Comorbid events,Persons,7,1
+14,N_HIV_DX,# of HIV/AIDS diagnoses,Comorbid events,Events,8,1
+15,N_HIV_DIAGNOSED,# who had an HIV/AIDS diagnosis,Comorbid events,Persons,8,1
+16,N_MENTAL_DX,# of mental health diagnoses,Comorbid events,Events,9,1
+17,N_MENTAL_DIAGNOSED,# who had a mental health diagnosis,Comorbid events,Persons,9,1
+18,N_SUD_DX,# of substance use disorder diagnoses,Comorbid events,Events,10,1
+19,N_SUD_DIAGNOSED,# who had a substance use disorder diagnosis,Comorbid events,Persons,10,1
+20,TOTAL_POPULATION,# who were residents,Demographic data,Persons,11,1
+21,TOTAL_MALE,# who were male residents,Demographic data,Persons,12,1
+22,TOTAL_FEMALE,# who were female residents,Demographic data,Persons,13,1
+23,MEDIAN_AGE,Median age of residents,Demographic data,Age,14,1
+24,INCOME_BELOW_POVERTY_12MONTH,# who had income below poverty level within 12 months,Demographic data,Persons,15,1
+25,CASH_ASSISTANCE_OR_SNAP,# who had cash asistance or SNAP,Demographic data,Persons,16,1
+26,NOT_IN_LABOR_FORCE,# who were not in the labor force,Demographic data,Persons,17,1

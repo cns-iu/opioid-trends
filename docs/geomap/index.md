@@ -1,7 +1,10 @@
-# Opioid Trends on the Indiana Map
-
 {{ vega_script_tags }}
-{{ include_vega_ext('map.vl.json') }}
+
+<div id="visualization"></div>
+<script type="text/javascript">
+  var opt = { "renderer": "canvas", "actions": true };
+  vegaEmbed("#visualization", "map.vl.json", opt).then(console.log);
+</script>
 
 <style>
 /* hack to turn off gray background in the readthedocs theme */
