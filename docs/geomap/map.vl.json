@@ -117,6 +117,9 @@
         "color": {
           "field": "value",
           "type": "quantitative",
+          "scale": {
+            "type": "sqrt"
+          },
           "title": "Value"
         },
         "tooltip": {
@@ -175,6 +178,9 @@
             "title": "",
             "orient": "right",
             "titlePadding": 20
+          },
+          "scale": {
+            "type": "log"
           }
         },
         "color": {
@@ -188,7 +194,7 @@
         },
         "opacity": {
           "condition": {"selection": "data_variable", "value": 1},
-          "value": 0.2
+          "value": 0.1
         }
       },
       "resolve": {
