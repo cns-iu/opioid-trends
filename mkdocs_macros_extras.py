@@ -81,24 +81,28 @@ def declare_variables(variables, macro):
   )
 
   @macro
-  def include_vega(spec):
+  def include_vega(spec, opt = None):
     vid = unique('vega-embed-id')
     json_spec = json.dumps(spec, separators=(',', ':'))
+    opts = { 'rendered': 'canvas', 'actions': False, **(opt or {}) }
+    json_opts = json.dumps(opts, separators=(',', ':'))
+
     return _multiline(
       f'<div id="{ vid }"></div>',
       f'<script type="text/javascript">',
-      f'  var opt = {{ "renderer": "canvas", "actions": false }};',
-      f'  vegaEmbed("#{ vid }", JSON.parse(\'{ json_spec }\'), opt);',
+      f'  vegaEmbed("#{ vid }", JSON.parse(\'{ json_spec }\'), JSON.parse(\'{ json_opts }\'));',
       f'</script>'
     )
 
   @macro
-  def include_vega_ext(url):
+  def include_vega_ext(url, opt = None):
     vid = unique('vega-embed-id')
+    opts = { 'rendered': 'canvas', 'actions': False, **(opt or {}) }
+    json_opts = json.dumps(opts, separators=(',', ':'))
+
     return _multiline(
       f'<div id="{ vid }"></div>',
       f'<script type="text/javascript">',
-      f'  var opt = {{ "renderer": "canvas", "actions": false }};',
-      f'  vegaEmbed("#{ vid }", "{ url }", opt);',
+      f'  vegaEmbed("#{ vid }", "{ url }", JSON.parse(\'{ json_opts }\'));',
       f'</script>'
     )
