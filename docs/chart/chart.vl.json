@@ -1,10 +1,20 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
 
-  "name": "Opioid Trends Over Time",
-  "autosize": {
-    "type": "fit-x",
-    "contains": "padding"
+  "title": {
+    "text": "Opioid Trends Over Time",
+    "anchor": "middle",
+    "fontSize": 28
+  },
+  "padding": 10,
+  "config": {
+    "autosize": {
+      "type": "pad"
+    },
+
+    "axisBottom": { "labelFlush": false },
+    "mark": { "tooltip": null },
+    "range": { "category": { "scheme": "category20" } }
   },
 
   "data": {
@@ -23,7 +33,10 @@
       "lookup": "DATA_VARIABLE",
       "from": {
         "key": "DATA_VARIABLE",
-        "fields": ["LABEL", "TYPE", "SCALE", "COLOR", "SCALING_FACTOR"],
+        "fields": [
+          "LEGEND_ORDER", "LABEL", "TYPE",
+          "SCALE", "COLOR", "SCALING_FACTOR"
+        ],
         "data": {
           "url": "../data/data-variables.csv",
           "format": {
@@ -49,90 +62,347 @@
 
   "vconcat": [
     {
-      "width": 800,
-      "height": 440,
+      "width": 703,
+      "height": 480,
+      "title": " ",
 
       "layer": [
         {
-          "mark": "line"
-        }
-      ],
+          "transform": [{ "filter": { "selection": "labelpoints" } }],
 
+          "mark": {
+            "type": "rule",
+            "color": "gray"
+          },
+          "encoding": {
+            "x": {
+              "type": "temporal",
+              "field": "PERIOD",
+              "scale": { "domain": { "selection": "period" } }
+            }
+          }
+        },
+        {
+          "encoding": {
+            "x": {
+              "type": "temporal",
+              "field": "PERIOD",
+              "scale": { "domain": { "selection": "period" } },
+              "axis": { "title": null }
+            },
+            "y": {
+              "type": "quantitative",
+              "field": "VALUE",
+              "scale": { "type": "log" },
+              "axis": {
+                "title": null,
+                "tickCount": 6
+              }
+            },
+
+            "color": {
+              "type": "nominal",
+              "field": "LABEL",
+              "title": "Data Variable",
+              "scale": {
+                "domain": [
+                  "# of opioid prescriptions",
+                  "# who had opioid prescriptions",
+                  "# of opioid overdoses",
+                  "# who had opioid overdoses",
+                  "# of opioid misuse diagnoses",
+                  "# who had opioid misuse diagnosed",
+                  "# of pills issued",
+                  "# of times narcan was used during an EMS run",
+                  "# incidents where narcan was used during an EMS run",
+                  "# of STDs diagnosed",
+                  "# who had an STD diagnoses",
+                  "# of Hepatitus C diagnoses",
+                  "# who had a Hepatitus C diagnosis",
+                  "# of HIV/AIDS diagnoses",
+                  "# who had an HIV/AIDS diagnosis",
+                  "# of mental health diagnoses",
+                  "# who had a mental health diagnosis",
+                  "# of substance use disorder diagnoses",
+                  "# who had a substance use disorder diagnosis",
+                  "# who were residents",
+                  "# who were male residents",
+                  "# who were female residents",
+                  "Median age of residents",
+                  "# who had income below poverty level within 12 months",
+                  "# who had cash asistance or SNAP",
+                  "# who were not in the labor force"
+                ],
+                "range": [
+                  "#1f77b4",
+                  "#1f77b4",
+                  "#aec7e8",
+                  "#aec7e8",
+                  "#ff7f0e",
+                  "#ff7f0e",
+                  "#ffbb78",
+                  "#2ca02c",
+                  "#2ca02c",
+                  "#98df8a",
+                  "#98df8a",
+                  "#d62728",
+                  "#d62728",
+                  "#ff9896",
+                  "#ff9896",
+                  "#9467bd",
+                  "#9467bd",
+                  "#c5b0d5",
+                  "#c5b0d5",
+                  "#8c564b",
+                  "#c49c94",
+                  "#e377c2",
+                  "#f7b6d2",
+                  "#bcbd22",
+                  "#dbdb8d",
+                  "#17becf"
+                ]
+              }
+            },
+
+            "detail": {
+              "type": "nominal",
+              "field": "DATA_VARIABLE"
+            }
+          },
+
+          "layer": [
+            { "mark": "line" },
+            {
+              "mark": {
+                "type": "point",
+                "filled": true
+              },
+              "encoding": {
+                "opacity": {
+                  "condition": {
+                    "selection": "labelpoints",
+                    "value": 1
+                  },
+                  "value": 0
+                }
+              },
+              "selection": {
+                "labelpoints": {
+                  "type": "single",
+                  "nearest": true,
+                  "on": "mouseover",
+                  "encodings": ["x"],
+                  "empty": "none"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "transform": [{ "filter": { "selection": "labelpoints" } }],
+
+          "encoding": {
+            "x": {
+              "type": "temporal",
+              "field": "PERIOD",
+              "scale": { "domain": { "selection": "period" } }
+            },
+            "y": {
+              "type": "quantitative",
+              "field": "VALUE"
+            },
+
+            "text": {
+              "type": "quantitative",
+              "field": "VALUE",
+              "format": ".2~f"
+            }
+          },
+
+          "layer": [
+            {
+              "mark": {
+                "type": "text",
+                "stroke": "white",
+                "strokeWidth": 2,
+                "align": "left",
+                "dx": 5,
+                "dy": -5
+              }
+            },
+            {
+              "mark": {
+                "type": "text",
+                "align": "left",
+                "dx": 5,
+                "dy": -5
+              },
+              "encoding": {
+                "color": {
+                  "type": "nominal",
+                  "field": "LABEL",
+                  "scale": {
+                    "domain": [
+                      "# of opioid prescriptions",
+                      "# who had opioid prescriptions",
+                      "# of opioid overdoses",
+                      "# who had opioid overdoses",
+                      "# of opioid misuse diagnoses",
+                      "# who had opioid misuse diagnosed",
+                      "# of pills issued",
+                      "# of times narcan was used during an EMS run",
+                      "# incidents where narcan was used during an EMS run",
+                      "# of STDs diagnosed",
+                      "# who had an STD diagnoses",
+                      "# of Hepatitus C diagnoses",
+                      "# who had a Hepatitus C diagnosis",
+                      "# of HIV/AIDS diagnoses",
+                      "# who had an HIV/AIDS diagnosis",
+                      "# of mental health diagnoses",
+                      "# who had a mental health diagnosis",
+                      "# of substance use disorder diagnoses",
+                      "# who had a substance use disorder diagnosis",
+                      "# who were residents",
+                      "# who were male residents",
+                      "# who were female residents",
+                      "Median age of residents",
+                      "# who had income below poverty level within 12 months",
+                      "# who had cash asistance or SNAP",
+                      "# who were not in the labor force"
+                    ],
+                    "range": [
+                      "#1f77b4",
+                      "#1f77b4",
+                      "#aec7e8",
+                      "#aec7e8",
+                      "#ff7f0e",
+                      "#ff7f0e",
+                      "#ffbb78",
+                      "#2ca02c",
+                      "#2ca02c",
+                      "#98df8a",
+                      "#98df8a",
+                      "#d62728",
+                      "#d62728",
+                      "#ff9896",
+                      "#ff9896",
+                      "#9467bd",
+                      "#9467bd",
+                      "#c5b0d5",
+                      "#c5b0d5",
+                      "#8c564b",
+                      "#c49c94",
+                      "#e377c2",
+                      "#f7b6d2",
+                      "#bcbd22",
+                      "#dbdb8d",
+                      "#17becf"
+                    ]
+                  },
+                  "legend": null
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 703,
+      "height": 150,
+
+      "mark": "line",
       "encoding": {
         "x": {
           "type": "temporal",
           "field": "PERIOD",
-          "scale": {
-            "domain": {
-              "selection": "brush"
-            }
-          },
-          "axis": {
-            "title": null
-          }
-        },
-        "y": {
-          "type": "quantitative",
-          "field": "VALUE"
-        },
-        "color": {
-          "type": "nominal",
-          "field": "DATA_VARIABLE",
-          "scale": {
-            "scheme": "category20"
-          }
-        }
-      },
-
-      "resolve": {
-        "axis": {
-          "x": "shared",
-          "y": "independent"
-        }
-      }
-    },
-    {
-      "width": 800,
-      "height": 60,
-
-      "layer": [
-        {
-          "mark": "line",
-
-          "selection": {
-            "brush": {
-              "type": "interval",
-              "encodings": ["x"]
-            }
-          }
-        }
-      ],
-
-      "encoding": {
-        "x": {
-          "type": "temporal",
-          "field": "PERIOD"
+          "axis": { "title": "Period" }
         },
         "y": {
           "type": "quantitative",
           "field": "VALUE",
+          "scale": { "type": "log" },
           "axis": {
+            "title": null,
+            "orient": "right",
+            "tickCount": 6,
             "grid": false
           }
         },
+
         "color": {
           "type": "nominal",
-          "field": "DATA_VARIABLE",
+          "field": "LABEL",
           "scale": {
-            "scheme": "category20"
-          }
+            "domain": [
+              "# of opioid prescriptions",
+              "# who had opioid prescriptions",
+              "# of opioid overdoses",
+              "# who had opioid overdoses",
+              "# of opioid misuse diagnoses",
+              "# who had opioid misuse diagnosed",
+              "# of pills issued",
+              "# of times narcan was used during an EMS run",
+              "# incidents where narcan was used during an EMS run",
+              "# of STDs diagnosed",
+              "# who had an STD diagnoses",
+              "# of Hepatitus C diagnoses",
+              "# who had a Hepatitus C diagnosis",
+              "# of HIV/AIDS diagnoses",
+              "# who had an HIV/AIDS diagnosis",
+              "# of mental health diagnoses",
+              "# who had a mental health diagnosis",
+              "# of substance use disorder diagnoses",
+              "# who had a substance use disorder diagnosis",
+              "# who were residents",
+              "# who were male residents",
+              "# who were female residents",
+              "Median age of residents",
+              "# who had income below poverty level within 12 months",
+              "# who had cash asistance or SNAP",
+              "# who were not in the labor force"
+            ],
+            "range": [
+              "#1f77b4",
+              "#1f77b4",
+              "#aec7e8",
+              "#aec7e8",
+              "#ff7f0e",
+              "#ff7f0e",
+              "#ffbb78",
+              "#2ca02c",
+              "#2ca02c",
+              "#98df8a",
+              "#98df8a",
+              "#d62728",
+              "#d62728",
+              "#ff9896",
+              "#ff9896",
+              "#9467bd",
+              "#9467bd",
+              "#c5b0d5",
+              "#c5b0d5",
+              "#8c564b",
+              "#c49c94",
+              "#e377c2",
+              "#f7b6d2",
+              "#bcbd22",
+              "#dbdb8d",
+              "#17becf"
+            ]
+          },
+          "legend": null
+        },
+
+        "detail": {
+          "type": "nominal",
+          "field": "DATA_VARIABLE"
         }
       },
-
-      "resolve": {
-        "axis": {
-          "x": "shared",
-          "y": "independent"
+      "selection": {
+        "period": {
+          "type": "interval",
+          "encodings": ["x"]
         }
       }
     }
