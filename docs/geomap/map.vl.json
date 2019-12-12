@@ -29,26 +29,11 @@
       "lookup": "DATA_VARIABLE",
       "from": {
         "key": "DATA_VARIABLE",
-        "fields": ["LEGEND_ORDER", "LABEL", "TYPE", "SCALE", "COLOR", "SCALING_FACTOR"],
+        "fields": ["LEGEND_ORDER", "LABEL"],
         "data": {
-          "url": "../data/data-variables.csv",
-          "format": {
-            "type": "csv",
-            "parse": {
-              "COLOR": "number",
-              "SCALING_FACTOR": "number"
-            }
-          }
+          "url": "../data/data-variables.csv"
         }
       }
-    },
-    {
-      "calculate": "toNumber(datum.COLOR)",
-      "as": "COLOR"
-    },
-    {
-      "calculate": "toNumber(datum.SCALING_FACTOR)",
-      "as": "SCALING_FACTOR"
     },
     {
       "filter": "datum.TRACT_5 != '' && !!datum.VALUE && toString(datum.VALUE) != 'Infinity' && !!datum.LEGEND_ORDER"
@@ -59,14 +44,8 @@
       "width": 250,
       "height": 250,
       "transform": [
-        {
-          "filter": {
-            "and": [
-              {"selection": "period"},
-              {"selection": "data_variable"}
-            ]
-          }
-        },
+        {"filter": {"selection": "data_variable"}},
+        {"filter": {"selection": "period"}},
         {
           "aggregate": [{
             "op": "sum",

@@ -7,9 +7,9 @@
     return result.text();
   }).then((text) => {
     // Replace relative paths with absolute URLs
-    var host = new URL(document.URL).origin;
-    var spec = text.replace('../data/', host + '/data/');
-    return vegaEmbed("#visualization", JSON.parse(spec), opt);
+    var baseUrl = document.URL.replace('/geomap/index.html', '/data/');
+    var spec = JSON.parse(text.replace(/\.\.\/data\//gi, baseUrl));
+    return vegaEmbed("#visualization", spec, opt);
   }).then((results) => {
     console.log("Visualization successfully loaded");
   });

@@ -5,7 +5,7 @@ LEGEND_ORDER,DATA_VARIABLE,LABEL,TYPE,SCALE,COLOR,SCALING_FACTOR
 04,N_OPIOID_OVERDOSERS,# who had opioid overdoses,Opioid related events,Persons,2,1
 05,N_OPIOID_DX,# of opioid misuse diagnoses,Opioid related events,Events,3,1
 06,N_OPIOID_DIAGNOSED,# who had opioid misuse diagnosed,Opioid related events,Persons,3,1
-07,N,_PILLS_ISSUED,# of pills issued,Opioid related events,Pills,4,1
+07,N_PILLS_ISSUED,# of pills issued,Opioid related events,Pills,4,1
 08,N_NARCAN_RUNS,# of times narcan was used during an EMS run,Opioid related events,Events,5,1
 09,N_NARCAN_INCIDENTS,# incidents where narcan was used during an EMS run,Opioid related events,Events,5,1
 10,N_STD_DX,# of STDs diagnosed,Comorbid events,Events,6,1
