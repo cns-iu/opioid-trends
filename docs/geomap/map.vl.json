@@ -39,7 +39,7 @@
       "filter": "datum.TRACT_5 != '' && !!datum.VALUE && toString(datum.VALUE) != 'Infinity' && !!datum.LEGEND_ORDER"
     }
   ],
-  "vconcat": [ 
+  "vconcat": [
     {
       "width": 250,
       "height": 250,
@@ -129,7 +129,7 @@
               "on": "[mousedown, window:mouseup] > window:mousemove{150, 300}"
             },
             "data_variable": {
-              "type": "multi", 
+              "type": "multi",
               "fields": ["LABEL"],
               "bind": {"legend": "dblclick"},
               "init": [
@@ -146,17 +146,17 @@
         "x": {
           "type": "temporal",
           "field": "PERIOD",
-          "title": "Period"
+          "title": null
         },
         "y": {
           "aggregate": "sum",
           "type": "quantitative",
           "field": "VALUE",
           "axis": {
-            "grid": false,
-            "title": "",
+            "title": null,
             "orient": "right",
-            "titlePadding": 20
+            "tickCount": 6,
+            "grid": false
           },
           "scale": {
             "type": "log"
