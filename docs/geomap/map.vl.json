@@ -97,7 +97,9 @@
           "field": "value",
           "type": "quantitative",
           "scale": {
-            "type": "sqrt"
+            "type": "sqrt",
+            "nice": true,
+            "zero": true
           },
           "title": "Value"
         },
