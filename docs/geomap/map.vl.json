@@ -29,7 +29,7 @@
       "lookup": "DATA_VARIABLE",
       "from": {
         "key": "DATA_VARIABLE",
-        "fields": ["LEGEND_ORDER", "LABEL"],
+        "fields": ["LEGEND_ORDER", "LABEL", "TYPE"],
         "data": {
           "url": "../data/data-variables.csv"
         }
@@ -121,7 +121,11 @@
       },
       "layer": [
         {
-          "mark": "line",
+          "transform": [{ "filter": "datum.TYPE == 'Opioid related events'" }],
+          "mark": {
+            "type": "line",
+            "strokeDash": []
+          },
           "selection": {
             "period": {
               "type": "interval",
@@ -139,6 +143,27 @@
                 {"LABEL": "# who had a substance use disorder diagnosis"}
               ]
             }
+          }
+        },
+        {
+          "transform": [{ "filter": "datum.TYPE == 'Comorbid events'" }],
+          "mark": {
+            "type": "line",
+            "strokeDash": [20, 4]
+          }
+        },
+        {
+          "transform": [{ "filter": "datum.TYPE == 'Demographic data'" }],
+          "mark": {
+            "type": "line",
+            "strokeDash": [4, 4]
+          }
+        },
+        {
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "fillOpacity": 0
           }
         }
       ],
@@ -165,11 +190,70 @@
         "color": {
           "type": "nominal",
           "field": "LABEL",
-          "scale": {
-            "scheme": "category20"
-          },
           "title": "Data Variable",
-          "sort": {"field": "LEGEND_ORDER"}
+          "sort": {"field": "LEGEND_ORDER"},
+          "scale": {
+            "domain": [
+              "# of opioid prescriptions",
+              "# who had opioid prescriptions",
+              "# of opioid overdoses",
+              "# who had opioid overdoses",
+              "# of opioid misuse diagnoses",
+              "# who had opioid misuse diagnosed",
+              "# of pills issued",
+              "# of times narcan was used during an EMS run",
+              "# incidents where narcan was used during an EMS run",
+              "# of STDs diagnosed",
+              "# who had an STD diagnoses",
+              "# of Hepatitus C diagnoses",
+              "# who had a Hepatitus C diagnosis",
+              "# of HIV/AIDS diagnoses",
+              "# who had an HIV/AIDS diagnosis",
+              "# of mental health diagnoses",
+              "# who had a mental health diagnosis",
+              "# of substance use disorder diagnoses",
+              "# who had a substance use disorder diagnosis",
+              "# who were residents",
+              "# who were male residents",
+              "# who were female residents",
+              "Median age of residents",
+              "# who had income below poverty level within 12 months",
+              "# who had cash asistance or SNAP",
+              "# who were not in the labor force"
+            ],
+            "range": [
+              "#1f77b4",
+              "#1f77b4",
+              "#aec7e8",
+              "#aec7e8",
+              "#ff7f0e",
+              "#ff7f0e",
+              "#ffbb78",
+              "#2ca02c",
+              "#2ca02c",
+              "#98df8a",
+              "#98df8a",
+              "#d62728",
+              "#d62728",
+              "#ff9896",
+              "#ff9896",
+              "#9467bd",
+              "#9467bd",
+              "#c5b0d5",
+              "#c5b0d5",
+              "#8c564b",
+              "#c49c94",
+              "#e377c2",
+              "#f7b6d2",
+              "#bcbd22",
+              "#dbdb8d",
+              "#17becf"
+            ]
+          },
+          "legend": {
+            "symbolType": "circle",
+            "offset": -20
+          }
         },
         "opacity": {
           "condition": {"selection": "data_variable", "value": 1},

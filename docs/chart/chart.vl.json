@@ -83,6 +83,7 @@
           }
         },
         {
+          "transform": [{ "filter": { "selection": "data_variable" } }],
           "encoding": {
             "x": {
               "type": "temporal",
@@ -161,7 +162,17 @@
                   "#dbdb8d",
                   "#17becf"
                 ]
+              },
+              "legend": {
+                "offset": -20
               }
+            },
+            "opacity": {
+              "condition": {
+                "selection": "data_variable",
+                "value": 1
+              },
+              "value": 0.1
             },
 
             "detail": {
@@ -172,18 +183,13 @@
 
           "layer": [
             {
-              "mark": "line",
-              "encoding": {
-                "opacity": {
-                  "condition": {
-                    "selection": "activeitems",
-                    "value": 1
-                  },
-                  "value": 0.1
-                }
+              "transform": [{ "filter": "datum.TYPE == 'Opioid related events'" }],
+              "mark": {
+                "type": "line",
+                "strokeDash": []
               },
               "selection": {
-                "activeitems": {
+                "data_variable": {
                   "type": "multi",
                   "fields": ["LABEL"],
                   "bind": { "legend": "dblclick" },
@@ -197,6 +203,20 @@
               }
             },
             {
+              "transform": [{ "filter": "datum.TYPE == 'Comorbid events'" }],
+              "mark": {
+                "type": "line",
+                "strokeDash": [20, 4]
+              }
+            },
+            {
+              "transform": [{ "filter": "datum.TYPE == 'Demographic data'" }],
+              "mark": {
+                "type": "line",
+                "strokeDash": [4, 4]
+              }
+            },
+            {
               "mark": {
                 "type": "point",
                 "filled": true
@@ -204,7 +224,7 @@
               "encoding": {
                 "opacity": {
                   "condition": {
-                    "selection": { "and": ["labelpoints", "activeitems"] },
+                    "selection": { "and": ["labelpoints", "data_variable"] },
                     "value": 1
                   },
                   "value": 0
@@ -223,7 +243,7 @@
           ]
         },
         {
-          "transform": [{ "filter": { "selection": { "and": ["labelpoints", "activeitems"] } } }],
+          "transform": [{ "filter": { "selection": { "and": ["labelpoints", "data_variable"] } } }],
 
           "encoding": {
             "x": {
@@ -335,7 +355,6 @@
       "width": 703,
       "height": 150,
 
-      "mark": "line",
       "encoding": {
         "x": {
           "type": "temporal",
@@ -418,7 +437,7 @@
         },
         "opacity": {
           "condition": {
-            "selection": "activeitems",
+            "selection": "data_variable",
             "value": 1
           },
           "value": 0.1
@@ -429,12 +448,36 @@
           "field": "DATA_VARIABLE"
         }
       },
-      "selection": {
-        "period": {
-          "type": "interval",
-          "encodings": ["x"]
+
+      "layer": [
+        {
+          "transform": [{ "filter": "datum.TYPE == 'Opioid related events'" }],
+          "mark": {
+            "type": "line",
+            "strokeDash": []
+          },
+          "selection": {
+            "period": {
+              "type": "interval",
+              "encodings": ["x"]
+            }
+          }
+        },
+        {
+          "transform": [{ "filter": "datum.TYPE == 'Comorbid events'" }],
+          "mark": {
+            "type": "line",
+            "strokeDash": [20, 4]
+          }
+        },
+        {
+          "transform": [{ "filter": "datum.TYPE == 'Demographic data'" }],
+          "mark": {
+            "type": "line",
+            "strokeDash": [4, 4]
+          }
         }
-      }
+      ]
     }
   ]
 }
