@@ -253,8 +253,7 @@
             ]
           },
           "legend": {
-            "symbolType": "circle",
-            "offset": -20
+            "symbolType": "circle"
           }
         },
         "opacity": {

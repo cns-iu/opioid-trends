@@ -97,7 +97,7 @@ def declare_variables(variables, macro):
   @macro
   def include_vega_ext(url, opt = None):
     vid = unique('vega-embed-id')
-    opts = { 'rendered': 'canvas', 'actions': False, **(opt or {}) }
+    opts = { 'renderer': 'canvas', 'actions': False, **(opt or {}) }
     json_opts = json.dumps(opts, separators=(',', ':'))
 
     return _multiline(

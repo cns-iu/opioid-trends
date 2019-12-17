@@ -15,7 +15,8 @@ nav:
   - Chart: chart/index.md
   - Map: geomap/index.md
   - Data: data/index.md
-  - Sources: sources/index.md  
+  - Sources: sources/index.md
+  - Help: help/index.md
 
 plugins:
   - search
