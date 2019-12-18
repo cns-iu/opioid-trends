@@ -260,12 +260,6 @@
           "condition": {"selection": "data_variable", "value": 1},
           "value": 0.1
         }
-      },
-      "resolve": {
-        "axis": {
-          "x": "shared",
-          "y": "independent"
-        }
       }
     }
   ]
