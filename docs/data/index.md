@@ -4,9 +4,9 @@ Data was extracted from an IADC Database provided by Regenstrief. See [Sources](
 
 ## Data Variables
 
-From the raw data, we compiled a number of data variables to visualize.
+From the raw data, we compiled a number of data variables to visualize. This metadata can be found [here](../data/data-variables.csv).
 
-DATA_VARIABLE | Label | Type | Scale
+DATA_VARIABLE | LABEL | TYPE | SCALE
 --------------|-------|------|-------
 N_OPIOID_PRESCRIPTIONS | # of opioid prescriptions | Opioid related events | Events
 N_OPIOID_PRESCRIBERS | # who had opioid prescriptions | Opioid related events | Persons
@@ -37,8 +37,8 @@ NOT_IN_LABOR_FORCE | # who were not in the labor force | Demographic data | Pers
 
 ## Chart Data
 
-For the chart data, we computed the data variable values by grouping by the minimum periodicity (currently one month intervals) and computed the values of the data variables in each period.
+For the chart data, we computed the data variable values by grouping by the minimum periodicity (currently one month intervals) and computed the values of the data variables in each period. The chart data exists in both [column](../data/chart-data.csv) and [row](../data/chart-data-row-based.csv) based formats.
 
 ## Map Data
 
-For the geographic map of indiana, we further grouped by county (TRACT_5) so that we can see how the data variables play out at the county level.
+For the geographic map of indiana, we further grouped by county (TRACT_5) so that we can see how the data variables play out at the county level. The map data exists in both [column](../data/geomap-data.csv) and [row](../data/geomap-data-row-based.csv) based formats.

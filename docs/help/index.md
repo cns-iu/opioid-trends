@@ -1,5 +1,5 @@
 
-## Interaction (TODO better title)
+## Visualization Interactions
 Both the chart and map visualizations support two different interactions.
 One to select the time period viewed and one to select which data variables are visualized.
 
@@ -26,18 +26,19 @@ Data variables can be selected and deselected to show any combination. The follo
 - Double click a data variable to turn it on and all other data variables off.
 - Double click a data variable while pressing the shift key to toggle the data variable on/off.
 
-## Embed (TODO better title)
-To embed one of the visualizations on another website first download the vega or vega-lite specification (from the action menu on the visualization), then add the following HTML snippet to the website:
+## How to Embed a Visualization in a Webpage
+To embed one of the visualizations on another webpage first download the vega or vega-lite specification (from the action menu on the visualization), then add the following HTML snippet to the webpage:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
-<div id=visualization></div>
+<div id="visualization"></div>
 <script type="text/javascript">
   var opts = { renderer: 'canvas', actions: true };
-  vegaEmbed('visualization', 'SPEC URL', opts);
+  vegaEmbed('visualization', 'path/to/vega/spec', opts);
 </script>
 ```
-With `'SPEC URL'` replaced with the actual path to the downloaded vega specification.
+With `'path/to/vega/spec'` replaced with the actual path to the downloaded vega specification.  
+Futher information on Vega-Embed can be found [here](https://github.com/vega/vega-embed).
