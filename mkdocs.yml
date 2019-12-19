@@ -11,7 +11,7 @@ repo_url: https://github.com/cns-iu/opioid-trends/
 use_directory_urls: false
 
 nav:
-  - Home: index.md
+  - About: index.md
   - Chart: chart/index.md
   - Map: geomap/index.md
   - Data: data/index.md
