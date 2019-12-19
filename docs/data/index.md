@@ -1,10 +1,10 @@
 ## Data
 
-Data was extracted from an IADC Database provided by Regenstrief. See [Sources](../sources/index.md) for details.
+Data was extracted from an IADC Database provided by the [Regenstrief Institute](https://www.regenstrief.org/). See [Sources](../sources/index.md) for details.
 
 ## Data Variables
 
-From the raw data, we compiled a number of data variables to visualize. This metadata can be found [here](../data/data-variables.csv).
+From the raw data, we compiled a number of data variables to visualize. This metadata can be found [here](data-variables.csv).
 
 DATA_VARIABLE | LABEL | TYPE | SCALE
 --------------|-------|------|-------
@@ -37,8 +37,12 @@ NOT_IN_LABOR_FORCE | # who were not in the labor force | Demographic data | Pers
 
 ## Chart Data
 
-For the chart data, we computed the data variable values by grouping by the minimum periodicity (currently one month intervals) and computed the values of the data variables in each period. The chart data exists in both [column](../data/chart-data.csv) and [row](../data/chart-data-row-based.csv) based formats.
+For the chart data, we computed the data variable values by grouping by the minimum periodicity (currently one month intervals) and computed the values of the data variables in each period. The chart data exists in both [column](chart-data.csv) and [row](chart-data-row-based.csv) based formats.
+
+The SQL commands that compiled the data is [here](https://github.com/cns-iu/opioid-trends/blob/master/src/create-chart-db.sql) and the script to extract the data to CSV is [here](https://github.com/cns-iu/opioid-trends/blob/master/scripts/10-extract-chart-data.sh).
 
 ## Map Data
 
-For the geographic map of indiana, we further grouped by county (TRACT_5) so that we can see how the data variables play out at the county level. The map data exists in both [column](../data/geomap-data.csv) and [row](../data/geomap-data-row-based.csv) based formats.
+For the geographic map of indiana, we further grouped by county (TRACT_5) so that we can see how the data variables play out at the county level. The map data exists in both [column](geomap-data.csv) and [row](geomap-data-row-based.csv) based formats. A topojson file for the state of Indiana is available [here](indiana.topojson).
+
+The SQL commands that compiled the data is [here](https://github.com/cns-iu/opioid-trends/blob/master/src/create-geomap-db.sql) and the script to extract the data to CSV is [here](https://github.com/cns-iu/opioid-trends/blob/master/scripts/10-extract-geomap-data.sh).
