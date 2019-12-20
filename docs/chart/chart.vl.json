@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-
+  "name": "Opioid Trends Over Time",
   "title": {
     "text": "Opioid Trends Over Time",
     "anchor": "middle",
@@ -63,7 +63,7 @@
   "vconcat": [
     {
       "width": 703,
-      "height": 480,
+      "height": 546,
       "title": " ",
 
       "layer": [
@@ -432,7 +432,10 @@
               "#17becf"
             ]
           },
-          "legend": null
+          "legend": {
+            "symbolType": "circle",
+            "orient": "right"
+          }
         },
         "opacity": {
           "condition": {
