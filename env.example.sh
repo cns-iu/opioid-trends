@@ -9,7 +9,7 @@ BOX_USER="example@example.com"
 # EKEY="encryption key"
 
 # Mapbox api token
-# MAPBOX_ACCESS_TOKEN="mytoken"
+# export MAPBOX_ACCESS_TOKEN="mytoken"
 
 # The port to use when serving locally during development
 DEV_PORT=4444

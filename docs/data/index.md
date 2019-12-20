@@ -35,13 +35,13 @@ INCOME_BELOW_POVERTY_12MONTH | # who had income below poverty level within 12 mo
 CASH_ASSISTANCE_OR_SNAP | # who had cash asistance or SNAP | Demographic data | Persons
 NOT_IN_LABOR_FORCE | # who were not in the labor force | Demographic data | Persons
 
-## Chart Data
+## Chart Data (Opioid Trends Over Time)
 
-For the chart data, we computed the data variable values by grouping by the minimum periodicity (currently one month intervals) and computed the values of the data variables in each period. The chart data exists in both [column](chart-data.csv) and [row](chart-data-row-based.csv) based formats.
+For the chart data, we computed the data variable values by grouping by the minimum periodicity (currently quarterly intervals) and computed the values of the data variables in each period. The chart data exists in both [column](chart-data.csv) and [row](chart-data-row-based.csv) based formats.
 
 The SQL commands that compiled the data is [here](https://github.com/cns-iu/opioid-trends/blob/master/src/create-chart-db.sql) and the script to extract the data to CSV is [here](https://github.com/cns-iu/opioid-trends/blob/master/scripts/10-extract-chart-data.sh).
 
-## Map Data
+## Map Data (Opioid Trends on the Indiana Map)
 
 For the geographic map of indiana, we further grouped by county (TRACT_5) so that we can see how the data variables play out at the county level. The map data exists in both [column](geomap-data.csv) and [row](geomap-data-row-based.csv) based formats. A topojson file for the state of Indiana is available [here](indiana.topojson).
 

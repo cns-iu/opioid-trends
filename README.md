@@ -1,8 +1,6 @@
-# Indiana Addictions Data Commons Visualizations
+# Opioid Trends in Indiana
 
-## Opioid Trends in Indiana
-
-Scripts for compiling, validating, and visualizing the IADC Data.
+Scripts for compiling, validating, and visualizing the Indiana Addictions Data Commons (IADC) Data.
 
 ## Change Log
 
