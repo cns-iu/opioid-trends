@@ -23,10 +23,11 @@ nav:
 
 plugins:
   - search
-  - macros
+  - macros:
+      module_name: mkdocs_macros
 
 # Module defining additional variables/macros for jinja2 processing
-python_module: mkdocs_macros_extras
+# python_module: mkdocs_macros_extras
 
 extra:
   source_prefix: 'https://github.com/cns-iu/opioid-trends/blob/develop/'
