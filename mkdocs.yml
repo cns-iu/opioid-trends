@@ -41,7 +41,8 @@ extra:
   # - mkpdfs:
   #     output_path: pdf/a2agc-documentation.pdf
 
-theme: readthedocs
+theme:
+  name: ivory
 
 markdown_extensions:
   - toc:
