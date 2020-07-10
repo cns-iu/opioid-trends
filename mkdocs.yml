@@ -19,14 +19,17 @@ nav:
   - Visualizations:
     - Opioid Trends Over Time: chart/index.md
     - Opioid Trends on the Indiana Map: geomap/index.md
+    - Demographics: demographics/index.md
+    - Diagnosis: diagnosis/index.md
+    - Fills: fills/index.md
+    - Encounters: encounters/index.md
+    - Labs: labs/index.md
   - Help: help/index.md
 
 plugins:
   - search
-  - macros
-
-# Module defining additional variables/macros for jinja2 processing
-python_module: mkdocs_macros_extras
+  - macros:
+      module_name: mkdocs_macros
 
 extra:
   source_prefix: 'https://github.com/cns-iu/opioid-trends/blob/develop/'
@@ -38,7 +41,8 @@ extra:
   # - mkpdfs:
   #     output_path: pdf/a2agc-documentation.pdf
 
-theme: readthedocs
+theme:
+  name: ivory
 
 markdown_extensions:
   - toc:
