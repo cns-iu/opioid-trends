@@ -1,5 +1,44 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": null,
-  "mark": "circle"
+  "data": {
+    "url": "http://localhost:6127/data/diagnosis-data.csv"
+  },
+  "width": 703,
+  "height": 546,
+  "transform": [
+    {"calculate": "datum.N_OPIOID_DIAGNOSED/datum.N_OPIOID_PRESCRIBERS", "as": "%Opioid Use"},
+    {"calculate": "datum.N_OPIOID_POISONING_DIAGNOSED/datum.N_OPIOID_PRESCRIBERS", "as": "%Opioid Poisoning"},
+    {"calculate": "datum.N_STD_DIAGNOSED/datum.N_OPIOID_PRESCRIBERS", "as": "%STD"},
+    {"calculate": "datum.N_HIV_DIAGNOSED/datum.N_OPIOID_PRESCRIBERS", "as": "%HIV"},
+    {"calculate": "datum.N_MENTAL_DIAGNOSED/datum.N_OPIOID_PRESCRIBERS", "as": "%Mental Health"},
+    {"calculate": "datum.N_SUD_DIAGNOSED/datum.N_OPIOID_PRESCRIBERS", "as": "%Substance Use Disorder"},
+    {"calculate": "datum.N_ALCOHOL_DIAGNOSED/datum.N_OPIOID_PRESCRIBERS", "as": "%Alcohol Poisoning"},
+    {"calculate": "datum.N_BENZO_DIAGNOSED/datum.N_OPIOID_PRESCRIBERS", "as": "%Benzo Poisoning"},
+    {"calculate": "datum.N_DRUG_DIAGNOSED/datum.N_OPIOID_PRESCRIBERS", "as": "%Illicit Drug Poisoning"},
+    {"calculate": "datum.N_OTHER_DIAGNOSED/datum.N_OPIOID_PRESCRIBERS", "as": "%Other Poisoning"},
+    {"calculate": "datum.N_OVERDOSE_DIAGNOSED/datum.N_OPIOID_PRESCRIBERS", "as": "%Overdose (any)"},
+    {"calculate": "datum.N_STIMULANT_DIAGNOSED/datum.N_OPIOID_PRESCRIBERS", "as": "%Stimulant Poisoning"}
+  ],
+  "repeat": {
+    "layer": ["%Opioid Use", "%Opioid Poisoning","%STD", "%HIV","%Substance Use Disorder", "%Alcohol Poisoning", "%Benzo Poisoning", "%Illicit Drug Poisoning", "%Overdose (any)", "%Stimulant Poisoning"]
+  },
+  "spec": {
+    "mark": "line",
+    "encoding": {
+      "x": {
+        "field": "PERIOD",
+        "type": "temporal"
+      },
+      "y": {
+        "aggregate": "sum",
+        "field": {"repeat": "layer"},
+        "type": "quantitative",
+        "title": "% of individuals"
+      },
+      "color": {
+        "datum": {"repeat": "layer"},
+        "type": "nominal"
+      }
+    }
+  }
 }

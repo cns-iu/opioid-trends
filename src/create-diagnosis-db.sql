@@ -58,7 +58,6 @@ CREATE TABLE "DIAGNOSES_AGG_OPIOID" AS
       ELSE '-10-01'
     END AS "PERIOD", -- Quarterly Period
     substr(TRACT_11, 0, 6) AS "TRACT_5",
-    count(*) AS "N_OPIOID_DX", -- O4 # opioid misuse diagnoses
     count(DISTINCT STUDY_ID) AS "N_OPIOID_DIAGNOSED" -- O4 # individuals diagnosed with opioid misuse
   FROM src.DIAGNOSES
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
@@ -78,11 +77,10 @@ CREATE TABLE "DIAGNOSES_AGG_OPIOID_POISONING" AS
       ELSE '-10-01'
     END AS "PERIOD", -- Quarterly Period
     substr(TRACT_11, 0, 6) AS "TRACT_5",
-    count(*) AS "N_OPIOID_POISONING_DX",
     count(DISTINCT STUDY_ID) AS "N_OPIOID_POISONING_DIAGNOSED"
   FROM src.DIAGNOSES
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
-  WHERE DX_CODE_TYPE == 'OPIOID-POISONING_DX'
+  WHERE DX_CODE_TYPE == 'OPIOID_POISONING_DX'
   GROUP BY tract_5, period
   ORDER BY period, tract_5;
 
@@ -99,31 +97,10 @@ CREATE TABLE "DIAGNOSES_AGG_STD" AS
       ELSE '-10-01'
     END AS "PERIOD", -- Quarterly Period
     substr(TRACT_11, 0, 6) AS "TRACT_5",
-    count(*) AS "N_STD_DX", -- C1 # of sexually transmitted diseases
     count(DISTINCT STUDY_ID) AS "N_STD_DIAGNOSED" -- C1 # individuals diagnosed with sexually transmitted diseases
   FROM src.DIAGNOSES
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
   WHERE DX_CODE_TYPE == 'STD_DX'
-  GROUP BY tract_5, period
-  ORDER BY period, tract_5;
-
-
-DROP TABLE IF EXISTS "DIAGNOSES_AGG_HEPC";
-CREATE TABLE "DIAGNOSES_AGG_HEPC" AS
-  SELECT
-    -- date(DX_DATE, 'start of month') AS "PERIOD", -- Monthly Period
-    strftime('%Y', DX_DATE) || CASE 
-      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
-      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
-      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
-      ELSE '-10-01'
-    END AS "PERIOD", -- Quarterly Period
-    substr(TRACT_11, 0, 6) AS "TRACT_5",
-    count(*) AS "N_HEPC_DX", -- C2 # of Hep C diagnoses
-    count(DISTINCT STUDY_ID) AS "N_HEPC_DIAGNOSED" -- C2 # individuals diagnosed with Hep C
-  FROM src.DIAGNOSES INNER JOIN src.LABS USING (STUDY_ID)
-    INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
-  WHERE DX_CODE_TYPE == 'STD_DX' AND LAB_CODE_TYPE == 'HEP C LAB'
   GROUP BY tract_5, period
   ORDER BY period, tract_5;
 
@@ -139,7 +116,6 @@ CREATE TABLE "DIAGNOSES_AGG_HIV" AS
       ELSE '-10-01'
     END AS "PERIOD", -- Quarterly Period
     substr(TRACT_11, 0, 6) AS "TRACT_5",
-    count(*) AS "N_HIV_DX", -- C3 # of HIV/AIDS diagnoses
     count(DISTINCT STUDY_ID) AS "N_HIV_DIAGNOSED" -- C3 # individuals diagnosed with HIV/AIDS
   FROM src.DIAGNOSES INNER JOIN src.LABS USING (STUDY_ID)
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
@@ -159,7 +135,6 @@ CREATE TABLE "DIAGNOSES_AGG_MENTAL_DX" AS
       ELSE '-10-01'
     END AS "PERIOD", -- Quarterly Period
     substr(TRACT_11, 0, 6) AS "TRACT_5",
-    count(*) AS "N_MENTAL_DX", -- C4 # of mental health diagnoses
     count(DISTINCT STUDY_ID) AS "N_MENTAL_DIAGNOSED" -- C4 # individuals diagnosed with mental health disorders
   FROM src.DIAGNOSES
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
@@ -179,7 +154,6 @@ CREATE TABLE "DIAGNOSES_AGG_SUD" AS
       ELSE '-10-01'
     END AS "PERIOD", -- Quarterly Period
     substr(TRACT_11, 0, 6) AS "TRACT_5",
-    count(*) AS "N_SUD_DX", -- C5 # substance abuse diagnoses
     count(DISTINCT STUDY_ID) AS "N_SUD_DIAGNOSED" -- C5 # individuals diagnosed with substance abuse diagnoses
   FROM src.DIAGNOSES
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
@@ -198,7 +172,6 @@ CREATE TABLE "DIAGNOSES_AGG_ALCOHOL" AS
       ELSE '-10-01'
     END AS "PERIOD", -- Quarterly Period
     substr(TRACT_11, 0, 6) AS "TRACT_5",
-    count(*) AS "N_ALCOHOL_DX",
     count(DISTINCT STUDY_ID) AS "N_ALCOHOL_DIAGNOSED"
   FROM src.DIAGNOSES
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
@@ -218,7 +191,6 @@ CREATE TABLE "DIAGNOSES_AGG_BENZO" AS
       ELSE '-10-01'
     END AS "PERIOD", -- Quarterly Period
     substr(TRACT_11, 0, 6) AS "TRACT_5",
-    count(*) AS "N_BENZO_DX",
     count(DISTINCT STUDY_ID) AS "N_BENZO_DIAGNOSED"
   FROM src.DIAGNOSES
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
@@ -237,7 +209,6 @@ CREATE TABLE "DIAGNOSES_AGG_DRUG" AS
       ELSE '-10-01'
     END AS "PERIOD", -- Quarterly Period
     substr(TRACT_11, 0, 6) AS "TRACT_5",
-    count(*) AS "N_DRUG_DX",
     count(DISTINCT STUDY_ID) AS "N_DRUG_DIAGNOSED"
   FROM src.DIAGNOSES
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
@@ -256,7 +227,6 @@ CREATE TABLE "DIAGNOSES_AGG_OTHER" AS
       ELSE '-10-01'
     END AS "PERIOD", -- Quarterly Period
     substr(TRACT_11, 0, 6) AS "TRACT_5",
-    count(*) AS "N_OTHER_DX",
     count(DISTINCT STUDY_ID) AS "N_OTHER_DIAGNOSED"
   FROM src.DIAGNOSES
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
@@ -275,11 +245,28 @@ CREATE TABLE "DIAGNOSES_AGG_OVERDOSE" AS
       ELSE '-10-01'
     END AS "PERIOD", -- Quarterly Period
     substr(TRACT_11, 0, 6) AS "TRACT_5",
-    count(*) AS "N_OVERDOSE",
     count(DISTINCT STUDY_ID) AS "N_OVERDOSE_DIAGNOSED"
   FROM src.DIAGNOSES
     INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
   WHERE DX_CODE_TYPE == 'OVERDOSE'
+  GROUP BY tract_5, period
+  ORDER BY period, tract_5;
+
+DROP TABLE IF EXISTS "DIAGNOSES_AGG_STIMULANT";
+CREATE TABLE "DIAGNOSES_AGG_STIMULANT" AS
+  SELECT
+    -- date(DX_DATE, 'start of month') AS "PERIOD", -- Monthly Period
+    strftime('%Y', DX_DATE) || CASE 
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
+      WHEN cast(strftime('%m', DX_DATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
+      ELSE '-10-01'
+    END AS "PERIOD", -- Quarterly Period
+    substr(TRACT_11, 0, 6) AS "TRACT_5",
+    count(DISTINCT STUDY_ID) AS "N_STIMULANT_DIAGNOSED"
+  FROM src.DIAGNOSES
+    INNER JOIN src.DEMOGRAPHICS USING(STUDY_ID)
+  WHERE DX_CODE_TYPE == 'STIMULANT_POISONING_DX'
   GROUP BY tract_5, period
   ORDER BY period, tract_5;
 
@@ -295,7 +282,6 @@ CREATE TABLE "ALL_AGGREGATES" AS
     LEFT JOIN DIAGNOSES_AGG_OPIOID_POISONING USING(tract_5, period)
     -- (C)omorbid events or comparison data elements --
     LEFT JOIN DIAGNOSES_AGG_STD USING(tract_5, period)
-    LEFT JOIN DIAGNOSES_AGG_HEPC USING(tract_5, period)
     LEFT JOIN DIAGNOSES_AGG_HIV USING(tract_5, period)
     LEFT JOIN DIAGNOSES_AGG_MENTAL_DX USING(tract_5, period)
     LEFT JOIN DIAGNOSES_AGG_SUD USING(tract_5, period)
@@ -304,14 +290,15 @@ CREATE TABLE "ALL_AGGREGATES" AS
     LEFT JOIN DIAGNOSES_AGG_DRUG USING(tract_5, period)
     LEFT JOIN DIAGNOSES_AGG_OTHER USING(tract_5, period)
     LEFT JOIN DIAGNOSES_AGG_OVERDOSE USING(tract_5, period)
-
+    LEFT JOIN DIAGNOSES_AGG_STIMULANT USING(tract_5, period)
   WHERE cast(strftime('%Y', F.period) as integer) >= 2009
   ORDER BY F.period, F.tract_5;
 
 -- DROP TABLE IF EXISTS "ALL_AGGREGATES";
 -- CREATE TABLE "ALL_AGGREGATES" AS
---   SELECT *
---   FROM src.DIAGNOSES
+--   SELECT DISTINCT DX_CODE_TYPE
+--   FROM
+--     src.DIAGNOSES
 
 
 -- DROP TABLE IF EXISTS "ALL_AGGREGATES_ROW_BASED";
