@@ -9,13 +9,13 @@ sqlite3 $LABS_DB < src/create-labs-db.sql
 sqlite3 $LABS_DB > $OUT/site-data/labs-all-agg-data.csv << EOF
 .header on
 .mode csv
-SELECT * FROM FILLS_AGG;
+SELECT * FROM LABS_AGG;
 .quit
 EOF
 
-sqlite3 $LABS_DB > $OUT/site-data/labs-chronic-agg-data.csv << EOF
-.header on
-.mode csv
-SELECT * FROM CHRONIC_FILLS_AGG;
-.quit
-EOF
+# sqlite3 $LABS_DB > $OUT/site-data/labs-chronic-agg-data.csv << EOF
+# .header on
+# .mode csv
+# SELECT * FROM CHRONIC_FILLS_AGG;
+# .quit
+# EOF

@@ -1,5 +1,23 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": null,
-  "mark": "circle"
+  "mark": "bar",
+  "data": {
+    "url" : "http://localhost:6001/data/labs-all-agg-data.csv"
+  },
+  "encoding": {
+    "x": {
+      "field": "LAB_CODE_TYPE",
+      "type": "nominal",
+      "axis": {
+        "title": "Lab Type"
+      }
+    },
+    "y": {
+      "field": "LAB_COUNT",
+      "type": "quantitative",
+      "axis": {
+        "title": "Lab Count"
+      }
+    }
+  }
 }
