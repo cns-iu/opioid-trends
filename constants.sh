@@ -17,6 +17,7 @@ DATA_SOURCES="$ORIG/box-health/Final Datasets"
 
 CHART_DB=$OUT/chart-data.db
 GEOMAP_DB=$OUT/map-data.db
+ENCOUNTERS_DB=$OUT/encounters-data.db
 
 SRC=./src
 

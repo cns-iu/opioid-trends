@@ -1,5 +1,25 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": null,
-  "mark": "circle"
+  "mark": "bar",
+  "data": {
+    "url" : "http://localhost:6027/data/encounters-data.csv",
+    "format": {
+      "parse": {
+        "CATEGORY_TOTAL": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "joinaggregate": [{
+        "op": "sum",
+        "field": "CATEGORY_TOTAL",
+        "as": "TOTAL"
+      }]
+    },
+    {
+      "calculate": "datum.CATEGORY_TOTAL / datum.TOTAL",
+      "as": "PERCENTAGE"
+    }
+  ]
 }
