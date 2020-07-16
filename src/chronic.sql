@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS "CHRONIC";
 CREATE TABLE "CHRONIC" AS
   SELECT
     DISTINCT STUDY_ID,
-    ifnull(mindiff(julianday(FILL_DATE), 3) <= 120, 0) AS "CHRONIC"
+    ifnull(mindiff(julianday(FILL_DATE), 3) <= 120, 0) AS "IS_CHRONIC"
   FROM src.FILLS
   WHERE DRUG_TYPE = 'OPIOID'
   GROUP BY STUDY_ID;
