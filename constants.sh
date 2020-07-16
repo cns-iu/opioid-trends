@@ -28,5 +28,6 @@ BASE_URL="https://demo.cns.iu.edu/a2agc-dataset/"
 
 alias sqlite="sqlcipher $DB"
 alias sqlite3="sqlcipher"
+alias sqlite3_ext="python3 -m sqlite3_ext"
 
 source env.sh
