@@ -1,8 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": {
-    "url": "../data/diagnosis-data.csv"
-  },
+  "data": {"url": "../data/diagnosis-data.csv"},
   "vconcat": [
     {
       "width": 703,
