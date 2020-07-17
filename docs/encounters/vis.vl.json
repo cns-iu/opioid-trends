@@ -1,25 +1,71 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "mark": "bar",
   "data": {
-    "url" : "http://localhost:6027/data/encounters-data.csv",
+    "url": "http://localhost:6027/data/encounters-category-data.csv",
     "format": {
       "parse": {
         "CATEGORY_TOTAL": "number"
       }
     }
   },
-  "transform": [
+  "concat": [
     {
-      "joinaggregate": [{
-        "op": "sum",
-        "field": "CATEGORY_TOTAL",
-        "as": "TOTAL"
-      }]
-    },
-    {
-      "calculate": "datum.CATEGORY_TOTAL / datum.TOTAL",
-      "as": "PERCENTAGE"
+      "title": "All Cohort: Emergency",
+      "repeat": {
+        "layer": [
+          "PER_PERSON_AVERAGE",
+          "CATEGORY_PERCENT"
+        ]
+      },
+      "transform": [
+        {
+          "filter": {
+            "and": [
+              { "field": "COHORT", "equal": "ALL" },
+              { "field": "CATEGORY", "equal": "E"}
+            ]
+          }
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "sum",
+              "field": "CATEGORY_TOTAL",
+              "as": "TOTAL"
+            }
+          ]
+        },
+        {
+          "calculate": "datum.CATEGORY_TOTAL / datum.UNIQUE_STUDY_IDS",
+          "as": "PER_PERSON_AVERAGE"
+        },
+        {
+          "calculate": "datum.CATEGORY_TOTAL / datum.ENCOUNTERS_TOTAL * 100",
+          "as": "CATEGORY_PERCENT"
+        }
+      ],
+      "spec": {
+        "mark": "line",
+        "encoding": {
+          "x": {
+            "field": "PERIOD",
+            "type": "temporal"
+          },
+          "y": {
+            "field": {
+              "repeat": "layer"
+            },
+            "type": "quantitative"
+          },
+          "color": {
+            "datum": {
+              "repeat": "layer"
+            },
+            "type": "nominal"
+          }
+        }
+      }
     }
-  ]
+  ],
+  "columns": 2
 }
