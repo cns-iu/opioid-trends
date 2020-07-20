@@ -1,46 +1,124 @@
 -- Load Source Database --
 
 ATTACH DATABASE 'raw-data/original/box-health/R2767_Data.db' AS src;
--- ATTACH DATABASE ':memory:' AS src;
--- .restore 'src' 'raw-data/original/box-health/R2767_Data.db';
+
 
 
 -- (O)pioid related events --
+DROP TABLE IF EXISTS "LABS_COUNT";
+CREATE TABLE "LABS_COUNT" AS
+    SELECT
+        strftime('%Y', TEST_DATE) || CASE 
+            WHEN cast(strftime('%m', TEST_DATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+            WHEN cast(strftime('%m', TEST_DATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
+            WHEN cast(strftime('%m', TEST_DATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
+            ELSE '-10-01'
+            END AS "PERIOD", -- Quarterly Period
+        COUNT(*) AS TOTAL_COUNT
+    FROM src.LABS
+    GROUP BY PERIOD;
+
+DROP TABLE IF EXISTS "PRE_LABS_ALL";
+CREATE TABLE "PRE_LABS_ALL" AS
+    SELECT
+        strftime('%Y', TEST_DATE) || CASE 
+            WHEN cast(strftime('%m', TEST_DATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+            WHEN cast(strftime('%m', TEST_DATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
+            WHEN cast(strftime('%m', TEST_DATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
+            ELSE '-10-01'
+            END AS "PERIOD", -- Quarterly Period
+        LAB_CODE_TYPE
+    FROM src.LABS;
+
+DROP TABLE IF EXISTS "LABS_ALL";
+CREATE TABLE "LABS_ALL" AS
+    SELECT
+        PERIOD,
+        LAB_CODE_TYPE,
+        COUNT(LAB_CODE_TYPE) as LAB_COUNT,
+        TOTAL_COUNT
+    FROM PRE_LABS_ALL
+    JOIN LABS_COUNT USING(PERIOD)
+    GROUP BY PERIOD, LAB_CODE_TYPE
+    ORDER BY PERIOD, LAB_CODE_TYPE;
+
+DROP TABLE IF EXISTS "PRE_LABS_CHRONIC";
+CREATE TABLE "PRE_LABS_CHRONIC" AS
+    SELECT
+        strftime('%Y', TEST_DATE) || CASE 
+            WHEN cast(strftime('%m', TEST_DATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+            WHEN cast(strftime('%m', TEST_DATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
+            WHEN cast(strftime('%m', TEST_DATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
+            ELSE '-10-01'
+            END AS "PERIOD", -- Quarterly Period
+        LAB_CODE_TYPE
+    FROM src.LABS
+    JOIN CHRONIC USING(STUDY_ID)
+    WHERE IS_CHRONIC = 1;
+
+DROP TABLE IF EXISTS "LABS_CHRONIC";
+CREATE TABLE "LABS_CHRONIC" AS
+    SELECT
+        PERIOD,
+        LAB_CODE_TYPE,
+        COUNT(LAB_CODE_TYPE) as LAB_COUNT,
+        TOTAL_COUNT
+    FROM PRE_LABS_CHRONIC
+    JOIN LABS_COUNT USING(PERIOD)
+    GROUP BY PERIOD, LAB_CODE_TYPE
+    ORDER BY PERIOD, LAB_CODE_TYPE;
+
+DROP TABLE IF EXISTS "PRE_LABS_OTHER";
+CREATE TABLE "PRE_LABS_OTHER" AS
+    SELECT
+        strftime('%Y', TEST_DATE) || CASE 
+            WHEN cast(strftime('%m', TEST_DATE) as integer) BETWEEN 1 AND 3 THEN '-01-01'
+            WHEN cast(strftime('%m', TEST_DATE) as integer) BETWEEN 4 and 6 THEN '-04-01'
+            WHEN cast(strftime('%m', TEST_DATE) as integer) BETWEEN 7 and 9 THEN '-07-01'
+            ELSE '-10-01'
+            END AS "PERIOD", -- Quarterly Period
+        LAB_CODE_TYPE
+    FROM src.LABS
+    JOIN CHRONIC USING(STUDY_ID)
+    WHERE IS_CHRONIC = 1;
+
+DROP TABLE IF EXISTS "LABS_OTHER";
+CREATE TABLE "LABS_OTHER" AS
+    SELECT
+        PERIOD,
+        LAB_CODE_TYPE,
+        COUNT(LAB_CODE_TYPE) as LAB_COUNT,
+        TOTAL_COUNT
+    FROM PRE_LABS_OTHER
+    JOIN LABS_COUNT USING(PERIOD)
+    GROUP BY PERIOD, LAB_CODE_TYPE
+    ORDER BY PERIOD, LAB_CODE_TYPE;
 
 DROP TABLE IF EXISTS "LABS_AGG";
 CREATE TABLE "LABS_AGG" AS
-    SELECT DISTINCT
-        LAB_CODE_TYPE,
-        STUDY_ID,
-        COUNT(LAB_CODE_TYPE) as LAB_COUNT
-    FROM src.LABS
-    GROUP BY LAB_CODE_TYPE
-    ORDER BY LAB_COUNT DESC;
-
--- DROP TABLE IF EXISTS "FILL_DATES";
--- CREATE TABLE "FILL_DATES" AS
---   SELECT
---     STUDY_ID AS "ID",
---     julianday(FILL_DATE) AS "DATE"
---   FROM src.FILLS
---   WHERE DRUG_TYPE = 'OPIOID'
---   ORDER BY DATE;
-
--- This query could use some optimization!
--- DROP TABLE IF EXISTS "CHRONIC";
--- CREATE TABLE "CHRONIC" AS
---   SELECT
---     DISTINCT f1.ID AS "ID"
---   FROM FILL_DATES AS f1
---   JOIN FILL_DATES AS f2 ON f1.ID = f2.ID AND f1.DATE < f2.DATE
---   JOIN FILL_DATES AS f3 ON f1.ID = f3.ID AND f2.DATE < f3.DATE
---   WHERE abs(f3.DATE - f1.DATE) <= 120;
-
--- DROP TABLE IF EXISTS "CHRONIC_LABS_AGG";
--- CREATE TABLE "CHRONIC_LABS_AGG" AS
---     SELECT * FROM (
---         SELECT *
---         FROM CHRONIC
---     LEFT JOIN LABS_AGG
---     ON CHRONIC.STUDY_ID = LABS_AGG.STUDY_ID
---     )
+    SELECT * FROM (
+        SELECT
+            PERIOD,
+            LAB_CODE_TYPE,
+            LAB_COUNT,
+            TOTAL_COUNT,
+            "ALL" AS "COHORT"
+        FROM LABS_ALL
+    UNION ALL
+        SELECT
+            PERIOD,
+            LAB_CODE_TYPE,
+            LAB_COUNT,
+            TOTAL_COUNT,
+            "CHRONIC" AS "COHORT"
+        FROM LABS_CHRONIC
+    UNION ALL
+        SELECT
+            PERIOD,
+            LAB_CODE_TYPE,
+            LAB_COUNT,
+            TOTAL_COUNT,
+            "OTHER" AS "COHORT"
+        FROM LABS_OTHER
+    )
+ORDER BY COHORT, PERIOD, LAB_CODE_TYPE
