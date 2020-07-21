@@ -1,5 +1,32 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": null,
-  "mark": "circle"
+  "data": {
+    "url" : "../data/labs-all-agg-data.csv"
+  },
+  "transform": [
+    {
+      "calculate": "datum.LAB_COUNT / datum.TOTAL_COUNT * 100",
+      "as": "LAB_PERCENT"
+    }
+  ],
+  "mark": "line",
+  "encoding": {
+    "column": {
+      "field": "COHORT",
+      "type": "nominal",
+      "spacing": 10
+    },
+    "y": {
+      "field": "LAB_PERCENT",
+      "type": "quantitative"
+    },
+    "x": {
+      "field": "PERIOD",
+      "type": "temporal"
+    },
+    "color":{
+      "field": "LAB_CODE_TYPE",
+      "type": "nominal"
+    }
+  }
 }
