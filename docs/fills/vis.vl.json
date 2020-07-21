@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": {"url": "http://localhost:6127/data/fills-data-row-based.csv"},
+  "data": {"url": "../data/fills-data-row-based.csv"},
   "transform": [
     {"calculate": "datum.VALUE/datum.TOTAL*100", "as": "(%)"}
   ],
@@ -20,7 +20,7 @@
       "title": ""
     },
     "y": {
-      "field": "(%)", 
+      "field": "(%)",
       "type": "quantitative",
       "scale": {"zero": false}
     },
