@@ -1,5 +1,32 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": null,
-  "mark": "circle"
+  "data": {"url": "../data/diagnosis-data-row-based.csv"},
+  "mark": "bar",
+  "width": 150,
+  "spacing": 50,
+  "transform": [
+    {"calculate": "datum.VALUE*100", "as": "percent"}
+  ],
+  "encoding": {
+    "facet": {
+      "columns": 4,
+      "field": "DATA_VARIABLE", 
+      "type": "ordinal",
+      "title": ""
+    },
+    "x": {
+      "field": "COHORT",
+      "type": "nominal",
+      "title": "Cohort"
+    },
+    "y": {
+      "field": "percent", 
+      "type": "quantitative",
+      "title": "% of Cohort"
+    }
+  },
+  "resolve": {
+    "axis": {"x":"independent"},
+    "scale": {"y": "independent"}
+  }
 }
