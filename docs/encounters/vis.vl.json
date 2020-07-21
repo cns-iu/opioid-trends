@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
   "data": {
-    "url": "http://localhost:6027/data/encounters-category-data.csv",
+    "url": "../data/encounters-category-data.csv",
     "format": {
       "parse": {
         "CATEGORY_TOTAL": "number"
@@ -10,62 +10,67 @@
   },
   "concat": [
     {
-      "title": "All Cohort: Emergency",
-      "repeat": {
-        "layer": [
-          "PER_PERSON_AVERAGE",
-          "CATEGORY_PERCENT"
-        ]
-      },
+      "title": "Encounter Types by Percent",
       "transform": [
-        {
-          "filter": {
-            "and": [
-              { "field": "COHORT", "equal": "ALL" },
-              { "field": "CATEGORY", "equal": "E"}
-            ]
-          }
-        },
-        {
-          "joinaggregate": [
-            {
-              "op": "sum",
-              "field": "CATEGORY_TOTAL",
-              "as": "TOTAL"
-            }
-          ]
-        },
-        {
-          "calculate": "datum.CATEGORY_TOTAL / datum.UNIQUE_STUDY_IDS",
-          "as": "PER_PERSON_AVERAGE"
-        },
         {
           "calculate": "datum.CATEGORY_TOTAL / datum.ENCOUNTERS_TOTAL * 100",
           "as": "CATEGORY_PERCENT"
         }
       ],
-      "spec": {
         "mark": "line",
         "encoding": {
+          "column": {
+            "field": "COHORT",
+            "type": "nominal",
+            "spacing": 10
+          },
           "x": {
             "field": "PERIOD",
-            "type": "temporal"
+            "type": "temporal",
+            "title": "Year"
           },
           "y": {
-            "field": {
-              "repeat": "layer"
-            },
-            "type": "quantitative"
+            "field": "CATEGORY_PERCENT",
+            "type": "quantitative",
+            "title": "Percentage"
           },
           "color": {
-            "datum": {
-              "repeat": "layer"
-            },
+            "field": "CATEGORY",
+            "type": "nominal"
+          }
+        }
+      },
+      {
+      "title": "Encounter Types by Average per Person",
+      "transform": [
+        {
+          "calculate": "datum.CATEGORY_TOTAL / datum.UNIQUE_STUDY_IDS",
+          "as": "PER_PERSON_AVERAGE"
+        }
+      ],
+        "mark": "line",
+        "encoding": {
+          "column": {
+            "field": "COHORT",
+            "type": "nominal",
+            "spacing": 10
+          },
+          "x": {
+            "field": "PERIOD",
+            "type": "temporal",
+            "title": "Year"
+          },
+          "y": {
+            "field": "PER_PERSON_AVERAGE",
+            "type": "quantitative",
+            "title": "Percentage"
+          },
+          "color": {
+            "field": "CATEGORY",
             "type": "nominal"
           }
         }
       }
-    }
   ],
-  "columns": 2
+  "columns": 1
 }

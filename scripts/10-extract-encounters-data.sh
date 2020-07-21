@@ -14,9 +14,9 @@ SELECT * FROM CATEGORY_AGG;
 .quit
 EOF
 
-# sqlite3 $ENCOUNTERS_DB > $OUT/site-data/encounters-insurance-data.csv << EOF
-# .header on
-# .mode csv
-# SELECT * FROM INSURANCE_COUNTS_AGG;
-# .quit
-# EOF
+sqlite3 $ENCOUNTERS_DB > $OUT/site-data/encounters-insurance-data.csv << EOF
+.header on
+.mode csv
+SELECT * FROM INSURANCE_COUNTS_AGG;
+.quit
+EOF
