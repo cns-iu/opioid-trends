@@ -19,6 +19,8 @@ CHART_DB=$OUT/chart-data.db
 GEOMAP_DB=$OUT/map-data.db
 DIAGNOSIS_DB=$OUT/diagnosis-data.db
 FILLS_DB=$OUT/fills-data.db
+LABS_DB=$OUT/labs-data.db
+ENCOUNTERS_DB=$OUT/encounters-data.db
 
 SRC=./src
 
