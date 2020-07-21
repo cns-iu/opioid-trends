@@ -1,0 +1,88 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "data": {
+        "url": "../data/encounters-insurance-data.csv",
+        "format": {
+            "parse": {
+                "TOTAL": "number"
+            }
+        }
+    },
+    "title": "All Cohort",
+    "repeat": {
+        "layer": [
+            "COMMERCIAL_PERCENT",
+            "OTHER_GOV_PERCENT",
+            "SELF_PAY_PERCENT",
+            "WORKERS_COMP_PERCENT",
+            "INSTITUTIONALIZED_PERCENT",
+            "CHARITY_PERCENT",
+            "MEDICARE_PERCENT",
+            "MEDICAID_PERCENT",
+            "NO_DATA_PERCENT"
+        ]
+    },
+    "transform": [
+        {
+            "filter": "datum.COHORT == 'ALL'"
+        },
+        {
+            "calculate": "datum.COMMERCIAL / datum.TOTAL * 100",
+            "as": "COMMERCIAL_PERCENT"
+        },
+        {
+            "calculate": "datum.OTHER_GOV / datum.TOTAL * 100",
+            "as": "OTHER_GOV_PERCENT"
+        },
+        {
+            "calculate": "datum.SELF_PAY / datum.TOTAL * 100",
+            "as": "SELF_PAY_PERCENT"
+        },
+        {
+            "calculate": "datum.WORKERS_COMP / datum.TOTAL * 100",
+            "as": "WORKERS_COMP_PERCENT"
+        },
+        {
+            "calculate": "datum.INSTITUTIONALIZED / datum.TOTAL * 100",
+            "as": "INSTITUTIONALIZED_PERCENT"
+        },
+        {
+            "calculate": "datum.CHARITY / datum.TOTAL * 100",
+            "as": "CHARITY_PERCENT"
+        },
+        {
+            "calculate": "datum.MEDICARE / datum.TOTAL * 100",
+            "as": "MEDICARE_PERCENT"
+        },
+        {
+            "calculate": "datum.MEDICAID / datum.TOTAL * 100",
+            "as": "MEDICAID_PERCENT"
+        },
+        {
+            "calculate": "datum.NO_DATA / datum.TOTAL * 100",
+            "as": "NO_DATA_PERCENT"
+        }
+    ],
+    "spec": {
+        "mark": "line",
+        "encoding": {
+            "x": {
+                "field": "PERIOD",
+                "type": "temporal"
+            },
+            "y": {
+                "field": {
+                    "repeat": "layer"
+                },
+                "type": "quantitative",
+                "title": "Insurance"
+            },
+            "color": {
+                "datum": {
+                    "repeat": "layer"
+                },
+                "type": "nominal"
+            }
+        }
+    }
+}
