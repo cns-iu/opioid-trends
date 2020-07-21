@@ -1,5 +1,32 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": null,
-  "mark": "circle"
+  "data": {"url": "http://localhost:6127/data/fills-data-row-based.csv"},
+  "transform": [
+    {"calculate": "datum.VALUE/datum.TOTAL*100", "as": "(%)"}
+  ],
+  "mark": "line",
+  "height": {"step": 12},
+  "encoding": {
+    "facet": {
+      "field": "DATA_VARIABLE",
+      "type": "ordinal",
+      "columns": 3,
+      "title": ""
+    },
+    "x": {
+      "field": "PERIOD",
+      "type": "temporal",
+      "scale": {"zero": false},
+      "title": ""
+    },
+    "y": {
+      "field": "(%)", 
+      "type": "quantitative",
+      "scale": {"zero": false}
+    },
+    "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
+  },
+  "resolve": {
+    "scale": {"y": "independent"}
+  }
 }
