@@ -1,5 +1,76 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": null,
-  "mark": "circle"
+  "data": {
+    "url": "../data/encounters-category-data.csv",
+    "format": {
+      "parse": {
+        "CATEGORY_TOTAL": "number"
+      }
+    }
+  },
+  "concat": [
+    {
+      "title": "Encounter Types by Percent",
+      "transform": [
+        {
+          "calculate": "datum.CATEGORY_TOTAL / datum.ENCOUNTERS_TOTAL * 100",
+          "as": "CATEGORY_PERCENT"
+        }
+      ],
+        "mark": "line",
+        "encoding": {
+          "column": {
+            "field": "COHORT",
+            "type": "nominal",
+            "spacing": 10
+          },
+          "x": {
+            "field": "PERIOD",
+            "type": "temporal",
+            "title": "Year"
+          },
+          "y": {
+            "field": "CATEGORY_PERCENT",
+            "type": "quantitative",
+            "title": "Percentage"
+          },
+          "color": {
+            "field": "CATEGORY",
+            "type": "nominal"
+          }
+        }
+      },
+      {
+      "title": "Encounter Types by Average per Person",
+      "transform": [
+        {
+          "calculate": "datum.CATEGORY_TOTAL / datum.UNIQUE_STUDY_IDS",
+          "as": "PER_PERSON_AVERAGE"
+        }
+      ],
+        "mark": "line",
+        "encoding": {
+          "column": {
+            "field": "COHORT",
+            "type": "nominal",
+            "spacing": 10
+          },
+          "x": {
+            "field": "PERIOD",
+            "type": "temporal",
+            "title": "Year"
+          },
+          "y": {
+            "field": "PER_PERSON_AVERAGE",
+            "type": "quantitative",
+            "title": "Percentage"
+          },
+          "color": {
+            "field": "CATEGORY",
+            "type": "nominal"
+          }
+        }
+      }
+  ],
+  "columns": 1
 }
