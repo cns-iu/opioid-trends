@@ -4,29 +4,116 @@
   "transform": [
     {"calculate": "datum.VALUE/datum.TOTAL*100", "as": "(%)"}
   ],
-  "mark": "line",
-  "height": {"step": 12},
-  "encoding": {
-    "facet": {
-      "field": "DATA_VARIABLE",
-      "type": "ordinal",
-      "columns": 3,
-      "title": ""
+  "vconcat": [
+    {
+      "facet": {
+        "field": "DATA_VARIABLE",
+        "type": "ordinal",
+        "title": ""
+      },
+      "resolve": {
+        "scale": {"y": "independent"}
+      }, 
+      "spec": {
+        "layer": [
+          {
+            "transform": [{ "filter": { "selection": "labelpoints" } }],
+            "mark": {
+              "type": "rule",
+              "color": "gray"
+            },
+            "encoding": {
+              "x": {
+                "type": "temporal",
+                "field": "PERIOD",
+                "scale": { "domain": { "selection": "period" } }
+              }
+            }
+          },
+          {
+            "height": 200,
+            "encoding": {
+              "x": {
+                "field": "PERIOD",
+                "type": "temporal",
+                "scale": {"domain": { "selection": "period" }},
+                "title": ""
+              },
+              "y": {
+                "field": "(%)", 
+                "type": "quantitative",
+                "scale": {"zero": false}
+              },
+              "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
+            },
+            "layer": [
+              {
+                "mark": "line"
+              },
+              {
+                "mark": {
+                  "type": "point",
+                  "filled": true
+                },
+                "encoding": {
+                  "opacity": {
+                    "condition": {
+                      "selection": "labelpoints",
+                      "value": 1
+                    },
+                    "value": 0
+                  }
+                },
+                "selection": {
+                  "labelpoints": {
+                    "type": "single",
+                    "nearest": true,
+                    "on": "mouseover",
+                    "encodings": ["x"],
+                    "empty": "none"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
     },
-    "x": {
-      "field": "PERIOD",
-      "type": "temporal",
-      "scale": {"zero": false},
-      "title": ""
-    },
-    "y": {
-      "field": "(%)",
-      "type": "quantitative",
-      "scale": {"zero": false}
-    },
-    "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
-  },
-  "resolve": {
-    "scale": {"y": "independent"}
-  }
+
+    {
+      "width": 703,
+      "height": 150,
+      "transform": [{ "filter": "datum.COHORT == 'All'" }],
+
+      "encoding": {
+        "x": {
+          "type": "temporal",
+          "field": "PERIOD"
+        },
+        "y": {
+          "aggregate": "sum",
+          "type": "quantitative",
+          "field": "VALUE",
+          "scale": { "type": "log" },
+          "axis": {
+            "title": null,
+            "orient": "right",
+            "tickCount": 6,
+            "grid": false
+          }
+        }
+      },
+      "layer": [
+        {
+          "mark": "line",
+          "selection": {
+            "period": {
+              "type": "interval",
+              "encodings": ["x"]
+            }
+          }
+        }
+      ]
+    }
+  ]
 }
