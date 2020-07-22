@@ -5,7 +5,7 @@
   },
   "transform": [
     {
-      "calculate": "datum.LAB_COUNT / datum.TOTAL_COUNT * 100",
+      "calculate": "datum.LAB_TYPE_COUNT / datum.TOTAL_COUNT * 100",
       "as": "LAB_PERCENT"
     }
   ],
