@@ -23,7 +23,8 @@
         "scale": {"y": "independent"}
       },
       "spec": {
-
+        "height": 200,
+        "width": 200,
         "layer": [
           {
             "transform": [{ "filter": { "selection": "labelpoints" } }],
@@ -56,7 +57,8 @@
                 "scale": {"zero": false},
                 "axis": {
                   "tickCount": 6
-                }
+                },
+                "title": "% of Cohort"
               },
               "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
             },
@@ -159,22 +161,57 @@
         ]
       }
     },
-
+    {
+      "facet": {
+        "field": "DATA_VARIABLE",
+        "type": "ordinal",
+        "title": ""
+      },
+      "resolve": {
+        "scale": {"y": "independent"}
+      },
+      "spec": {
+        "height": 200,
+        "width": 200,
+        "transform": [{ "filter": { "selection": "period" } }],
+        "encoding": {
+          "x": {
+            "field": "COHORT",
+            "type": "nominal",
+            "title": ""
+          },
+          "y": {
+            "field": "(%)", 
+            "type": "quantitative",
+            "axis": {
+              "labelFlush": true
+            },
+            "title": "% of Cohort"
+          },
+          "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
+        },
+        "layer": [
+          {
+            "mark": "bar"
+          }
+        ]
+      }
+    },
     {
       "width": 703,
       "height": 150,
       "encoding": {
         "x": {
           "type": "temporal",
-          "field": "PERIOD"
+          "field": "PERIOD",
+          "title": null
         },
         "y": {
           "aggregate": "sum",
           "type": "quantitative",
           "field": "VALUE",
           "axis": {
-            "title": null,
-            "orient": "right",
+            "title": "Number of patients",
             "tickCount": 6,
             "grid": false
           }
