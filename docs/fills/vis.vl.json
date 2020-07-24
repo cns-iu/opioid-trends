@@ -213,7 +213,8 @@
                 "axis": {
                   "labelFlush": true,
                   "tickCount": 10
-                }
+                },
+                "scale": {"domain": [0,100]}
               },
               "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
             }
@@ -221,7 +222,7 @@
           {
             "mark": {
               "type": "text",
-              "yOffset": 8
+              "yOffset": -5
             },
             "encoding": {
               "text": {"field": "percent", "type": "quantitative", "format": ",.2~f"},
@@ -261,7 +262,7 @@
             "minExtent": 60
           }
         },
-        "color": {"legend": null, "field": "COHORT", "type": "nominal", "title": "Cohort"}
+        "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
       },
       "layer": [
         {
