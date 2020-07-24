@@ -21,7 +21,7 @@
         "title": ""
       },
       "resolve": {
-        "scale": {"y": "independent"}
+        "scale": {"x": "independent", "y": "independent"}
       },
       "spec": {
         "height": 200,
@@ -42,22 +42,21 @@
             }
           },
           {
+            "transform": [{ "filter": { "selection": "period" } }],
             "encoding": {
               "x": {
                 "field": "PERIOD",
                 "type": "temporal",
-                "scale": {"domain": { "selection": "period" }},
-                "title": "",
-                "axis": {
-                  "offset": -5
-                }
+                "title": ""
               },
               "y": {
                 "field": "(%)", 
                 "type": "quantitative",
-                "scale": {"zero": false},
                 "axis": {
                   "tickCount": 6
+                },
+                "scale": {
+                  "zero": false
                 },
                 "title": "% of Cohort"
               },
@@ -110,7 +109,7 @@
               "text": {
                 "type": "quantitative",
                 "field": "(%)",
-                "format": ",.2~f"
+                "format": ",.4~f"
               }
             },
 
@@ -170,7 +169,7 @@
         "title": ""
       },
       "resolve": {
-        "scale": {"y": "independent"}
+        "scale": {"x": "independent", "y": "independent"}
       },
       "spec": {
         "height": 200,
@@ -203,7 +202,10 @@
                 "field": "COHORT",
                 "type": "nominal",
                 "title": "",
-                "scale": {"domain": ["All", "Chronic", "Non-chronic"]}
+                "scale": {"domain": ["All", "Chronic", "Non-chronic"]},
+                "axis": {
+                  "labelAngle": 0
+                }
               },
               "y": {
                 "aggregate": "average",
@@ -214,7 +216,10 @@
                   "labelFlush": true,
                   "tickCount": 10
                 },
-                "scale": {"domain": [0,100]}
+                "scale": {
+                  "padding": 30,
+                  "zero": false
+                }
               },
               "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
             }
@@ -225,7 +230,7 @@
               "yOffset": -5
             },
             "encoding": {
-              "text": {"field": "percent", "type": "quantitative", "format": ",.2~f"},
+              "text": {"field": "percent", "type": "quantitative", "format": ",.4~f"},
               "x": {
                 "field": "COHORT",
                 "type": "nominal",
@@ -258,8 +263,7 @@
             "orient": "right",
             "title": "Number of patients",
             "tickCount": 6,
-            "grid": false,
-            "minExtent": 60
+            "grid": false
           }
         },
         "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
