@@ -1,88 +1,266 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-    "data": {
-        "url": "../data/encounters-insurance-data.csv",
-        "format": {
-            "parse": {
-                "TOTAL": "number"
+    "name": "Opioid Trends Over Time",
+    "title": {
+        "text": "Encounters Over Time",
+        "anchor": "middle",
+        "fontSize": 28
+    },
+    "padding": 10,
+    "config": {
+        "autosize": {
+            "type": "pad"
+        },
+        "axisBottom": {
+            "title": null,
+            "labelFlush": false
+        },
+        "mark": {
+            "tooltip": null
+        },
+        "range": {
+            "category": {
+                "scheme": "category20"
             }
         }
     },
-    "title": "All Cohort",
-    "repeat": {
-        "layer": [
-            "COMMERCIAL_PERCENT",
-            "OTHER_GOV_PERCENT",
-            "SELF_PAY_PERCENT",
-            "WORKERS_COMP_PERCENT",
-            "INSTITUTIONALIZED_PERCENT",
-            "CHARITY_PERCENT",
-            "MEDICARE_PERCENT",
-            "MEDICAID_PERCENT",
-            "NO_DATA_PERCENT"
-        ]
+    "data": {
+        "url": "http://127.0.0.1:5063/data/encounters-insurance-data.csv",
+        "format": {
+            "type": "csv"
+        }
     },
     "transform": [
         {
-            "filter": "datum.COHORT == 'ALL'"
+            "lookup": "DATA_VARIABLE",
+            "from": {
+                "key": "DATA_VARIABLE",
+                "fields": [
+                    "LEGEND_ORDER",
+                    "LABEL",
+                    "TYPE",
+                    "SCALE",
+                    "COLOR",
+                    "SCALING_FACTOR"
+                ],
+                "data": {
+                    "url": "http://127.0.0.1:5063/data/data-variables.csv",
+                    "format": {
+                        "type": "csv",
+                        "parse": {
+                            "COLOR": "number",
+                            "SCALING_FACTOR": "number"
+                        }
+                    }
+                }
+            }
         },
         {
-            "calculate": "datum.COMMERCIAL / datum.TOTAL * 100",
-            "as": "COMMERCIAL_PERCENT"
+            "calculate": "toNumber(datum.COLOR)",
+            "as": "COLOR"
         },
         {
-            "calculate": "datum.OTHER_GOV / datum.TOTAL * 100",
-            "as": "OTHER_GOV_PERCENT"
-        },
-        {
-            "calculate": "datum.SELF_PAY / datum.TOTAL * 100",
-            "as": "SELF_PAY_PERCENT"
-        },
-        {
-            "calculate": "datum.WORKERS_COMP / datum.TOTAL * 100",
-            "as": "WORKERS_COMP_PERCENT"
-        },
-        {
-            "calculate": "datum.INSTITUTIONALIZED / datum.TOTAL * 100",
-            "as": "INSTITUTIONALIZED_PERCENT"
-        },
-        {
-            "calculate": "datum.CHARITY / datum.TOTAL * 100",
-            "as": "CHARITY_PERCENT"
-        },
-        {
-            "calculate": "datum.MEDICARE / datum.TOTAL * 100",
-            "as": "MEDICARE_PERCENT"
-        },
-        {
-            "calculate": "datum.MEDICAID / datum.TOTAL * 100",
-            "as": "MEDICAID_PERCENT"
-        },
-        {
-            "calculate": "datum.NO_DATA / datum.TOTAL * 100",
-            "as": "NO_DATA_PERCENT"
+            "calculate": "toNumber(datum.SCALING_FACTOR)",
+            "as": "SCALING_FACTOR"
         }
     ],
-    "spec": {
-        "mark": "line",
-        "encoding": {
-            "x": {
-                "field": "PERIOD",
-                "type": "temporal"
-            },
-            "y": {
-                "field": {
-                    "repeat": "layer"
+    "vconcat": [
+        {
+            "width": 703,
+            "height": 546,
+            "title": " ",
+            "mark": "line",
+            "encoding": {
+                "x": {
+                    "field": "PERIOD",
+                    "type": "temporal"
                 },
-                "type": "quantitative",
-                "title": "Insurance"
-            },
-            "color": {
-                "datum": {
-                    "repeat": "layer"
+                "y": {
+                    "field": "VALUE",
+                    "type": "quantitative",
+                    "scale": {
+                        "type": "log"
+                    },
+                    "axis": {
+                        "title": null,
+                        "tickCount": 6
+                    }
                 },
-                "type": "nominal"
+                "color": {
+                    "field": "LABEL",
+                    "type": "nominal",
+                    "title": "Data Variables",
+                    "scale": {
+                        "domain": [
+                            "Avg. # Emergency Encounters",
+                            "Avg. # Inpatient Encounters",
+                            "Avg. # Outpatient Encounters",
+                            "% Emergency Encounters",
+                            "% Inpatient Encounters",
+                            "% Outpatient Encounters",
+                            "% Commercial Insurance",
+                            "% Charity Insurance",
+                            "% Institutionalized Insurance",
+                            "% Government Insurance",
+                            "% Medicaid Insurance",
+                            "% Medicare Insurance",
+                            "% Other Government Insurance",
+                            "% Workers Comp Insurance",
+                            "% Self Pay",
+                            "% No Insurance Data"
+                        ],
+                        "range": [
+                            "#1f77b4",
+                            "#aec7e8",
+                            "#ff7f0e",
+                            "#98df8a",
+                            "#d62728",
+                            "#ff9896",
+                            "#2ca02c",
+                            "#ffbb78",
+                            "#9467bd",
+                            "#98df8a",
+                            "#c5b0d5",
+                            "#8c564b",
+                            "#e377c2",
+                            "#bcbd22",
+                            "#c49c94",
+                            "#f7b6d2"
+                        ]
+                    },
+                    "legend": null
+                }
             }
+        },
+        {
+            "width": 703,
+            "height": 150,
+            "encoding": {
+                "x": {
+                    "type": "temporal",
+                    "field": "PERIOD"
+                },
+                "y": {
+                    "type": "quantitative",
+                    "field": "VALUE",
+                    "scale": {
+                        "type": "log"
+                    },
+                    "axis": {
+                        "title": null,
+                        "orient": "right",
+                        "tickCount": 6,
+                        "grid": false
+                    }
+                },
+                "color": {
+                    "field": "LABEL",
+                    "type": "nominal",
+                    "title": "Data Variables",
+                    "scale": {
+                        "domain": [
+                            "Avg. # Emergency Encounters",
+                            "Avg. # Inpatient Encounters",
+                            "Avg. # Outpatient Encounters",
+                            "% Emergency Encounters",
+                            "% Inpatient Encounters",
+                            "% Outpatient Encounters",
+                            "% Commercial Insurance",
+                            "% Charity Insurance",
+                            "% Institutionalized Insurance",
+                            "% Government Insurance",
+                            "% Medicaid Insurance",
+                            "% Medicare Insurance",
+                            "% Other Government Insurance",
+                            "% Workers Comp Insurance",
+                            "% Self Pay",
+                            "% No Insurance Data"
+                        ],
+                        "range": [
+                            "#1f77b4",
+                            "#aec7e8",
+                            "#ff7f0e",
+                            "#98df8a",
+                            "#d62728",
+                            "#ff9896",
+                            "#2ca02c",
+                            "#ffbb78",
+                            "#9467bd",
+                            "#98df8a",
+                            "#c5b0d5",
+                            "#8c564b",
+                            "#e377c2",
+                            "#bcbd22",
+                            "#c49c94",
+                            "#f7b6d2"
+                        ]
+                    },
+                    "legend": {
+                        "symbolType": "circle",
+                        "orient": "right"
+                    }
+                },
+                "opacity": {
+                    "condition": {
+                        "selection": "data_variable",
+                        "value": 1
+                    },
+                    "value": 0.1
+                },
+                "detail": {
+                    "type": "nominal",
+                    "field": "DATA_VARIABLE"
+                }
+            },
+            "layer": [
+                {
+                    "transform": [
+                        {
+                            "filter": "datum.TYPE == 'Encounter Types Average'"
+                        }
+                    ],
+                    "mark": {
+                        "type": "line",
+                        "strokeDash": []
+                    },
+                    "selection": {
+                        "period": {
+                            "type": "interval",
+                            "encodings": [
+                                "x"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "transform": [
+                        {
+                            "filter": "datum.TYPE == 'Encounter Types Percentage'"
+                        }
+                    ],
+                    "mark": {
+                        "type": "line",
+                        "strokeDash": [
+                            20,
+                            4
+                        ]
+                    }
+                },
+                {
+                    "transform": [
+                        {
+                            "filter": "datum.TYPE == 'Insurance Percentage'"
+                        }
+                    ],
+                    "mark": {
+                        "type": "line",
+                        "strokeDash": [
+                            4,
+                            4
+                        ]
+                    }
+                }
+            ]
         }
-    }
+    ]
 }

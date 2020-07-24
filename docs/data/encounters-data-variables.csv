@@ -1,0 +1,17 @@
+LEGEND_ORDER,DATA_VARIABLE,LABEL,TYPE,SCALE,COLOR,COLOR_GROUP,SCALING_FACTOR
+01,AVERAGE_EMERGENCY_ENCOUNTERS,Avg. # Emergency Encounters,Encounter Types Average,Types,#1f77b4,1,1
+02,AVERAGE_INPATIENT_ENCOUNTERS,Avg. # Inpatient Encounters,Encounter Types Average,Types,#aec7e8,1,1
+03,AVERAGE_OUTPATIENT_ENCOUNTERS,Avg. # Outpatient Encounters,Encounter Types Average,Types,#ff7f0e,1,1
+04,PERCENT_EMERGENCY_ENCOUNTERS,% Emergency Encounters, Encounter Types Percentage,Types,#98df8a,2,1
+05,PERCENT_INPATIENT_ENCOUNTERS,% Inpatient Encounters, Encounter Types Percentage,Types,#d62728,2,1
+06,PERCENT_OUTPATIENT_ENCOUNTERS,% Outpatient Encounters, Encounter Types Percentage,Types,#ff9896,2,1
+07,PERCENT_COMMERCIAL_INSURANCE,% Commercial Insurance,Insurance Percentage,Insurance,#2ca02c,3,1
+08,PERCENT_CHARITY_INSURANCE,% Charity Insurance,Insurance Percentage,Insurance,#ffbb78,3,1
+09,PERCENT_INSTITUTIONALIZED_INSURANCE,% Institutionalized Insurance,Insurance Percentage,Insurance,#9467bd,3,1
+10,PERCENT_GOV_INSURANCE,% Government Insurance,Insurance Percentage,Insurance,#98df8a,3,1
+11,PERCENT_MEDICAID_INSURANCE,% Medicaid Insurance,Insurance Percentage,Insurance,#c5b0d5,3,1
+12,PERCENT_MEDICARE_INSURANCE,% Medicare Insurance,Insurance Percentage,Insurance,#8c564b,3,1
+13,PERCENT_OTHER_GOV_INSURANCE,% Other Government Insurance,Insurance Percentage,Insurance,#e377c2,3,1
+14,PERCENT_WORKERS_COMP_INSURANCE,% Workers Comp Insurance,Insurance Percentage,Insurance,#bcbd22,3,1
+15,PERCENT_SELF_PAY_INSURANCE,% Self Pay,Insurance Percentage,Insurance,#c49c94,3,1
+16,PERCENT_NO_DATA_INSURANCE,% No Insurance Data,Insurance Percentage,Insurance,#f7b6d2,3,1
