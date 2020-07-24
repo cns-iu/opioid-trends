@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": {"url": "../data/fills-data-row-based.csv"},
+  "data": {"url": "..//data/fills-data-row-based.csv"},
   "transform": [
     {"calculate": "datum.VALUE/datum.TOTAL*100", "as": "(%)"}
   ],
@@ -14,6 +14,7 @@
   },
   "vconcat": [
     {
+      "spacing": 30,
       "facet": {
         "field": "DATA_VARIABLE",
         "type": "ordinal",
@@ -162,6 +163,7 @@
       }
     },
     {
+      "spacing": 30,
       "facet": {
         "field": "DATA_VARIABLE",
         "type": "ordinal",
@@ -211,7 +213,7 @@
                   "labelFlush": true,
                   "tickCount": 10
                 },
-                "scale": {"domain": [0,100]}
+                "scale": {"domain": [0, 100]}
               },
               "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
             }
@@ -238,7 +240,7 @@
       }
     },
     {
-      "width": 703,
+      "width": 660,
       "height": 150,
       "encoding": {
         "x": {
@@ -251,9 +253,11 @@
           "type": "quantitative",
           "field": "VALUE",
           "axis": {
+            "orient": "right",
             "title": "Number of patients",
             "tickCount": 6,
-            "grid": false
+            "grid": false,
+            "minExtent": 60
           }
         },
         "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
