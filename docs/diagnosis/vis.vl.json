@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": {"url": "..//data/diagnosis-data-row-based.csv"},
+  "data": {"url": "../data/diagnosis-data-row-based.csv"},
   "transform": [
     {"calculate": "datum.VALUE/datum.TOTAL*100", "as": "(%)"}
   ],
@@ -22,7 +22,7 @@
         "title": ""
       },
       "resolve": {
-        "scale": {"y": "independent"}
+        "scale": {"x": "independent", "y": "independent"}
       },
       "spec": {
         "height": 200,
@@ -48,7 +48,6 @@
               "x": {
                 "field": "PERIOD",
                 "type": "temporal",
-                "scale": {"domain": { "selection": "period" }},
                 "title": ""
               },
               "y": {
@@ -57,8 +56,10 @@
                 "axis": {
                   "tickCount": 6
                 },
-                "title": "% of Cohort",
-                "scale": {"zero": false}
+                "scale": {
+                  "zero": false
+                },
+                "title": "% of Cohort"
               },
               "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
             },
@@ -170,7 +171,7 @@
         "title": ""
       },
       "resolve": {
-        "scale": {"y": "independent"}
+        "scale": {"x": "independent", "y": "independent"}
       },
       "spec": {
         "height": 200,
@@ -203,7 +204,10 @@
                 "field": "COHORT",
                 "type": "nominal",
                 "title": "",
-                "scale": {"domain": ["All", "Chronic", "Non-chronic"]}
+                "scale": {"domain": ["All", "Chronic", "Non-chronic"]},
+                "axis": {
+                  "labelAngle": 0
+                }
               },
               "y": {
                 "aggregate": "average",
@@ -214,7 +218,10 @@
                   "labelFlush": true,
                   "tickCount": 10
                 },
-                "scale": {"zero": false}
+                "scale": {
+                  "padding": 30,
+                  "zero": false
+                }
               },
               "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
             }
@@ -222,7 +229,7 @@
           {
             "mark": {
               "type": "text",
-              "yOffset": 8
+              "yOffset": -5
             },
             "encoding": {
               "text": {"field": "percent", "type": "quantitative", "format": ",.4~f"},
@@ -258,8 +265,7 @@
             "orient": "right",
             "title": "Number of patients",
             "tickCount": 6,
-            "grid": false,
-            "minExtent": 60
+            "grid": false
           }
         },
         "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
