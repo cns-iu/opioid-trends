@@ -173,26 +173,66 @@
       "spec": {
         "height": 200,
         "width": 200,
-        "transform": [{ "filter": { "selection": "period" } }],
-        "encoding": {
-          "x": {
-            "field": "COHORT",
-            "type": "nominal",
-            "title": ""
+        "transform": [
+          { "filter": { "selection": "period" } },
+          {
+            "joinaggregate": [{
+              "op": "sum",
+              "field": "VALUE",
+              "as": "a"
+            }],
+            "groupby": ["COHORT", "DATA_VARIABLE"]
           },
-          "y": {
-            "field": "(%)", 
-            "type": "quantitative",
-            "axis": {
-              "labelFlush": true
-            },
-            "title": "% of Cohort"
+          {
+          "joinaggregate": [{
+            "op": "sum",
+            "field": "TOTAL",
+            "as": "b"
+          }],
+          "groupby": ["COHORT", "DATA_VARIABLE"]
           },
-          "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
-        },
+          {"calculate": "datum.a/datum.b*100", "as": "percent"}
+        ],
         "layer": [
           {
-            "mark": "bar"
+            "mark": "bar",
+            "encoding": {
+              "x": {
+                "field": "COHORT",
+                "type": "nominal",
+                "title": "",
+                "scale": {"domain": ["All", "Chronic", "Non-chronic"]}
+              },
+              "y": {
+                "field": "percent",
+                "type": "quantitative",
+                "title": "% of Cohort",
+                "axis": {
+                  "labelFlush": true,
+                  "tickCount": 10
+                },
+                "scale": {"domain": [0,100]}
+              },
+              "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
+            }
+          },
+          {
+            "mark": {
+              "type": "text",
+              "yOffset": -5
+            },
+            "encoding": {
+              "text": {"field": "percent", "type": "quantitative", "format": ",.2~f"},
+              "x": {
+                "field": "COHORT",
+                "type": "nominal",
+                "title": ""
+              },
+              "y": {
+                "field": "percent", 
+                "type": "quantitative"
+              }
+            }
           }
         ]
       }
