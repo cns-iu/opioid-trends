@@ -5,7 +5,7 @@
   "width": 150,
   "spacing": 50,
   "transform": [
-    {"calculate": "datum.VALUE*100", "as": "percent"}
+    {"calculate": "datum.VALUE/datum.TOTAL*100", "as": "percent"}
   ],
   "encoding": {
     "facet": {
