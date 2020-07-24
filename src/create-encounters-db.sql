@@ -210,52 +210,219 @@ CREATE TABLE "INSURANCE_COUNTS_OTHER" AS
     ORDER BY PERIOD;
 
 
-DROP TABLE IF EXISTS "INSURANCE_COUNTS_AGG";
-CREATE TABLE "INSURANCE_COUNTS_AGG" AS
+-- DROP TABLE IF EXISTS "INSURANCE_COUNTS_AGG";
+-- CREATE TABLE "INSURANCE_COUNTS_AGG" AS
+--     SELECT * FROM (
+--         SELECT
+--             PERIOD,
+--             TOTAL,
+--             COMMERCIAL,
+--             OTHER_GOV,
+--             SELF_PAY,
+--             WORKERS_COMP,
+--             INSTITUTIONALIZED,
+--             CHARITY,
+--             MEDICARE,
+--             MEDICAID,
+--             NO_DATA,
+--             "ALL" AS "COHORT"
+--         FROM INSURANCE_COUNTS_ALL
+--     UNION ALL
+--         SELECT
+--             PERIOD,
+--             TOTAL,
+--             COMMERCIAL,
+--             OTHER_GOV,
+--             SELF_PAY,
+--             WORKERS_COMP,
+--             INSTITUTIONALIZED,
+--             CHARITY,
+--             MEDICARE,
+--             MEDICAID,
+--             NO_DATA,
+--             "OPIOID_CHRONIC" AS "COHORT"
+--         FROM INSURANCE_COUNTS_CHRONIC
+--     UNION ALL
+--         SELECT
+--             PERIOD,
+--             TOTAL,
+--             COMMERCIAL,
+--             OTHER_GOV,
+--             SELF_PAY,
+--             WORKERS_COMP,
+--             INSTITUTIONALIZED,
+--             CHARITY,
+--             MEDICARE,
+--             MEDICAID,
+--             NO_DATA,
+--             "OPIOID_OTHER" AS "COHORT"
+--         FROM INSURANCE_COUNTS_OTHER
+--     ) AS AGG
+--     ORDER BY COHORT, PERIOD;
+
+DROP TABLE IF EXISTS "INSURANCE_COUNTS_ROW_BASED";
+CREATE TABLE "INSURANCE_COUNTS_ROW_BASED" AS
     SELECT * FROM (
         SELECT
             PERIOD,
-            TOTAL,
-            COMMERCIAL,
-            OTHER_GOV,
-            SELF_PAY,
-            WORKERS_COMP,
-            INSTITUTIONALIZED,
-            CHARITY,
-            MEDICARE,
-            MEDICAID,
-            NO_DATA,
-            "ALL" AS "COHORT"
+            "N_ALL_COMMERCIAL" AS "DATA_VARIABLE",
+            COMMERCIAL/CAST(TOTAL AS REAL)*100 AS "VALUE"
         FROM INSURANCE_COUNTS_ALL
     UNION ALL
         SELECT
             PERIOD,
-            TOTAL,
-            COMMERCIAL,
-            OTHER_GOV,
-            SELF_PAY,
-            WORKERS_COMP,
-            INSTITUTIONALIZED,
-            CHARITY,
-            MEDICARE,
-            MEDICAID,
-            NO_DATA,
-            "OPIOID_CHRONIC" AS "COHORT"
+            "N_ALL_OTHER_GOV" AS "DATA_VARIABLE",
+            OTHER_GOV/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_ALL
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_ALL_SELF_PAY" AS "DATA_VARIABLE",
+            SELF_PAY/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_ALL
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_ALL_WORKERS_COMP" AS "DATA_VARIABLE",
+            WORKERS_COMP/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_ALL
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_ALL_INSTITUTIONALIZED" AS "DATA_VARIABLE",
+            INSTITUTIONALIZED/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_ALL
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_ALL_CHARITY" AS "DATA_VARIABLE",
+            CHARITY/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_ALL
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_ALL_MEDICARE" AS "DATA_VARIABLE",
+            MEDICARE/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_ALL
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_ALL_MEDICAID" AS "DATA_VARIABLE",
+            MEDICAID/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_ALL
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_ALL_NO_DATA" AS "DATA_VARIABLE",
+            NO_DATA/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_ALL
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_CHRONIC_COMMERCIAL" AS "DATA_VARIABLE",
+            COMMERCIAL/CAST(TOTAL AS REAL)*100 AS "VALUE"
         FROM INSURANCE_COUNTS_CHRONIC
     UNION ALL
         SELECT
             PERIOD,
-            TOTAL,
-            COMMERCIAL,
-            OTHER_GOV,
-            SELF_PAY,
-            WORKERS_COMP,
-            INSTITUTIONALIZED,
-            CHARITY,
-            MEDICARE,
-            MEDICAID,
-            NO_DATA,
-            "OPIOID_OTHER" AS "COHORT"
+            "N_CHRONIC_OTHER_GOV" AS "DATA_VARIABLE",
+            OTHER_GOV/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_CHRONIC
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_CHRONIC_SELF_PAY" AS "DATA_VARIABLE",
+            SELF_PAY/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_CHRONIC
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_CHRONIC_WORKERS_COMP" AS "DATA_VARIABLE",
+            WORKERS_COMP/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_CHRONIC
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_CHRONIC_INSTITUTIONALIZED" AS "DATA_VARIABLE",
+            INSTITUTIONALIZED/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_CHRONIC
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_CHRONIC_CHARITY" AS "DATA_VARIABLE",
+            CHARITY/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_CHRONIC
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_CHRONIC_MEDICARE" AS "DATA_VARIABLE",
+            MEDICARE/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_CHRONIC
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_CHRONIC_MEDICAID" AS "DATA_VARIABLE",
+            MEDICAID/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_CHRONIC
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_CHRONIC_NO_DATA" AS "DATA_VARIABLE",
+            NO_DATA/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_CHRONIC
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_OTHER_COMMERCIAL" AS "DATA_VARIABLE",
+            COMMERCIAL/CAST(TOTAL AS REAL)*100 AS "VALUE"
         FROM INSURANCE_COUNTS_OTHER
-    ) AS AGG
-    ORDER BY COHORT, PERIOD;
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_OTHER_OTHER_GOV" AS "DATA_VARIABLE",
+            OTHER_GOV/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_OTHER
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_OTHER_SELF_PAY" AS "DATA_VARIABLE",
+            SELF_PAY/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_OTHER
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_OTHER_WORKERS_COMP" AS "DATA_VARIABLE",
+            WORKERS_COMP/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_OTHER
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_OTHER_INSTITUTIONALIZED" AS "DATA_VARIABLE",
+            INSTITUTIONALIZED/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_OTHER
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_OTHER_CHARITY" AS "DATA_VARIABLE",
+            CHARITY/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_OTHER
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_OTHER_MEDICARE" AS "DATA_VARIABLE",
+            MEDICARE/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_OTHER
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_OTHER_MEDICAID" AS "DATA_VARIABLE",
+            MEDICAID/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_OTHER
+    UNION ALL
+        SELECT
+            PERIOD,
+            "N_OTHER_NO_DATA" AS "DATA_VARIABLE",
+            NO_DATA/CAST(TOTAL AS REAL)*100 AS "VALUE"
+        FROM INSURANCE_COUNTS_OTHER
+    )
+    ORDER BY DATA_VARIABLE, PERIOD;
