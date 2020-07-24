@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": {"url": "..//data/fills-data-row-based.csv"},
+  "data": {"url": "../data/fills-data-row-based.csv"},
   "transform": [
     {"calculate": "datum.VALUE/datum.TOTAL*100", "as": "(%)"}
   ],
@@ -206,14 +206,14 @@
                 "scale": {"domain": ["All", "Chronic", "Non-chronic"]}
               },
               "y": {
+                "aggregate": "average",
                 "field": "percent",
                 "type": "quantitative",
                 "title": "% of Cohort",
                 "axis": {
                   "labelFlush": true,
                   "tickCount": 10
-                },
-                "scale": {"domain": [0, 100]}
+                }
               },
               "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
             }
@@ -221,7 +221,7 @@
           {
             "mark": {
               "type": "text",
-              "yOffset": -5
+              "yOffset": 8
             },
             "encoding": {
               "text": {"field": "percent", "type": "quantitative", "format": ",.2~f"},
@@ -231,6 +231,7 @@
                 "title": ""
               },
               "y": {
+                "aggregate": "average",
                 "field": "percent", 
                 "type": "quantitative"
               }
@@ -260,7 +261,7 @@
             "minExtent": 60
           }
         },
-        "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
+        "color": {"legend": null, "field": "COHORT", "type": "nominal", "title": "Cohort"}
       },
       "layer": [
         {
