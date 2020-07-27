@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": {"url": "../data/fills-data-row-based.csv"},
+  "data": {"url": "../data/diagnosis-data-row-based.csv"},
   "transform": [
     {"calculate": "datum.VALUE/datum.TOTAL*100", "as": "(%)"}
   ],
@@ -14,7 +14,8 @@
   },
   "vconcat": [
     {
-      "spacing": 30,
+      "spacing": 20,
+      "columns": 4,
       "facet": {
         "field": "DATA_VARIABLE",
         "type": "ordinal",
@@ -24,8 +25,8 @@
         "scale": {"x": "independent", "y": "independent"}
       },
       "spec": {
-        "height": 200,
-        "width": 200,
+        "height": 100,
+        "width": 150,
         "layer": [
           {
             "transform": [{ "filter": { "selection": "labelpoints" } }],
@@ -157,91 +158,6 @@
                 }
               }
             ]
-          }
-        ]
-      }
-    },
-    {
-      "spacing": 30,
-      "facet": {
-        "field": "DATA_VARIABLE",
-        "type": "ordinal",
-        "title": ""
-      },
-      "resolve": {
-        "scale": {"x": "independent", "y": "independent"}
-      },
-      "spec": {
-        "height": 200,
-        "width": 200,
-        "transform": [
-          { "filter": { "selection": "period" } },
-          {
-            "joinaggregate": [{
-              "op": "sum",
-              "field": "VALUE",
-              "as": "a"
-            }],
-            "groupby": ["COHORT", "DATA_VARIABLE"]
-          },
-          {
-          "joinaggregate": [{
-            "op": "sum",
-            "field": "TOTAL",
-            "as": "b"
-          }],
-          "groupby": ["COHORT", "DATA_VARIABLE"]
-          },
-          {"calculate": "datum.a/datum.b*100", "as": "percent"}
-        ],
-        "layer": [
-          {
-            "mark": "bar",
-            "encoding": {
-              "x": {
-                "field": "COHORT",
-                "type": "nominal",
-                "title": "",
-                "scale": {"domain": ["All", "Chronic", "Non-chronic"]},
-                "axis": {
-                  "labelAngle": 0
-                }
-              },
-              "y": {
-                "aggregate": "average",
-                "field": "percent",
-                "type": "quantitative",
-                "title": "% of Cohort",
-                "axis": {
-                  "labelFlush": true,
-                  "tickCount": 10
-                },
-                "scale": {
-                  "padding": 30,
-                  "zero": false
-                }
-              },
-              "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
-            }
-          },
-          {
-            "mark": {
-              "type": "text",
-              "yOffset": -5
-            },
-            "encoding": {
-              "text": {"field": "percent", "type": "quantitative", "format": ",.4~f"},
-              "x": {
-                "field": "COHORT",
-                "type": "nominal",
-                "title": ""
-              },
-              "y": {
-                "aggregate": "average",
-                "field": "percent", 
-                "type": "quantitative"
-              }
-            }
           }
         ]
       }

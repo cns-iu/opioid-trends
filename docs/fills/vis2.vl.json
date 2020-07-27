@@ -1,0 +1,150 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "data": {"url": "../data/fills-data-row-based.csv"},
+  "transform": [
+    {"calculate": "datum.VALUE/datum.TOTAL*100", "as": "(%)"}
+  ],
+  "padding": 10,
+  "config": {
+    "autosize": {
+      "type": "pad"
+    },
+
+    "mark": { "tooltip": null }
+  },
+  "vconcat": [
+    {
+      "spacing": 30,
+      "facet": {
+        "field": "DATA_VARIABLE",
+        "type": "ordinal",
+        "title": ""
+      },
+      "resolve": {
+        "scale": {"x": "independent", "y": "independent"}
+      },
+      "spec": {
+        "height": 200,
+        "width": 200,
+        "transform": [
+          { "filter": { "selection": "period" } },
+          {
+            "joinaggregate": [{
+              "op": "sum",
+              "field": "VALUE",
+              "as": "a"
+            }],
+            "groupby": ["COHORT", "DATA_VARIABLE"]
+          },
+          {
+          "joinaggregate": [{
+            "op": "sum",
+            "field": "TOTAL",
+            "as": "b"
+          }],
+          "groupby": ["COHORT", "DATA_VARIABLE"]
+          },
+          {"calculate": "datum.a/datum.b*100", "as": "percent"}
+        ],
+        "layer": [
+          {
+            "mark": "bar",
+            "encoding": {
+              "x": {
+                "field": "COHORT",
+                "type": "nominal",
+                "title": "",
+                "scale": {"domain": ["All", "Chronic", "Non-chronic"]},
+                "axis": {
+                  "labelAngle": 0
+                }
+              },
+              "y": {
+                "aggregate": "average",
+                "field": "percent",
+                "type": "quantitative",
+                "title": "% of Cohort",
+                "axis": {
+                  "labelFlush": true,
+                  "tickCount": 10
+                },
+                "scale": {
+                  "padding": 30,
+                  "zero": false
+                }
+              },
+              "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
+            }
+          },
+          {
+            "mark": {
+              "type": "text",
+              "yOffset": -5
+            },
+            "encoding": {
+              "text": {"field": "percent", "type": "quantitative", "format": ",.4~f"},
+              "x": {
+                "field": "COHORT",
+                "type": "nominal",
+                "title": ""
+              },
+              "y": {
+                "aggregate": "average",
+                "field": "percent", 
+                "type": "quantitative"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "width": 660,
+      "height": 150,
+      "encoding": {
+        "x": {
+          "type": "temporal",
+          "field": "PERIOD",
+          "title": null
+        },
+        "y": {
+          "aggregate": "sum",
+          "type": "quantitative",
+          "field": "VALUE",
+          "axis": {
+            "orient": "right",
+            "title": "Number of patients",
+            "tickCount": 6,
+            "grid": false
+          }
+        },
+        "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
+      },
+      "layer": [
+        {
+          "mark": "line",
+          "selection": {
+            "period": {
+              "type": "interval",
+              "encodings": ["x"]
+            }
+          }
+        },
+        {
+          "transform": [{ "filter": "datum.COHORT == 'Chronic'" }],
+          "mark": {
+            "type": "line",
+            "strokeDash": [20, 4]
+          }
+        },
+        {
+          "transform": [{ "filter": "datum.COHORT == 'Non-chronic'" }],
+          "mark": {
+            "type": "line",
+            "strokeDash": [4, 4]
+          }
+        }
+      ]
+    }
+  ]
+}
