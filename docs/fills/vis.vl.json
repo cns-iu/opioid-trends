@@ -76,12 +76,7 @@
                     "bind": { "legend": "dblclick" },
                     "on": "true",
                     "clear": "dblclick",
-                    "empty": "none",
-                    "init": [
-                      {"COHORT": "All"},
-                      {"COHORT": "Chronic"},
-                      {"COHORT": "Non-chronic"}
-                    ]
+                    "empty": "all"
                   }
                 }
               },
@@ -110,7 +105,7 @@
             ]
           },
           {
-            "transform": [{"filter": {"selection": {"and": ["labelpoints", "data_variable"]}}}],
+            "transform": [{"filter": {"selection": {"and": ["labelpoints"]}}}],
             "encoding": {
               "x": {
                 "type": "temporal",
@@ -129,6 +124,7 @@
             },
             "layer": [
               {
+                "transform": [{"filter": {"selection": "data_variable"}}],
                 "mark": {
                   "type": "text",
                   "stroke": "white",
@@ -138,6 +134,7 @@
                 }
               },
               {
+                "transform": [{"filter": {"selection": "data_variable"}}],
                 "mark": {
                   "type": "text", 
                   "align": "left", 
