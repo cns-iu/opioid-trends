@@ -1,0 +1,303 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "name": "Fills Trends Over Time",
+  "title": {
+    "text": "",
+    "anchor": "middle",
+    "fontSize": 28
+  },
+  "padding": 10,
+  "config": {
+    "autosize": {
+      "type": "pad"
+    },
+
+    "axisBottom": { "title": null, "labelFlush": false },
+    "mark": { "tooltip": null },
+    "range": { "category": { "scheme": "category20" } }
+  },
+
+  "data": {
+    "url": "../data/fills-data-row-based.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "PERIOD": "date",
+        "VALUE": "number"
+      }
+    }
+  },
+  "transform": [
+    {"calculate": "datum.VALUE/datum.TOTAL*100", "as": "(%)"}
+  ],
+  "vconcat": [
+    {
+      "spacing": 20,
+      "columns": 1,
+      "facet": {
+        "field": "COHORT",
+        "type": "ordinal",
+        "title": ""
+      },
+      "resolve": {
+        "scale": {"x": "independent", "y": "independent"}
+      },
+      "spec":     {
+        "width": 703,
+        "height": 200,
+        "title": "",
+  
+        "layer": [
+          {
+            "transform": [{ "filter": { "selection": "labelpoints" } }],
+  
+            "mark": {
+              "type": "rule",
+              "color": "gray"
+            },
+            "encoding": {
+              "x": {
+                "type": "temporal",
+                "field": "PERIOD",
+                "scale": { "domain": { "selection": "period" } }
+              }
+            }
+          },
+          {
+            "transform": [{ "filter": { "selection": "data_variable" } }],
+            "encoding": {
+              "x": {
+                "type": "temporal",
+                "field": "PERIOD",
+                "scale": { "domain": { "selection": "period" } },
+                "axis": { "title": null }
+              },
+              "y": {
+                "type": "quantitative",
+                "field": "(%)",
+                "scale": { "type": "linear" },
+                "axis": {
+                  "title": "% of Cohort",
+                  "tickCount": 6
+                }
+              },
+  
+              "color": {
+                "type": "nominal",
+                "field": "DATA_VARIABLE",
+                "title": "Data Variable",
+                "scale": {
+                  "domain": [
+                    "Anti-anxiety",
+                    "Antidepressant",
+                    "Neuro"
+                  ],
+                  "range": [
+                    "#1f77b4",
+                    "#aec7e8",
+                    "#ff7f0e"
+                  ]
+                },
+                "legend": {
+                  "symbolType": "circle",
+                  "orient": "right"
+                }
+              },
+              "opacity": {
+                "condition": {
+                  "selection": "data_variable",
+                  "value": 1
+                },
+                "value": 0.1
+              },
+  
+              "detail": {
+                "type": "nominal",
+                "field": "DATA_VARIABLE"
+              }
+            },
+  
+            "layer": [
+              {
+                "mark": {
+                  "type": "line",
+                  "strokeDash": []
+                },
+                "selection": {
+                  "data_variable": {
+                    "type": "multi",
+                    "fields": ["DATA_VARIABLE"],
+                    "bind": { "legend": "dblclick" },
+                    "on": "true",
+                    "clear": "dblclick",
+                    "empty": "all",
+                    "init": [
+                      {"DATA_VARIABLE": "Anti-anxiety"},
+                      {"DATA_VARIABLE": "Antidepressant"},
+                      {"DATA_VARIABLE": "Neuro"}
+                    ]
+                  }
+                }
+              },
+              {
+                "transform": [{ "filter": { "selection": "data_variable" } }],
+                "mark": {
+                  "type": "point",
+                  "filled": true
+                },
+                "encoding": {
+                  "opacity": {
+                    "condition": {
+                      "selection": { "and": ["labelpoints", "data_variable"] },
+                      "value": 1
+                    },
+                    "value": 0
+                  }
+                },
+                "selection": {
+                  "labelpoints": {
+                    "type": "single",
+                    "nearest": true,
+                    "on": "mouseover",
+                    "encodings": ["x"],
+                    "empty": "none"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "transform": [{ "filter": { "selection": { "and": ["labelpoints", "data_variable"] } } }],
+  
+            "encoding": {
+              "x": {
+                "type": "temporal",
+                "field": "PERIOD",
+                "scale": { "domain": { "selection": "period" } }
+              },
+              "y": {
+                "type": "quantitative",
+                "field": "(%)"
+              },
+  
+              "text": {
+                "type": "quantitative",
+                "field": "(%)",
+                "format": ",.2~f"
+              }
+            },
+  
+            "layer": [
+              {
+                "mark": {
+                  "type": "text",
+                  "stroke": "white",
+                  "strokeWidth": 3,
+                  "align": "left",
+                  "dx": 5,
+                  "dy": -5,
+                  "clip": false
+                }
+              },
+              {
+                "mark": {
+                  "type": "text",
+                  "align": "left",
+                  "dx": 5,
+                  "dy": -5,
+                  "clip": false
+                },
+                "encoding": {
+                  "color": {
+                    "type": "nominal",
+                    "field": "DATA_VARIABLE",
+                    "scale": {
+                      "domain": [
+                        "Anti-anxiety",
+                        "Antidepressant",
+                        "Neuro"
+                      ],
+                      "range": [
+                        "#1f77b4",
+                        "#aec7e8",
+                        "#ff7f0e"
+                      ]
+                    },
+                    "legend": null
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "width": 703,
+      "height": 150,
+
+      "encoding": {
+        "x": {
+          "type": "temporal",
+          "field": "PERIOD"
+        },
+        "y": {
+          "aggregate": "average",
+          "type": "quantitative",
+          "field": "(%)",
+          "scale": { "type": "linear" },
+          "axis": {
+            "title": null,
+            "orient": "right",
+            "tickCount": 6,
+            "grid": false
+          }
+        },
+
+        "color": {
+          "type": "nominal",
+          "field": "DATA_VARIABLE",
+          "scale": {
+            "domain": [
+              "Anti-anxiety",
+              "Antidepressant",
+              "Neuro"
+            ],
+            "range": [
+              "#1f77b4",
+              "#aec7e8",
+              "#ff7f0e"
+            ]
+          }
+        },
+        "opacity": {
+          "condition": {
+            "selection": "data_variable",
+            "value": 1
+          },
+          "value": 0.1
+        },
+
+        "detail": {
+          "type": "nominal",
+          "field": "DATA_VARIABLE"
+        }
+      },
+
+      "layer": [
+        {
+          "mark": {
+            "type": "line",
+            "strokeDash": []
+          },
+          "selection": {
+            "period": {
+              "type": "interval",
+              "encodings": ["x"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
