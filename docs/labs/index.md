@@ -2,7 +2,7 @@
 
 <a href="../help/index.html" class="icon fa fa-question-circle"> Help</a>
 
-{{ vega.embed('./docs/labs/vis.vl.json') }}
+{{ vega.embedWithCSV() }}
 
 <style>
 /* hack to turn off gray background in the readthedocs theme */
