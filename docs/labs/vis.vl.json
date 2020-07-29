@@ -1,32 +1,193 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
   "data": {
-    "url" : "../data/labs-all-agg-data.csv"
+    "url": "../data/labs-all-agg-data.csv",
+    "format": {
+      "parse": {
+        "PERIOD": "date",
+        "VALUE": "number"
+      }
+    }
   },
-  "transform": [
+  "vconcat": [
     {
-      "calculate": "datum.LAB_TYPE_COUNT / datum.TOTAL_COUNT * 100",
-      "as": "LAB_PERCENT"
+      "spacing": 75,
+      "columns": 4,
+      "facet": {
+        "field": "DATA_VARIABLE", 
+        "type": "ordinal", 
+        "title": ""
+      },
+      "bounds": "flush",
+      "resolve": {"scale": {"x": "independent", "y": "independent"}},
+      "spec": {
+        "height": 200,
+        "width": 225,
+        "layer": [
+          {
+            "transform": [{"filter": {"selection": "labelpoints"}}],
+            "mark": {"type": "rule", "color": "gray"},
+            "encoding": {
+              "x": {
+                "type": "temporal",
+                "field": "PERIOD",
+                "scale": {"domain": {"selection": "period"}}
+              }
+            }
+          },
+          {
+            "transform": [{ "filter": { "selection": "DATA_VARIABLE" } }],
+            "encoding": {
+              "x": {
+                "field": "PERIOD", 
+                "type": "temporal", 
+                "title": "",
+                "scale": { "domain": { "selection": "period" } }
+              },
+              "y": {
+                "field": "VALUE",
+                "type": "quantitative",
+                "axis": {"tickCount": 6},
+                "scale": {"zero": false},
+                "title": "% of Cohort"
+              },
+              "color": {
+                "field": "COHORT", 
+                "type": "nominal", 
+                "title": "Cohort",
+                "legend": {
+                  "symbolType": "circle",
+                  "orient": "right"
+                }
+              }
+            },
+            "layer": [
+              {
+                "mark": "line",
+                "selection": {
+                  "DATA_VARIABLE": {
+                    "type": "multi",
+                    "fields": ["COHORT"],
+                    "bind": { "legend": "dblclick" },
+                    "on": "true",
+                    "clear": "dblclick",
+                    "empty": "all"
+                  }
+                }
+              },
+              {
+                "mark": {"type": "point", "filled": true},
+                "encoding": {
+                  "opacity": {
+                    "condition": {
+                      "selection": "labelpoints", 
+                      "value": 1
+                    },
+                    "value": 0
+                  }
+                },
+                "selection": {
+                  "labelpoints": {
+                    "type": "single",
+                    "nearest": true,
+                    "on": "mouseover",
+                    "encodings": ["x"],
+                    "empty": "none",
+                    "clear": "mouseout"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "transform": [{"filter": {"selection": {"and": ["labelpoints"]}}}],
+            "encoding": {
+              "x": {
+                "type": "temporal",
+                "field": "PERIOD",
+                "scale": {"domain": {"selection": "period"}}
+              },
+              "y": {
+                "type": "quantitative", 
+                "field": "VALUE"
+              },
+              "text": {
+                "type": "quantitative",
+                "field": "TOOLTIP"
+              }
+            },
+            "layer": [
+              {
+                "transform": [{"filter": {"selection": "DATA_VARIABLE"}}],
+                "mark": {
+                  "type": "text",
+                  "stroke": "white",
+                  "strokeWidth": 3,
+                  "align": "left",
+                  "clip": false
+                }
+              },
+              {
+                "transform": [{"filter": {"selection": "DATA_VARIABLE"}}],
+                "mark": {
+                  "type": "text", 
+                  "align": "left", 
+                  "clip": false
+                },
+                "encoding": {
+                  "color": {
+                    "field": "COHORT",
+                    "type": "nominal",
+                    "title": "Cohort"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "width": 825,
+      "height": 150,
+      "encoding": {
+        "x": {
+          "type": "temporal", 
+          "field": "PERIOD", 
+          "title": null
+        },
+        "y": {
+          "aggregate": "sum",
+          "type": "quantitative",
+          "field": "TOOLTIP",
+          "axis": {
+            "orient": "right",
+            "title": "Number of patients",
+            "tickCount": 6,
+            "grid": false
+          }
+        },
+        "color": {
+          "field": "COHORT", 
+          "type": "nominal", 
+          "title": "Cohort"
+        },
+        "opacity": {
+          "condition": {
+            "selection": "DATA_VARIABLE",
+            "value": 1
+          },
+          "value": 0.1
+        }
+      },
+      "layer": [
+        {
+          "mark": "line",
+          "selection": {
+            "period": {"type": "interval", "encodings": ["x"]}
+          }
+        }
+      ]
     }
-  ],
-  "mark": "line",
-  "encoding": {
-    "column": {
-      "field": "COHORT",
-      "type": "nominal",
-      "spacing": 10
-    },
-    "y": {
-      "field": "LAB_PERCENT",
-      "type": "quantitative"
-    },
-    "x": {
-      "field": "PERIOD",
-      "type": "temporal"
-    },
-    "color":{
-      "field": "LAB_CODE_TYPE",
-      "type": "nominal"
-    }
-  }
+  ]
 }

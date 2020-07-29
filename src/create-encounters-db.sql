@@ -1,19 +1,25 @@
 -- Load Source Database --
-
 ATTACH DATABASE 'raw-data/original/box-health/R2767_Data.db' AS src;
 
 DROP TABLE IF EXISTS "ENCOUNTERS_COUNT";
 CREATE TABLE "ENCOUNTERS_COUNT" AS
     SELECT
-        strftime('%Y', ADMIT_TIME) || CASE 
-            WHEN cast(strftime('%m', ADMIT_TIME) as integer) BETWEEN 1 AND 3 THEN '-01-01'
-            WHEN cast(strftime('%m', ADMIT_TIME) as integer) BETWEEN 4 and 6 THEN '-04-01'
-            WHEN cast(strftime('%m', ADMIT_TIME) as integer) BETWEEN 7 and 9 THEN '-07-01'
-            ELSE '-10-01'
-            END AS "PERIOD", -- Quarterly Period
         COUNT(*) AS ENCOUNTERS_TOTAL
-    FROM src.ENCOUNTERS
-    GROUP BY PERIOD;
+    FROM src.DEMOGRAPHICS;
+
+DROP TABLE IF EXISTS "ENCOUNTERS_COUNT_CHRONIC";
+CREATE TABLE "ENCOUNTERS_COUNT_CHRONIC" AS
+    SELECT
+        COUNT(*) AS ENCOUNTERS_TOTAL
+    FROM src.DEMOGRAPHICS
+    WHERE THREE_FILL_FLAG IS 1;
+
+DROP TABLE IF EXISTS "ENCOUNTERS_COUNT_OTHER";
+CREATE TABLE "ENCOUNTERS_COUNT_OTHER" AS
+    SELECT
+        COUNT(*) AS ENCOUNTERS_TOTAL
+    FROM src.DEMOGRAPHICS
+    WHERE ONE_PER_YEAR_FLAG IS 1;
 
 DROP TABLE IF EXISTS "PRE_CATEGORY_COUNTS_ALL";
 CREATE TABLE "PRE_CATEGORY_COUNTS_ALL" AS
@@ -41,7 +47,6 @@ CREATE TABLE "CATEGORY_COUNTS_ALL" AS
         ENCOUNTERS.ENCOUNTERS_TOTAL
     FROM PRE_CATEGORY_COUNTS_ALL AS PRE
     JOIN ENCOUNTERS_COUNT AS ENCOUNTERS
-    USING(PERIOD)
     ORDER BY PERIOD, PRE.CATEGORY;
 
 DROP TABLE IF EXISTS "PRE_CATEGORY_COUNTS_CHRONIC";
@@ -71,7 +76,7 @@ CREATE TABLE "CATEGORY_COUNTS_CHRONIC" AS
         PRE.CATEGORY_TOTAL,
         ENCOUNTERS.ENCOUNTERS_TOTAL
     FROM PRE_CATEGORY_COUNTS_CHRONIC AS PRE
-    JOIN ENCOUNTERS_COUNT AS ENCOUNTERS USING(PERIOD)
+    JOIN ENCOUNTERS_COUNT_CHRONIC AS ENCOUNTERS
     ORDER BY PERIOD, PRE.CATEGORY;
 
 DROP TABLE IF EXISTS "PRE_CATEGORY_COUNTS_OTHER";
@@ -101,40 +106,8 @@ CREATE TABLE "CATEGORY_COUNTS_OTHER" AS
         PRE.CATEGORY_TOTAL,
         ENCOUNTERS.ENCOUNTERS_TOTAL
     FROM PRE_CATEGORY_COUNTS_OTHER AS PRE
-    JOIN ENCOUNTERS_COUNT AS ENCOUNTERS USING(PERIOD)
+    JOIN ENCOUNTERS_COUNT_OTHER AS ENCOUNTERS
     ORDER BY PERIOD, PRE.CATEGORY;
-
--- DROP TABLE IF EXISTS "CATEGORY_AGG";
--- CREATE TABLE "CATEGORY_AGG" AS
---     SELECT * FROM (
---         SELECT
---             PERIOD,
---             CATEGORY,
---             UNIQUE_STUDY_IDS,
---             CATEGORY_TOTAL,
---             ENCOUNTERS_TOTAL,
---             "ALL" AS "COHORT"
---         FROM CATEGORY_COUNTS_ALL
---     UNION ALL
---         SELECT
---             PERIOD,
---             CATEGORY,
---             UNIQUE_STUDY_IDS,
---             CATEGORY_TOTAL,
---             ENCOUNTERS_TOTAL,
---             "OPIOID_CHRONIC" AS "COHORT"
---         FROM CATEGORY_COUNTS_CHRONIC
---     UNION ALL
---         SELECT
---             PERIOD,
---             CATEGORY,
---             UNIQUE_STUDY_IDS,
---             CATEGORY_TOTAL,
---             ENCOUNTERS_TOTAL,
---             "OPIOID_OTHER" AS "COHORT"
---         FROM CATEGORY_COUNTS_OTHER
---     ) AS AGG
---     ORDER BY COHORT, PERIOD;
 
 DROP TABLE IF EXISTS "INSURANCE_COUNTS_ALL";
 CREATE TABLE "INSURANCE_COUNTS_ALL" AS
@@ -209,444 +182,399 @@ CREATE TABLE "INSURANCE_COUNTS_OTHER" AS
     GROUP BY PERIOD
     ORDER BY PERIOD;
 
-
--- DROP TABLE IF EXISTS "INSURANCE_COUNTS_AGG";
--- CREATE TABLE "INSURANCE_COUNTS_AGG" AS
---     SELECT * FROM (
---         SELECT
---             PERIOD,
---             TOTAL,
---             COMMERCIAL,
---             OTHER_GOV,
---             SELF_PAY,
---             WORKERS_COMP,
---             INSTITUTIONALIZED,
---             CHARITY,
---             MEDICARE,
---             MEDICAID,
---             NO_DATA,
---             "ALL" AS "COHORT"
---         FROM INSURANCE_COUNTS_ALL
---     UNION ALL
---         SELECT
---             PERIOD,
---             TOTAL,
---             COMMERCIAL,
---             OTHER_GOV,
---             SELF_PAY,
---             WORKERS_COMP,
---             INSTITUTIONALIZED,
---             CHARITY,
---             MEDICARE,
---             MEDICAID,
---             NO_DATA,
---             "OPIOID_CHRONIC" AS "COHORT"
---         FROM INSURANCE_COUNTS_CHRONIC
---     UNION ALL
---         SELECT
---             PERIOD,
---             TOTAL,
---             COMMERCIAL,
---             OTHER_GOV,
---             SELF_PAY,
---             WORKERS_COMP,
---             INSTITUTIONALIZED,
---             CHARITY,
---             MEDICARE,
---             MEDICAID,
---             NO_DATA,
---             "OPIOID_OTHER" AS "COHORT"
---         FROM INSURANCE_COUNTS_OTHER
---     ) AS AGG
---     ORDER BY COHORT, PERIOD;
-
 DROP TABLE IF EXISTS "INSURANCE_COUNTS_ROW_BASED";
 CREATE TABLE "INSURANCE_COUNTS_ROW_BASED" AS
     SELECT * FROM (
     -- AVERAGE ENCOUNTERS
+    -- All Cohort
         SELECT
             PERIOD,
-            "AVERAGE_EMERGENCY_ENCOUNTERS" AS "DATA_VARIABLE",
+            "Avg. # Emergency Encounters" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "ALL_AVERAGE_EMERGENCY_ENCOUNTERS" AS "DV_COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             1.0 * CATEGORY_TOTAL / UNIQUE_STUDY_IDS AS "VALUE"
         FROM CATEGORY_COUNTS_ALL
         WHERE CATEGORY IS "E"
     UNION ALL
         SELECT
             PERIOD,
-            "AVERAGE_INPATIENT_ENCOUNTERS" AS "DATA_VARIABLE",
+            "Avg. # Inpatient Encounters" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "ALL_AVERAGE_INPATIENT_ENCOUNTERS" AS "DV_COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             1.0 * CATEGORY_TOTAL / UNIQUE_STUDY_IDS AS "VALUE"
         FROM CATEGORY_COUNTS_ALL
         WHERE CATEGORY IS "I"
     UNION ALL
         SELECT
             PERIOD,
-            "AVERAGE_OUTPATIENT_ENCOUNTERS" AS "DATA_VARIABLE",
+            "Avg. # Outpatient Encounters" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "ALL_AVERAGE_OUTPATIENT_ENCOUNTERS" AS "DV_COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             1.0 * CATEGORY_TOTAL / UNIQUE_STUDY_IDS AS "VALUE"
         FROM CATEGORY_COUNTS_ALL
         WHERE CATEGORY IS "O"
     UNION ALL
-
+    -- Chronic Cohort
         SELECT
             PERIOD,
-            "AVERAGE_EMERGENCY_ENCOUNTERS" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "CHRONIC_AVERAGE_EMERGENCY_ENCOUNTERS" AS "DV_COHORT",
+            "Avg. # Emergency Encounters" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             1.0 * CATEGORY_TOTAL / UNIQUE_STUDY_IDS AS "VALUE"
         FROM CATEGORY_COUNTS_CHRONIC
         WHERE CATEGORY IS "E"
     UNION ALL
         SELECT
             PERIOD,
-            "AVERAGE_INPATIENT_ENCOUNTERS" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "CHRONIC_AVERAGE_INPATIENT_ENCOUNTERS" AS "DV_COHORT",
+            "Avg. # Inpatient Encounters" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             1.0 * CATEGORY_TOTAL / UNIQUE_STUDY_IDS AS "VALUE"
         FROM CATEGORY_COUNTS_CHRONIC
         WHERE CATEGORY IS "I"
     UNION ALL
         SELECT
             PERIOD,
-            "AVERAGE_OUTPATIENT_ENCOUNTERS" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "CHRONIC_AVERAGE_OUTPATIENT_ENCOUNTERS" AS "DV_COHORT",
+            "Avg. # Outpatient Encounters" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             1.0 * CATEGORY_TOTAL / UNIQUE_STUDY_IDS AS "VALUE"
         FROM CATEGORY_COUNTS_CHRONIC
         WHERE CATEGORY IS "O"
     UNION ALL
-
+    -- Non-Chronic Cohort
         SELECT
             PERIOD,
-            "AVERAGE_EMERGENCY_ENCOUNTERS" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "OTHER_AVERAGE_EMERGENCY_ENCOUNTERS" AS "DV_COHORT",
+            "Avg. # Emergency Encounters" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             1.0 * CATEGORY_TOTAL / UNIQUE_STUDY_IDS AS "VALUE"
         FROM CATEGORY_COUNTS_OTHER
         WHERE CATEGORY IS "E"
     UNION ALL
         SELECT
             PERIOD,
-            "AVERAGE_INPATIENT_ENCOUNTERS" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "OTHER_AVERAGE_INPATIENT_ENCOUNTERS" AS "DV_COHORT",
+            "Avg. # Inpatient Encounters" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             1.0 * CATEGORY_TOTAL / UNIQUE_STUDY_IDS AS "VALUE"
         FROM CATEGORY_COUNTS_OTHER
         WHERE CATEGORY IS "I"
     UNION ALL
         SELECT
             PERIOD,
-            "AVERAGE_OUTPATIENT_ENCOUNTERS" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "OTHER_AVERAGE_OUTPATIENT_ENCOUNTERS" AS "DV_COHORT",
+            "Avg. # Outpatient Encounters" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             1.0 * CATEGORY_TOTAL / UNIQUE_STUDY_IDS AS "VALUE"
         FROM CATEGORY_COUNTS_OTHER
         WHERE CATEGORY IS "O"
 
     -- PERCENTAGE ENCOUNTERS
+    -- All Cohort
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_EMERGENCY_ENCOUNTERS" AS "DATA_VARIABLE",
+            "% with Emergency Encounters" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "ALL_EMERGENCY_ENCOUNTERS" AS "DV_COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             100.0 * CATEGORY_TOTAL / ENCOUNTERS_TOTAL AS "VALUE"
         FROM CATEGORY_COUNTS_ALL
         WHERE CATEGORY IS "E"
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_INPATIENT_ENCOUNTERS" AS "DATA_VARIABLE",
+            "% with Inpatient Encounters" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "ALL_INPATIENT_ENCOUNTERS" AS "DV_COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             100.0 * CATEGORY_TOTAL / ENCOUNTERS_TOTAL AS "VALUE"
         FROM CATEGORY_COUNTS_ALL
         WHERE CATEGORY IS "I"
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_OUTPATIENT_ENCOUNTERS" AS "DATA_VARIABLE",
+            "% with Outpatient Encounters" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "ALL_OUTPATIENT_ENCOUNTERS" AS "DV_COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             100.0 * CATEGORY_TOTAL / ENCOUNTERS_TOTAL AS "VALUE"
         FROM CATEGORY_COUNTS_ALL
         WHERE CATEGORY IS "O"
     UNION ALL
+    -- Chronic Cohort
         SELECT
             PERIOD,
-            "PERCENT_EMERGENCY_ENCOUNTERS" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "CHRONIC_EMERGENCY_ENCOUNTERS" AS "DV_COHORT",
+            "% with Emergency Encounters" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             100.0 * CATEGORY_TOTAL / ENCOUNTERS_TOTAL AS "VALUE"
         FROM CATEGORY_COUNTS_CHRONIC
         WHERE CATEGORY IS "E"
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_INPATIENT_ENCOUNTERS" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "CHRONIC_INPATIENT_ENCOUNTERS" AS "DV_COHORT",
+            "% with Inpatient Encounters" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             100.0 * CATEGORY_TOTAL / ENCOUNTERS_TOTAL AS "VALUE"
         FROM CATEGORY_COUNTS_CHRONIC
         WHERE CATEGORY IS "I"
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_OUTPATIENT_ENCOUNTERS" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "CHRONIC_OUTPATIENT_ENCOUNTERS" AS "DV_COHORT",
+            "% with Outpatient Encounters" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             100.0 * CATEGORY_TOTAL / ENCOUNTERS_TOTAL AS "VALUE"
         FROM CATEGORY_COUNTS_CHRONIC
         WHERE CATEGORY IS "O"
     UNION ALL
+    -- Non-Chronic Cohort
         SELECT
             PERIOD,
-            "PERCENT_EMERGENCY_ENCOUNTERS" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "OTHER_EMERGENCY_ENCOUNTERS" AS "DV_COHORT",
+            "% with Emergency Encounters" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             100.0 * CATEGORY_TOTAL / ENCOUNTERS_TOTAL AS "VALUE"
         FROM CATEGORY_COUNTS_OTHER
         WHERE CATEGORY IS "E"
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_INPATIENT_ENCOUNTERS" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "OTHER_INPATIENT_ENCOUNTERS" AS "DV_COHORT",
+            "% with Inpatient Encounters" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             100.0 * CATEGORY_TOTAL / ENCOUNTERS_TOTAL AS "VALUE"
         FROM CATEGORY_COUNTS_OTHER
         WHERE CATEGORY IS "I"
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_OUTPATIENT_ENCOUNTERS" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "OTHER_OUTPATIENT_ENCOUNTERS" AS "DV_COHORT",
+            "% with Outpatient Encounters" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            CATEGORY_TOTAL AS "TOOLTIP",
             100.0 * CATEGORY_TOTAL / ENCOUNTERS_TOTAL AS "VALUE"
         FROM CATEGORY_COUNTS_OTHER
         WHERE CATEGORY IS "O"
     
     -- PERCENTAGE INSURANCES
+    -- All Cohort
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_COMMERCIAL_INSURANCE" AS "DATA_VARIABLE",
+            "% Commercial Insurance" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "PERCENT_ALL_COMMERCIAL_INSURANCE" AS "DV_COHORT",
-            COMMERCIAL/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            TOTAL AS "TOOLTIP",
+            100.0 * COMMERCIAL / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_ALL
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_OTHER_GOV_INSURANCE" AS "DATA_VARIABLE",
+            "% Other Gov. Insurance" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "PERCENT_ALL_OTHER_GOV_INSURANCE" AS "DV_COHORT",
-            OTHER_GOV/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            TOTAL AS "TOOLTIP",
+            100.0 * OTHER_GOV / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_ALL
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_SELF_PAY_INSURANCE" AS "DATA_VARIABLE",
+            "% Self Pay" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "PERCENT_ALL_SELF_PAY_INSURANCE" AS "DV_COHORT",
-            SELF_PAY/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            TOTAL AS "TOOLTIP",
+            100.0 * SELF_PAY / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_ALL
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_WORKERS_COMP_INSURANCE" AS "DATA_VARIABLE",
+            "% Workers Comp. Insurance" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "PERCENT_ALL_WORKERS_COMP_INSURANCE" AS "DV_COHORT",
-            WORKERS_COMP/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            TOTAL AS "TOOLTIP",
+            100.0 * WORKERS_COMP / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_ALL
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_INSTITUTIONALIZED_INSURANCE" AS "DATA_VARIABLE",
+            "% Institutionalized Insurance" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "PERCENT_ALL_INSTITUTIONALIZED_INSURANCE" AS "DV_COHORT",
-            INSTITUTIONALIZED/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            TOTAL AS "TOOLTIP",
+            100.0 * INSTITUTIONALIZED / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_ALL
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_CHARITY_INSURANCE" AS "DATA_VARIABLE",
+            "% Charity Insurance" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "PERCENT_ALL_CHARITY_INSURANCE" AS "DV_COHORT",
-            CHARITY/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            TOTAL AS "TOOLTIP",
+            100.0 * CHARITY / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_ALL
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_MEDICARE_INSURANCE" AS "DATA_VARIABLE",
+            "% Medicare Insurance" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "PERCENT_ALL_MEDICARE_INSURANCE" AS "DV_COHORT",
-            MEDICARE/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            TOTAL AS "TOOLTIP",
+            100.0 * MEDICARE / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_ALL
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_MEDICAID_INSURANCE" AS "DATA_VARIABLE",
+            "% Medicaid Insurance" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "PERCENT_ALL_MEDICAID_INSURANCE" AS "DV_COHORT",
-            MEDICAID/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            TOTAL AS "TOOLTIP",
+            100.0 * MEDICAID / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_ALL
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_NO_DATA_INSURANCE" AS "DATA_VARIABLE",
+            "% No Insurance Data" AS "DATA_VARIABLE",
             "ALL" AS "COHORT",
-            "PERCENT_ALL_NO_DATA_INSURANCE" AS "DV_COHORT",
-            NO_DATA/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            TOTAL AS "TOOLTIP",
+            100.0 * NO_DATA / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_ALL
     UNION ALL
+    -- Chronic Cohort
         SELECT
             PERIOD,
-            "PERCENT_COMMERCIAL_INSURANCE" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "PERCENT_CHRONIC_COMMERCIAL_INSURANCE" AS "DV_COHORT",
-            COMMERCIAL/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Commercial Insurance" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * COMMERCIAL / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_CHRONIC
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_GOV_INSURANCE" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "PERCENT_CHRONIC_OTHER_GOV_INSURANCE" AS "DV_COHORT",
-            OTHER_GOV/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Other Gov. Insurance" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * OTHER_GOV / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_CHRONIC
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_SELF_PAY_INSURANCE" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "PERCENT_CHRONIC_SELF_PAY_INSURANCE" AS "DV_COHORT",
-            SELF_PAY/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Self Pay" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * SELF_PAY / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_CHRONIC
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_WORKERS_COMP_INSURANCE" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "PERCENT_CHRONIC_WORKERS_COMP_INSURANCE" AS "DV_COHORT",
-            WORKERS_COMP/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Workers Comp. Insurance" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * WORKERS_COMP / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_CHRONIC
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_INSTITUTIONALIZED_INSURANCE" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "PERCENT_CHRONIC_INSTITUTIONALIZED_INSURANCE" AS "DV_COHORT",
-            INSTITUTIONALIZED/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Institutionalized Insurance" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * INSTITUTIONALIZED / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_CHRONIC
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_CHARITY_INSURANCE" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "PERCENT_CHRONIC_CHARITY_INSURANCE" AS "DV_COHORT",
-            CHARITY/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Charity Insurance" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * CHARITY / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_CHRONIC
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_MEDICARE_INSURANCE" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "PERCENT_CHRONIC_MEDICARE_INSURANCE" AS "DV_COHORT",
-            MEDICARE/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Medicare Insurance" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * MEDICARE / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_CHRONIC
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_MEDICAID_INSURANCE" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "PERCENT_CHRONIC_MEDICAID_INSURANCE" AS "DV_COHORT",
-            MEDICAID/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Medicaid Insurance" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * MEDICAID / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_CHRONIC
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_NO_DATA_INSURANCE" AS "DATA_VARIABLE",
-            "CHRONIC" AS "COHORT",
-            "PERCENT_CHRONIC_NO_DATA_INSURANCE" AS "DV_COHORT",
-            NO_DATA/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% No Insurance Data" AS "DATA_VARIABLE",
+            "Chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * NO_DATA / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_CHRONIC
     UNION ALL
+    -- Non-Chronic Cohort
         SELECT
             PERIOD,
-            "PERCENT_COMMERCIAL_INSURANCE" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "PERCENT_OTHER_COMMERCIAL_INSURANCE" AS "DV_COHORT",
-            COMMERCIAL/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Commercial Insurance" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * COMMERCIAL / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_OTHER
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_OTHER_GOV_INSURANCE" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "PERCENT_OTHER_OTHER_GOV_INSURANCE" AS "DV_COHORT",
-            OTHER_GOV/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Other Gov. Insurance" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * OTHER_GOV / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_OTHER
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_SELF_PAY_INSURANCE" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "PERCENT_OTHER_SELF_PAY_INSURANCE" AS "DV_COHORT",
-            SELF_PAY/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Self Pay" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * SELF_PAY / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_OTHER
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_WORKERS_COMP_INSURANCE" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "PERCENT_OTHER_WORKERS_COMP_INSURANCE" AS "DV_COHORT",
-            WORKERS_COMP/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Workers Comp. Insurance" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * WORKERS_COMP / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_OTHER
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_INSTITUTIONALIZED_INSURANCE" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "PERCENT_OTHER_INSTITUTIONALIZED_INSURANCE" AS "DV_COHORT",
-            INSTITUTIONALIZED/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Institutionalized Insurance" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * INSTITUTIONALIZED / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_OTHER
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_CHARITY_INSURANCE" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "PERCENT_OTHER_CHARITY_INSURANCE" AS "DV_COHORT",
-            CHARITY/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Charity Insurance" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * CHARITY / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_OTHER
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_MEDICARE_INSURANCE" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "PERCENT_OTHER_MEDICARE_INSURANCE" AS "DV_COHORT",
-            MEDICARE/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Medicare Insurance" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * MEDICARE / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_OTHER
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_MEDICAID_INSURANCE" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "PERCENT_OTHER_MEDICAID_INSURANCE" AS "DV_COHORT",
-            MEDICAID/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% Medicaid Insurance" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * MEDICAID / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_OTHER
-        -- HERE
     UNION ALL
         SELECT
             PERIOD,
-            "PERCENT_NO_DATA_INSURANCE" AS "DATA_VARIABLE",
-            "OTHER" AS "COHORT",
-            "PERCENT_OTHER_NO_DATA_INSURANCE" AS "DV_COHORT",
-            NO_DATA/CAST(TOTAL AS REAL)*100 AS "VALUE"
+            "% No Insurance Data" AS "DATA_VARIABLE",
+            "Non-chronic" AS "COHORT",
+            TOTAL AS "TOOLTIP",
+            100.0 * NO_DATA / TOTAL AS "VALUE"
         FROM INSURANCE_COUNTS_OTHER
     )
     ORDER BY DATA_VARIABLE, PERIOD;

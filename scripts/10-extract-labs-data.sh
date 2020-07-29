@@ -10,6 +10,6 @@ sqlite3 $LABS_DB < src/create-labs-db.sql
 sqlite3 $LABS_DB > $OUT/site-data/labs-all-agg-data.csv << EOF
 .header on
 .mode csv
-SELECT * FROM LABS_AGG;
+SELECT * FROM LABS_ROW_BASED;
 .quit
 EOF
