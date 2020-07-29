@@ -1,23 +1,10 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": {
-    "url": "../data/diagnosis-data-row-based.csv",
-    "format": {
-      "parse": {
-        "PERIOD": "date",
-        "VALUE": "number"
-      }
-    }
-  },
-  "transform": [
-    {
-      "calculate": "datum.VALUE/datum.TOTAL*100", "as": "(%)"
-    }
-  ],
+  "data": { "url": "../data/diagnosis-data-row-based.csv" },
   "vconcat": [
     {
       "spacing": 75,
-      "columns": 4,
+      "columns": 3,
       "facet": {
         "field": "DATA_VARIABLE", 
         "type": "ordinal", 
@@ -26,8 +13,8 @@
       "bounds": "flush",
       "resolve": {"scale": {"x": "independent", "y": "independent"}},
       "spec": {
-        "height": 100,
-        "width": 150,
+        "height": 75,
+        "width": 225,
         "layer": [
           {
             "transform": [{"filter": {"selection": "labelpoints"}}],
@@ -50,7 +37,7 @@
                 "scale": { "domain": { "selection": "period" } }
               },
               "y": {
-                "field": "(%)",
+                "field": "VALUE",
                 "type": "quantitative",
                 "axis": {"tickCount": 6},
                 "scale": {"zero": false},
@@ -114,11 +101,11 @@
               },
               "y": {
                 "type": "quantitative", 
-                "field": "(%)"
+                "field": "VALUE"
               },
               "text": {
                 "type": "quantitative",
-                "field": "VALUE",
+                "field": "TOOLTIP",
                 "format": ",.4~f"
               }
             },
@@ -165,7 +152,7 @@
         "y": {
           "aggregate": "sum",
           "type": "quantitative",
-          "field": "VALUE",
+          "field": "TOOLTIP",
           "axis": {
             "orient": "right",
             "title": "Number of patients",
