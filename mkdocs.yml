@@ -31,8 +31,10 @@ plugins:
   - macros:
       module_name: mkdocs_macros
 
-extra:
-  source_prefix: 'https://github.com/cns-iu/opioid-trends/blob/develop/'
+markdown_extensions:
+  - toc:
+      permalink: True
+
 
   # MkPDFs doesn't work with readthedocs theme and
   # the generated schema html. So for now, we'll
@@ -44,6 +46,8 @@ extra:
 theme:
   name: ivory
 
-markdown_extensions:
-  - toc:
-      permalink: True
+extra_css:
+  - css/extra.css
+
+extra:
+  source_prefix: 'https://github.com/cns-iu/opioid-trends/blob/develop/'

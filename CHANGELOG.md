@@ -1,4 +1,4 @@
-# Changelog
+# Change Log
 
 Changelog for Opioid Trends in Indiana.
 

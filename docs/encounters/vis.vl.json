@@ -1,76 +1,193 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
   "data": {
-    "url": "../data/encounters-category-data.csv",
+    "url": "../data/encounters-data.csv",
     "format": {
       "parse": {
-        "CATEGORY_TOTAL": "number"
+        "PERIOD": "date",
+        "VALUE": "number"
       }
     }
   },
-  "concat": [
+  "vconcat": [
     {
-      "title": "Encounter Types by Percent",
-      "transform": [
-        {
-          "calculate": "datum.CATEGORY_TOTAL / datum.ENCOUNTERS_TOTAL * 100",
-          "as": "CATEGORY_PERCENT"
-        }
-      ],
-        "mark": "line",
-        "encoding": {
-          "column": {
-            "field": "COHORT",
-            "type": "nominal",
-            "spacing": 10
+      "spacing": 75,
+      "columns": 3,
+      "facet": {
+        "field": "DATA_VARIABLE", 
+        "type": "ordinal", 
+        "title": ""
+      },
+      "bounds": "flush",
+      "resolve": {"scale": {"x": "independent", "y": "independent"}},
+      "spec": {
+        "height": 200,
+        "width": 225,
+        "layer": [
+          {
+            "transform": [{"filter": {"selection": "labelpoints"}}],
+            "mark": {"type": "rule", "color": "gray"},
+            "encoding": {
+              "x": {
+                "type": "temporal",
+                "field": "PERIOD",
+                "scale": {"domain": {"selection": "period"}}
+              }
+            }
           },
-          "x": {
-            "field": "PERIOD",
-            "type": "temporal",
-            "title": "Year"
+          {
+            "transform": [{ "filter": { "selection": "DATA_VARIABLE" } }],
+            "encoding": {
+              "x": {
+                "field": "PERIOD", 
+                "type": "temporal", 
+                "title": "",
+                "scale": { "domain": { "selection": "period" } }
+              },
+              "y": {
+                "field": "VALUE",
+                "type": "quantitative",
+                "axis": {"tickCount": 6},
+                "scale": {"zero": false},
+                "title": "% of Cohort"
+              },
+              "color": {
+                "field": "COHORT", 
+                "type": "nominal", 
+                "title": "Cohort",
+                "legend": {
+                  "symbolType": "circle",
+                  "orient": "right"
+                }
+              }
+            },
+            "layer": [
+              {
+                "mark": "line",
+                "selection": {
+                  "DATA_VARIABLE": {
+                    "type": "multi",
+                    "fields": ["COHORT"],
+                    "bind": { "legend": "dblclick" },
+                    "on": "true",
+                    "clear": "dblclick",
+                    "empty": "all"
+                  }
+                }
+              },
+              {
+                "mark": {"type": "point", "filled": true},
+                "encoding": {
+                  "opacity": {
+                    "condition": {
+                      "selection": "labelpoints", 
+                      "value": 1
+                    },
+                    "value": 0
+                  }
+                },
+                "selection": {
+                  "labelpoints": {
+                    "type": "single",
+                    "nearest": true,
+                    "on": "mouseover",
+                    "encodings": ["x"],
+                    "empty": "none",
+                    "clear": "mouseout"
+                  }
+                }
+              }
+            ]
           },
-          "y": {
-            "field": "CATEGORY_PERCENT",
-            "type": "quantitative",
-            "title": "Percentage"
-          },
-          "color": {
-            "field": "CATEGORY",
-            "type": "nominal"
+          {
+            "transform": [{"filter": {"selection": {"and": ["labelpoints"]}}}],
+            "encoding": {
+              "x": {
+                "type": "temporal",
+                "field": "PERIOD",
+                "scale": {"domain": {"selection": "period"}}
+              },
+              "y": {
+                "type": "quantitative", 
+                "field": "VALUE"
+              },
+              "text": {
+                "type": "quantitative",
+                "field": "TOOLTIP"
+              }
+            },
+            "layer": [
+              {
+                "transform": [{"filter": {"selection": "DATA_VARIABLE"}}],
+                "mark": {
+                  "type": "text",
+                  "stroke": "white",
+                  "strokeWidth": 3,
+                  "align": "left",
+                  "clip": false
+                }
+              },
+              {
+                "transform": [{"filter": {"selection": "DATA_VARIABLE"}}],
+                "mark": {
+                  "type": "text", 
+                  "align": "left", 
+                  "clip": false
+                },
+                "encoding": {
+                  "color": {
+                    "field": "COHORT",
+                    "type": "nominal",
+                    "title": "Cohort"
+                  }
+                }
+              }
+            ]
           }
+        ]
+      }
+    },
+    {
+      "width": 825,
+      "height": 150,
+      "encoding": {
+        "x": {
+          "type": "temporal", 
+          "field": "PERIOD", 
+          "title": null
+        },
+        "y": {
+          "aggregate": "sum",
+          "type": "quantitative",
+          "field": "TOOLTIP",
+          "axis": {
+            "orient": "right",
+            "title": "Number of patients",
+            "tickCount": 6,
+            "grid": false
+          }
+        },
+        "color": {
+          "field": "COHORT", 
+          "type": "nominal", 
+          "title": "Cohort"
+        },
+        "opacity": {
+          "condition": {
+            "selection": "DATA_VARIABLE",
+            "value": 1
+          },
+          "value": 0.1
         }
       },
-      {
-      "title": "Encounter Types by Average per Person",
-      "transform": [
+      "layer": [
         {
-          "calculate": "datum.CATEGORY_TOTAL / datum.UNIQUE_STUDY_IDS",
-          "as": "PER_PERSON_AVERAGE"
-        }
-      ],
-        "mark": "line",
-        "encoding": {
-          "column": {
-            "field": "COHORT",
-            "type": "nominal",
-            "spacing": 10
-          },
-          "x": {
-            "field": "PERIOD",
-            "type": "temporal",
-            "title": "Year"
-          },
-          "y": {
-            "field": "PER_PERSON_AVERAGE",
-            "type": "quantitative",
-            "title": "Percentage"
-          },
-          "color": {
-            "field": "CATEGORY",
-            "type": "nominal"
+          "mark": "line",
+          "selection": {
+            "period": {"type": "interval", "encodings": ["x"]}
           }
         }
-      }
-  ],
-  "columns": 1
+      ]
+    }
+  ]
 }

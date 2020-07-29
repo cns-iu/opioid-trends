@@ -1,4 +1,4 @@
-## Data
+# Generated Data
 
 Data was extracted from an IADC Database provided by the [Regenstrief Institute](https://www.regenstrief.org/). See [Sources](../sources/index.md) for details.
 
