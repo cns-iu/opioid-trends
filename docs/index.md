@@ -1,4 +1,6 @@
-# What is the Opioid Trends in Indiana Dataset?
+# About
+
+## What is the Opioid Trends in Indiana Dataset?
 
 The Opioid Trends in Indiana dataset is generated using code available on GitHub at [https://github.com/cns-iu/opioid-trends](https://github.com/cns-iu/opioid-trends).
 

@@ -35,8 +35,34 @@ def embed(path, opts=None):
     with open(path) as file:
         return create_vega_script(file.read(), opts)
 
+def embedWithCSV(spec='vis.vl.json', csv=None, opts=None):
+    sopts = options_to_javascript(opts)
+    elem_id = common.unique('vega-elem-')
+    csvData = 'spec.data.url' if not csv else f'"{csv}"'
+    content = ('''  fetch("|vis.vl.json|").then((result) => result.json()).then((spec) => 
+    fetch(|csvData|).then((result) => result.text()).then((csvData) => {
+      delete spec.data.url;
+      spec.data.name = 'data';
+      spec.data.format = Object.assign(spec.data.format || {}, {type: 'csv'});
+      spec.datasets = {data: csvData};
+      return vegaEmbed("#|elem_id|", spec, |opts|);
+    })
+  ).then((results) => {
+    console.log("Visualization successfully loaded");
+  });'''
+    .replace('|vis.vl.json|', spec)
+    .replace('|opts|', sopts)
+    .replace('|elem_id|', elem_id).replace('|csvData|', csvData))
+    
+    return common.multiline(
+        f'<div id="{elem_id}"></div>',
+        js.start(),
+        content,
+        js.end()
+    )
 
 def define_env(env):
     env.macro(header)
     env.macro(include)
     env.macro(embed)
+    env.macro(embedWithCSV)

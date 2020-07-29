@@ -1,6 +1,6 @@
-{{ vega_script_tags }}
+{{ vega.header() }}
 
-<a href="../help/index.html" class="icon fa-question-circle"> Help</a>
+<a href="../help/index.html" class="icon fa fa-question-circle"> Help</a>
 
 <div id="visualization"></div>
 <script type="text/javascript">

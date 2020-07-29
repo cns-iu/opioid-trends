@@ -1,6 +1,6 @@
 {{ vega.header() }}
 
-<a href="../help/index.html" class="icon fa-question-circle"> Help</a>
+<a href="../help/index.html" class="icon fa fa-question-circle"> Help</a>
 
 {{ vega.embed('./docs/demographics/vis.vl.json') }}
 
