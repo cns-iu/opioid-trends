@@ -104,9 +104,9 @@ def declare_variables(variables, macro):
 
   # Vega functionality
   variables['vega_script_tags'] = _multiline(
-    '<script src="https://cdn.jsdelivr.net/npm/vega@5.4.0"></script>'
-    '<script src="https://cdn.jsdelivr.net/npm/vega-lite@3.3.0"></script>'
-    '<script src="https://cdn.jsdelivr.net/npm/vega-embed@4.2.0"></script>'
+    '<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>'
+    '<script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>'
+    '<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>'
   )
 
   @macro
