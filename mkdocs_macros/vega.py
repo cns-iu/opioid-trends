@@ -43,7 +43,7 @@ def embedWithCSV(spec='vis.vl.json', csv=None, opts=None):
     fetch(|csvData|).then((result) => result.text()).then((csvData) => {
       delete spec.data.url;
       spec.data.name = 'data';
-      spec.data.format.type = 'csv';
+      spec.data.format = Object.assign(spec.data.format || {}, {type: 'csv'});
       spec.datasets = {data: csvData};
       return vegaEmbed("#|elem_id|", spec, |opts|);
     })
