@@ -1,8 +1,8 @@
 {{ vega.header() }}
 
-<a href="../help/index.html" class="icon fa-question-circle"> Help</a>
+<a href="../help/index.html" class="icon fa fa-question-circle"> Help</a>
 
-{{ vega.embed('./docs/fills/vis.vl.json') }}
+{{ vega.embedWithCSV() }}
 
 <style>
 /* hack to turn off gray background in the readthedocs theme */
