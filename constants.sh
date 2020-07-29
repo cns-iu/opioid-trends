@@ -21,6 +21,7 @@ DIAGNOSIS_DB=$OUT/diagnosis-data.db
 FILLS_DB=$OUT/fills-data.db
 LABS_DB=$OUT/labs-data.db
 ENCOUNTERS_DB=$OUT/encounters-data.db
+DEMOGRAPHICS_DB=$OUT/demographics-data.db
 
 SRC=./src
 
