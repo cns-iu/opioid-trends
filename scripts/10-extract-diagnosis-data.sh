@@ -3,7 +3,6 @@ source constants.sh
 set -ev
 
 rm -f $DIAGNOSIS_DB
-sqlite3_ext $DIAGNOSIS_DB < src/chronic.sql
 sqlite3 $DIAGNOSIS_DB < src/create-diagnosis-db.sql
 
 sqlite3 $DIAGNOSIS_DB > $OUT/site-data/diagnosis-data.csv << EOF

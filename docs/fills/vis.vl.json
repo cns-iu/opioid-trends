@@ -1,80 +1,78 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
-  "data": {"url": "../data/fills-data-row-based.csv"},
-  "transform": [
-    {"calculate": "datum.VALUE/datum.TOTAL*100", "as": "(%)"}
-  ],
-  "padding": 10,
-  "config": {
-    "autosize": {
-      "type": "pad"
-    },
-
-    "mark": { "tooltip": null }
-  },
+  "data": { "url": "../data/fills-data-row-based.csv" },
   "vconcat": [
     {
-      "spacing": 30,
+      "spacing": 75,
+      "columns": 3,
       "facet": {
-        "field": "DATA_VARIABLE",
-        "type": "ordinal",
+        "field": "DATA_VARIABLE", 
+        "type": "ordinal", 
         "title": ""
       },
-      "resolve": {
-        "scale": {"x": "independent", "y": "independent"}
-      },
+      "bounds": "flush",
+      "resolve": {"scale": {"x": "independent", "y": "independent"}},
       "spec": {
         "height": 200,
-        "width": 200,
+        "width": 225,
         "layer": [
           {
-            "transform": [{ "filter": { "selection": "labelpoints" } }],
-            "mark": {
-              "type": "rule",
-              "color": "gray"
-            },
+            "transform": [{"filter": {"selection": "labelpoints"}}],
+            "mark": {"type": "rule", "color": "gray"},
             "encoding": {
               "x": {
                 "type": "temporal",
                 "field": "PERIOD",
-                "scale": { "domain": { "selection": "period" } }
+                "scale": {"domain": {"selection": "period"}}
               }
             }
           },
           {
-            "transform": [{ "filter": { "selection": "period" } }],
+            "transform": [{ "filter": { "selection": "data_variable" } }],
             "encoding": {
               "x": {
-                "field": "PERIOD",
-                "type": "temporal",
-                "title": ""
+                "field": "PERIOD", 
+                "type": "temporal", 
+                "title": "",
+                "scale": { "domain": { "selection": "period" } }
               },
               "y": {
-                "field": "(%)", 
+                "field": "VALUE",
                 "type": "quantitative",
-                "axis": {
-                  "tickCount": 6
-                },
-                "scale": {
-                  "zero": false
-                },
+                "axis": {"tickCount": 6},
+                "scale": {"zero": false},
                 "title": "% of Cohort"
               },
-              "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
+              "color": {
+                "field": "COHORT", 
+                "type": "nominal", 
+                "title": "Cohort",
+                "legend": {
+                  "symbolType": "circle",
+                  "orient": "right"
+                }
+              }
             },
             "layer": [
               {
-                "mark": "line"
+                "mark": "line",
+                "selection": {
+                  "data_variable": {
+                    "type": "multi",
+                    "fields": ["COHORT"],
+                    "bind": { "legend": "dblclick" },
+                    "on": "true",
+                    "clear": "dblclick",
+                    "empty": "all"
+                  }
+                }
               },
               {
-                "mark": {
-                  "type": "point",
-                  "filled": true
-                },
+                "mark": {"type": "point", "filled": true},
                 "encoding": {
                   "opacity": {
                     "condition": {
-                      "selection": "labelpoints",
+                      "selection": "labelpoints", 
                       "value": 1
                     },
                     "value": 0
@@ -86,74 +84,55 @@
                     "nearest": true,
                     "on": "mouseover",
                     "encodings": ["x"],
-                    "empty": "none"
+                    "empty": "none",
+                    "clear": "mouseout"
                   }
                 }
               }
             ]
           },
           {
-            "transform": [{ "filter": { "selection": { "and": ["labelpoints"] } } }],
-
+            "transform": [{"filter": {"selection": {"and": ["labelpoints"]}}}],
             "encoding": {
               "x": {
                 "type": "temporal",
                 "field": "PERIOD",
-                "scale": { "domain": { "selection": "period" } }
+                "scale": {"domain": {"selection": "period"}}
               },
               "y": {
-                "type": "quantitative",
-                "field": "(%)"
+                "type": "quantitative", 
+                "field": "VALUE"
               },
-
               "text": {
                 "type": "quantitative",
-                "field": "(%)",
+                "field": "TOOLTIP",
                 "format": ",.4~f"
               }
             },
-
             "layer": [
               {
-                "transform": [{ "filter": "datum.PERIOD > 1491004800000" }],
-                "mark": {
-                  "type": "text",
-                  "stroke": "white",
-                  "strokeWidth": 3,
-                  "align": "right",
-                  "clip": true
-                }
-              },
-              {
-                "transform": [{ "filter": "datum.PERIOD > 1491004800000" }],
-                "mark": {
-                  "type": "text",
-                  "align": "right",
-                  "clip": true
-                },
-                "encoding": {
-                "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
-                }
-              },
-              {
-                "transform": [{ "filter": "datum.PERIOD <= 1491004800000" }],
+                "transform": [{"filter": {"selection": "data_variable"}}],
                 "mark": {
                   "type": "text",
                   "stroke": "white",
                   "strokeWidth": 3,
                   "align": "left",
-                  "clip": true
+                  "clip": false
                 }
               },
               {
-                "transform": [{ "filter": "datum.PERIOD <= 1491004800000" }],
+                "transform": [{"filter": {"selection": "data_variable"}}],
                 "mark": {
-                  "type": "text",
-                  "align": "left",
-                  "clip": true
+                  "type": "text", 
+                  "align": "left", 
+                  "clip": false
                 },
                 "encoding": {
-                "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
+                  "color": {
+                    "field": "COHORT",
+                    "type": "nominal",
+                    "title": "Cohort"
+                  }
                 }
               }
             ]
@@ -162,103 +141,18 @@
       }
     },
     {
-      "spacing": 30,
-      "facet": {
-        "field": "DATA_VARIABLE",
-        "type": "ordinal",
-        "title": ""
-      },
-      "resolve": {
-        "scale": {"x": "independent", "y": "independent"}
-      },
-      "spec": {
-        "height": 200,
-        "width": 200,
-        "transform": [
-          { "filter": { "selection": "period" } },
-          {
-            "joinaggregate": [{
-              "op": "sum",
-              "field": "VALUE",
-              "as": "a"
-            }],
-            "groupby": ["COHORT", "DATA_VARIABLE"]
-          },
-          {
-          "joinaggregate": [{
-            "op": "sum",
-            "field": "TOTAL",
-            "as": "b"
-          }],
-          "groupby": ["COHORT", "DATA_VARIABLE"]
-          },
-          {"calculate": "datum.a/datum.b*100", "as": "percent"}
-        ],
-        "layer": [
-          {
-            "mark": "bar",
-            "encoding": {
-              "x": {
-                "field": "COHORT",
-                "type": "nominal",
-                "title": "",
-                "scale": {"domain": ["All", "Chronic", "Non-chronic"]},
-                "axis": {
-                  "labelAngle": 0
-                }
-              },
-              "y": {
-                "aggregate": "average",
-                "field": "percent",
-                "type": "quantitative",
-                "title": "% of Cohort",
-                "axis": {
-                  "labelFlush": true,
-                  "tickCount": 10
-                },
-                "scale": {
-                  "padding": 30,
-                  "zero": false
-                }
-              },
-              "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
-            }
-          },
-          {
-            "mark": {
-              "type": "text",
-              "yOffset": -5
-            },
-            "encoding": {
-              "text": {"field": "percent", "type": "quantitative", "format": ",.4~f"},
-              "x": {
-                "field": "COHORT",
-                "type": "nominal",
-                "title": ""
-              },
-              "y": {
-                "aggregate": "average",
-                "field": "percent", 
-                "type": "quantitative"
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "width": 660,
+      "width": 825,
       "height": 150,
       "encoding": {
         "x": {
-          "type": "temporal",
-          "field": "PERIOD",
+          "type": "temporal", 
+          "field": "PERIOD", 
           "title": null
         },
         "y": {
           "aggregate": "sum",
           "type": "quantitative",
-          "field": "VALUE",
+          "field": "TOOLTIP",
           "axis": {
             "orient": "right",
             "title": "Number of patients",
@@ -266,30 +160,24 @@
             "grid": false
           }
         },
-        "color": {"field": "COHORT", "type": "nominal", "title": "Cohort"}
+        "color": {
+          "field": "COHORT", 
+          "type": "nominal", 
+          "title": "Cohort"
+        },
+        "opacity": {
+          "condition": {
+            "selection": "data_variable",
+            "value": 1
+          },
+          "value": 0.1
+        }
       },
       "layer": [
         {
           "mark": "line",
           "selection": {
-            "period": {
-              "type": "interval",
-              "encodings": ["x"]
-            }
-          }
-        },
-        {
-          "transform": [{ "filter": "datum.COHORT == 'Chronic'" }],
-          "mark": {
-            "type": "line",
-            "strokeDash": [20, 4]
-          }
-        },
-        {
-          "transform": [{ "filter": "datum.COHORT == 'Non-chronic'" }],
-          "mark": {
-            "type": "line",
-            "strokeDash": [4, 4]
+            "period": {"type": "interval", "encodings": ["x"]}
           }
         }
       ]
