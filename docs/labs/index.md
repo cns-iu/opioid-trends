@@ -1,8 +1,12 @@
 {{ vega.header() }}
+{{ js.include('../reusable_charts/reusable_charts.js') }}
 
 <a href="../help/index.html" class="icon fa fa-question-circle"> Help</a>
 
-{{ vega.embedWithCSV() }}
+<div id="visualization"></div>
+<script type="text/javascript">
+  dvOverTimeChart('../data/labs-all-agg-data.csv')
+</script>
 
 <style>
 /* hack to turn off gray background in the readthedocs theme */

@@ -1,9 +1,59 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "name": "",
+  "title": {
+    "text": "",
+    "anchor": "middle",
+    "fontSize": 28
+  },
   "vconcat": [
     {
+      "encoding": {
+        "x": {
+          "type": "temporal",
+          "field": "PERIOD",
+          "title": null
+        },
+        "y": {
+          "aggregate": "sum",
+          "type": "quantitative",
+          "field": "TOOLTIP",
+          "axis": {
+            "orient": "right",
+            "title": "Number of patients",
+            "tickCount": 6,
+            "grid": false
+          }
+        },
+        "color": {
+          "field": "COHORT",
+          "type": "nominal",
+          "title": "Cohort"
+        },
+        "opacity": {
+          "condition": {
+            "selection": "data_variable",
+            "value": 1
+          },
+          "value": 0.1
+        }
+      },
+      "layer": [
+        {
+          "mark": "line",
+          "selection": {
+            "period": {
+              "type": "interval",
+              "encodings": [
+                "x"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "spacing": 75,
-      "columns": 3,
       "facet": {
         "field": "DATA_VARIABLE",
         "type": "ordinal",
@@ -17,8 +67,6 @@
         }
       },
       "spec": {
-        "height": 75,
-        "width": 225,
         "layer": [
           {
             "transform": [
@@ -205,53 +253,6 @@
           }
         ]
       }
-    },
-    {
-      "width": 825,
-      "height": 150,
-      "encoding": {
-        "x": {
-          "type": "temporal",
-          "field": "PERIOD",
-          "title": null
-        },
-        "y": {
-          "aggregate": "sum",
-          "type": "quantitative",
-          "field": "TOOLTIP",
-          "axis": {
-            "orient": "right",
-            "title": "Number of patients",
-            "tickCount": 6,
-            "grid": false
-          }
-        },
-        "color": {
-          "field": "COHORT",
-          "type": "nominal",
-          "title": "Cohort"
-        },
-        "opacity": {
-          "condition": {
-            "selection": "data_variable",
-            "value": 1
-          },
-          "value": 0.1
-        }
-      },
-      "layer": [
-        {
-          "mark": "line",
-          "selection": {
-            "period": {
-              "type": "interval",
-              "encodings": [
-                "x"
-              ]
-            }
-          }
-        }
-      ]
     }
   ],
   "data": {
