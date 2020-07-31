@@ -5,7 +5,31 @@
 
 <div id="visualization"></div>
 <script type="text/javascript">
-  dvOverTimeChart('../data/encounters-data.csv')
+  dvOverTimeChart(
+    '../data/encounters-data.csv', 
+    {
+      selectedDataVariables: [
+        '% Charity Insurance', 
+        '% Commercial Insurance', 
+        '% Institutionalized Insurance',
+        '% Medicaid Insurance',
+        '% Medicare Insurance',
+        '% No Insurance Data',
+        '% Other Gov. Insurance',
+        '% Self Pay',
+        '% Workers Comp. Insurance',
+        '% with Emergency Encounters',
+        '% with Inpatient Encounters',
+        'Avg. # Emergency Encounters',
+        'Avg. # Inpatient Encounters'
+      ],
+      initVariables: [
+        '% Commercial Insurance', 
+        '% Medicare Insurance',
+        'Avg. # Emergency Encounters'
+      ]
+    }
+  )
 </script>
 
 <style>

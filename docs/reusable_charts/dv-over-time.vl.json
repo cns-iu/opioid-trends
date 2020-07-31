@@ -6,54 +6,20 @@
     "anchor": "middle",
     "fontSize": 28
   },
+  "autosize": {
+    "type": "pad",
+    "resize": true
+  },
   "vconcat": [
     {
-      "encoding": {
-        "x": {
-          "type": "temporal",
-          "field": "PERIOD",
-          "title": null
-        },
-        "y": {
-          "aggregate": "sum",
-          "type": "quantitative",
-          "field": "TOOLTIP",
-          "axis": {
-            "orient": "right",
-            "title": "Number of patients",
-            "tickCount": 6,
-            "grid": false
-          }
-        },
-        "color": {
-          "field": "COHORT",
-          "type": "nominal",
-          "title": "Cohort"
-        },
-        "opacity": {
-          "condition": {
-            "selection": "data_variable",
-            "value": 1
-          },
-          "value": 0.1
-        }
-      },
-      "layer": [
-        {
-          "mark": "line",
-          "selection": {
-            "period": {
-              "type": "interval",
-              "encodings": [
-                "x"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
       "spacing": 75,
+      "transform": [
+        {
+          "filter": {
+            "selection": "data_variable"
+          }
+        }
+      ],
       "facet": {
         "field": "DATA_VARIABLE",
         "type": "ordinal",
@@ -122,31 +88,64 @@
                 },
                 "title": "% of Cohort"
               },
+              "strokeWidth": {
+                "field": "DATA_VARIABLE",
+                "scale": {
+                  "domain": [
+                  ],
+                  "range": [
+                    2
+                  ]
+                },
+                "legend": {
+                  "symbolType": "triangle",
+                  "orient": "right",
+                  "symbolFillColor": "white",
+                  "symbolStrokeColor": "white",
+                  "title": "Data Variable"
+                }
+              },
               "color": {
                 "field": "COHORT",
                 "type": "nominal",
                 "title": "Cohort",
                 "legend": {
                   "symbolType": "circle",
-                  "orient": "right"
+                  "orient": "right",
+                  "title": "Cohort"
                 }
+              },
+              "opacity": {
+                "condition": {
+                  "selection": "cohort",
+                  "value": 1
+                },
+                "value": 0.1
               }
             },
             "layer": [
               {
                 "mark": "line",
                 "selection": {
-                  "data_variable": {
+                  "cohort": {
                     "type": "multi",
                     "fields": [
                       "COHORT"
                     ],
                     "bind": {
                       "legend": "dblclick"
+                    }
+                  },
+                  "data_variable": {
+                    "type": "multi",
+                    "fields": [
+                      "DATA_VARIABLE"
+                    ],
+                    "bind": {
+                      "legend": "dblclick"
                     },
-                    "on": "true",
-                    "clear": "dblclick",
-                    "empty": "all"
+                    "init": [
+                    ]
                   }
                 }
               },
@@ -253,6 +252,49 @@
           }
         ]
       }
+    },
+    {
+      "encoding": {
+        "x": {
+          "type": "temporal",
+          "field": "PERIOD",
+          "title": null
+        },
+        "y": {
+          "aggregate": "sum",
+          "type": "quantitative",
+          "field": "TOOLTIP",
+          "axis": {
+            "orient": "right",
+            "title": "Number of patients",
+            "tickCount": 6,
+            "grid": false
+          }
+        },
+        "color": {
+          "field": "COHORT",
+          "type": "nominal",
+          "title": "Cohort"
+        },
+        "opacity": {
+          "condition": {
+            "selection": "cohort",
+            "value": 1
+          },
+          "value": 0.1
+        }
+      },
+      "layer": [
+        {
+          "mark": "line",
+          "selection": {
+            "period": {
+              "type": "interval",
+              "encodings": ["x"]
+            }
+          }
+        }
+      ]
     }
   ],
   "data": {

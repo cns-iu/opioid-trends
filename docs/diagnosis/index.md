@@ -5,7 +5,30 @@
 
 <div id="visualization"></div>
 <script type="text/javascript">
-  dvOverTimeChart('../data/diagnosis-data-row-based.csv')
+  dvOverTimeChart(
+    '../data/diagnosis-data-row-based.csv',
+    {
+      selectedDataVariables: [
+        'Alcohol Poisoning',
+        'Benzo Poisoning',
+        'Drug Poisoning',
+        'HIV',
+        'Mental Health',
+        'Opioid Poisoning',
+        'Opioid Use',
+        'Other Poisoning',
+        'Overdose',
+        'STD',
+        'Stimulant Poisoning',
+        'Substance Abuse Disorder'
+      ],
+      initVariables: [
+        'Opioid Use',
+        'Overdose',
+        'Substance Abuse Disorder'
+      ]
+    }
+  )
 </script>
 
 <style>
