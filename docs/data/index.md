@@ -41,13 +41,13 @@ NOT_IN_LABOR_FORCE | # who were not in the labor force | Demographic data | Pers
 
 For the chart data, we computed the data variable values by grouping by the minimum periodicity (currently quarterly intervals) and computed the values of the data variables in each period. The chart data exists in both [column](chart-data.csv) and [row](chart-data-row-based.csv) based formats.
 
-The SQL commands that compiled the data are [here](https://github.com/cns-iu/opioid-trends/blob/master/src/create-chart-db.sql) and the script to extract the data to CSV is [here](https://github.com/cns-iu/opioid-trends/blob/master/scripts/10-extract-chart-data.sh).
+The SQL commands that compiled the data are [here](https://github.com/cns-iu/opioid-trends/blob/main/src/create-chart-db.sql) and the script to extract the data to CSV is [here](https://github.com/cns-iu/opioid-trends/blob/main/scripts/10-extract-chart-data.sh).
 
 ### Map Data (Opioid Trends on the Indiana Map)
 
 For the geographic map of indiana, we further grouped by county (TRACT_5) so that we can see how the data variables play out at the county level. The map data exists in both [column](geomap-data.csv) and [row](geomap-data-row-based.csv) based formats. A topojson file for the state of Indiana is available [here](indiana.topojson).
 
-The SQL commands that compiled the data are [here](https://github.com/cns-iu/opioid-trends/blob/master/src/create-geomap-db.sql) and the script to extract the data to CSV is [here](https://github.com/cns-iu/opioid-trends/blob/master/scripts/10-extract-geomap-data.sh).
+The SQL commands that compiled the data are [here](https://github.com/cns-iu/opioid-trends/blob/main/src/create-geomap-db.sql) and the script to extract the data to CSV is [here](https://github.com/cns-iu/opioid-trends/blob/main/scripts/10-extract-geomap-data.sh).
 
 ## Cohort Visualizations (Demographics, Diagnosis, Fills, Encounters, Labs)
 
@@ -80,8 +80,8 @@ Other Race | Race/ethnicity
 
 [Column-based data](demographics-data.csv)  
 [Row-based data](demographics-data-row-based.csv)  
-[SQL](https://github.com/cns-iu/opioid-trends/blob/master/src/create-demographics-db.sql)  
-[Script](https://github.com/cns-iu/opioid-trends/blob/master/scripts/10-extract-demographics-data.sh)  
+[SQL](https://github.com/cns-iu/opioid-trends/blob/main/src/create-demographics-db.sql)  
+[Script](https://github.com/cns-iu/opioid-trends/blob/main/scripts/10-extract-demographics-data.sh)  
 
 ### Diagnosis
 
@@ -104,8 +104,8 @@ Substance use disorder | (%)Substance use disorder
 
 [Column-based data](diagnosis-data.csv)  
 [Row-based data](diagnosis-data-row-based.csv)  
-[SQL](https://github.com/cns-iu/opioid-trends/blob/master/src/create-diagnosis-db.sql)  
-[Script](https://github.com/cns-iu/opioid-trends/blob/master/scripts/10-extract-diagnosis-data.sh)  
+[SQL](https://github.com/cns-iu/opioid-trends/blob/main/src/create-diagnosis-db.sql)  
+[Script](https://github.com/cns-iu/opioid-trends/blob/main/scripts/10-extract-diagnosis-data.sh)  
 
 ### Fills
 
@@ -119,8 +119,8 @@ Neuro | (%) Neurological agent
 
 [Column-based data](fills-data.csv)  
 [Row-based data](fills-data-row-based.csv)  
-[SQL](https://github.com/cns-iu/opioid-trends/blob/master/src/create-fills-db.sql)  
-[Script](https://github.com/cns-iu/opioid-trends/blob/master/scripts/10-extract-fills-data.sh)  
+[SQL](https://github.com/cns-iu/opioid-trends/blob/main/src/create-fills-db.sql)  
+[Script](https://github.com/cns-iu/opioid-trends/blob/main/scripts/10-extract-fills-data.sh)  
 
 ### Encounters
 
@@ -143,8 +143,8 @@ Avg. # Inpatient Encounters |
 % Workers Comp. Insurance |
 
 [Row-based data](encounters-data.csv)  
-[SQL](https://github.com/cns-iu/opioid-trends/blob/master/src/create-encounters-db.sql)  
-[Script](https://github.com/cns-iu/opioid-trends/blob/master/scripts/10-extract-encounters-data.sh)  
+[SQL](https://github.com/cns-iu/opioid-trends/blob/main/src/create-encounters-db.sql)  
+[Script](https://github.com/cns-iu/opioid-trends/blob/main/scripts/10-extract-encounters-data.sh)  
 
 ### Labs
 
@@ -157,5 +157,5 @@ DATA_VARIABLE |
 % Tox Screen Lab Completed |
 
 [Row-based data](labs-all-agg-data.csv)  
-[SQL](https://github.com/cns-iu/opioid-trends/blob/master/src/create-labs-db.sql)  
-[Script](https://github.com/cns-iu/opioid-trends/blob/master/scripts/10-extract-labs-data.sh)  
+[SQL](https://github.com/cns-iu/opioid-trends/blob/main/src/create-labs-db.sql)  
+[Script](https://github.com/cns-iu/opioid-trends/blob/main/scripts/10-extract-labs-data.sh)  

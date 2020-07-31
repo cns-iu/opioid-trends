@@ -2,6 +2,19 @@
 
 Changelog for Opioid Trends in Indiana.
 
+## 1.0.0 - 2020-07-31
+
+### Added in 1.0.0
+
+- Updated look and feel of the site ([Ivory Theme](https://github.com/daizutabi/mkdocs-ivory))
+- Added 5 new visualizations, one for each table: Demographics, Diagnosis, Fills, Encounters, and Labs
+- The 5 new visualizations can be opened and modified in [Vega Editor](https://vega.github.io/editor/#/)
+- Updated help and documentation
+
+### Known Issues in 1.0.0
+
+- Opioid Trends Over Time and on the Indiana Map visualizations will not open in Vega Editor properly until this site has become public.
+
 ## 0.1.0 - 2019-12-20
 
 ### Added in 0.1.0
