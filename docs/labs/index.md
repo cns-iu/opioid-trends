@@ -5,7 +5,12 @@
 
 <div id="visualization"></div>
 <script type="text/javascript">
-  dvOverTimeChart('../data/labs-all-agg-data.csv')
+  dvOverTimeChart('../data/labs-all-agg-data.csv', 
+    {
+      selectedDataVariables: ['% HIV Lab Completed', '% Hepatitus Lab Completed', '% Tox Screen Lab Completed'],
+      initVariables: ['% HIV Lab Completed', '% Hepatitus Lab Completed', '% Tox Screen Lab Completed']
+    }
+  )
 </script>
 
 <style>

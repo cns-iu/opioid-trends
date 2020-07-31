@@ -5,7 +5,12 @@
 
 <div id="visualization"></div>
 <script type="text/javascript">
-  dvOverTimeChart('../data/fills-data-row-based.csv')
+  dvOverTimeChart('../data/fills-data-row-based.csv', 
+    {
+      selectedDataVariables: ['Anti-anxiety', 'Antidepressant', 'Neuro'],
+      initVariables: ['Anti-anxiety', 'Antidepressant', 'Neuro']
+    }
+  )
 </script>
 
 <style>

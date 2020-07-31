@@ -17,6 +17,10 @@ function dvOverTimeChart(csvUrl, options) {
   const numColumns = window.innerWidth < 768 ? Math.floor(window.innerWidth / 375) : Math.floor((window.innerWidth - 300) / 375)
   const title = document.title.replace("— Opioid Trends in Indiana", "") + "By Cohort"
   const scrubWidth = 225*numColumns + 75*(numColumns - 1)
+  const initOptions = []
+  for (const option of options.initVariables) {
+    initOptions.push({"DATA_VARIABLE": option})
+  }
 
   options = Object.assign({
     divId: '#visualization',
@@ -28,7 +32,6 @@ function dvOverTimeChart(csvUrl, options) {
     columnWidth: 225,
     scrubberWidth: scrubWidth,
     scrubberHeight: 150
-
   }, options);
 
   return fetch(options.specUrl).then((result) => result.json()).then((spec) => 
@@ -36,12 +39,13 @@ function dvOverTimeChart(csvUrl, options) {
       spec.data.values = csvData
       spec.name = options.title
       spec.title.text = options.title
-      spec.vconcat[1].columns = options.columns
-      spec.vconcat[1].spec.width = options.columnWidth
-      spec.vconcat[1].spec.height = options.rowHeight
-      spec.vconcat[0].width = options.scrubberWidth
-      spec.vconcat[0].height = options.scrubberHeight
-
+      spec.vconcat[0].columns = options.columns
+      spec.vconcat[0].spec.width = options.columnWidth
+      spec.vconcat[0].spec.height = options.rowHeight
+      spec.vconcat[1].width = options.scrubberWidth
+      spec.vconcat[1].height = options.scrubberHeight
+      spec.vconcat[0].spec.layer[1].encoding.strokeWidth.scale.domain = options.selectedDataVariables
+      spec.vconcat[0].spec.layer[1].layer[0].selection.data_variable.init = initOptions
       return vegaEmbed(options.divId, spec, options.embedOpts);
     })
   ).then((results) => {
