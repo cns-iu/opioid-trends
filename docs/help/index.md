@@ -2,7 +2,7 @@
 
 ## Visualization Interactions
 
-Both the chart and map visualizations support two kinds of interaction: 
+All visualizations support two kinds of interaction: 
 1) to select the time period viewed and 2) to select which data variables are visualized.
 
 ### Time Period
@@ -32,15 +32,15 @@ The following actions can be performed:
     1. Hover the mouse anywhere inside the highlighted region
     2. Turn the mouse wheel to expand and contract the selected time period
 
-### Data Variables
+### Data Variables / Cohorts
 
-Data variables can be selected and deselected to show any combination of variables using the legend.
+Data variables and cohorts can be selected and deselected to show any combination of variables/cohorts using the legend.
 
 The following actions can be performed:
 
-- Double click a data variable to turn only that data variable on
-- Double click a data variable while pressing the shift key to toggle that data variable on/off
-- Double click anywhere to turn on **all** data variables
+- Double click a data variable/cohort to turn only that data variable on
+- Double click a data variable/cohort while pressing the shift key to toggle that data variable on/off
+- Double click anywhere to turn on **all** data variables and cohorts
 
 ## Save a Screenshot of a Visualization
 
